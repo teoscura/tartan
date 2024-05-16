@@ -1,0 +1,9 @@
+LONGTERM packets implement topacket all packet types. dash:not impl, x: impl.
+
+Packets -----
+    ->Deserial - Logic - Serial
+    0x00 x-N
+    0x01 x-x
+    0x02 x-x
+    0x06 x-x
+    0xFF x-x
