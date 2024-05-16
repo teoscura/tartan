@@ -2,6 +2,7 @@
     <h1 font-size=15>Tartan</h1>
     <p>A C++23 Reimplementation of the Minecraft Beta 1.7.3 Server</p>
 </div>
+
 I genuinely have no idea where this project will end up, _if it ends anywhere to be honest_
 
 TODO = write a todo-list:
