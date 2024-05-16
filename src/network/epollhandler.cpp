@@ -68,7 +68,7 @@ void EpollHandler::handleRead(uint32_t fd){
         info.epoll_fd = fd;
         info.thread_ID = this->info.ID;
 
-        std::unique_ptr<Packet> pack = std::make_unique<Packet>(Packet(buffer, nread, info));
+        std::unique_ptr<Packet> pack = std::make_unique<Packet>(buffer, nread, info);
         this->deserializer->addPacket(std::move(pack));
     }
 }

@@ -18,12 +18,15 @@ class Blob{
     public:
         //respectively accepts a player from outside, or takes out the player
         void eventLoop();
-        void welcomePlayer(std::shared_ptr<Player> p);
-        void goodbyePlayer(std::shared_ptr<Player> p);
 
-        void processPacket(DsPacket* p);
-        void sendPacketToGlobal(DsPacket* p);
-        void requestChunk(v2<int32_t> chunk_coords);
+        void welcomePlayer(std::shared_ptr<Player> moved_p);
+        void goodbyePlayer(std::shared_ptr<Player> player_tomove);
+
+        void processPacket(std::unique_ptr<DsPacket> p);
+        void sendPacketToGlobal(std::unique_ptr<DsPacket> p);
+
+
+        void genChunk(v2<int32_t> chunk_coords);
 
         Blob();
         Blob(v2<int32_t> center_chunk_coords);

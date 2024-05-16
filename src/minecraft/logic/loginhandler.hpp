@@ -3,6 +3,7 @@
 
 #include <set>
 #include <string>
+#include <sqlite3.h>
 
 #include "../../packet/packets/p_LoginRequest.hpp"
 #include "../../packet/packets/p_HandShake.hpp"

@@ -1,5 +1,8 @@
 #include "loginhandler.hpp"
+
 #include <string>
+
+#include "../../packet/packets/p_Kick.hpp"
 
 DsPacket* LoginHandler::handlepacket(DsPacket* p){
     DsPacket* pack;

@@ -15,10 +15,11 @@ void Blob::goodbyePlayer(std::shared_ptr<Player> p){
     this->local_players.erase(p->getEntityId());
 }
 
-void processPacket(DsPacket* p){
+void Blob::processPacket(std::unique_ptr<DsPacket> p){
 
 }
-void sendPacketToGlobal(DsPacket* p){
+
+void Blob::sendPacketToGlobal(std::unique_ptr<DsPacket> p){
 
 }
 
@@ -35,6 +36,12 @@ Blob::Blob(){
             this->chunks.insert(tmp);
         }
     }
+}
+
+void Blob::genChunk(v2<int32_t> chunk_coords){
+    auto tmp = this->terrain_generator.generateChunk(chunk_coords);
+    auto pair = std::make_pair(chunk_coords,std::move(tmp));
+    this->chunks.insert(pair);
 }
 
 Blob::Blob(v2<int32_t> center_chunk_coords){
