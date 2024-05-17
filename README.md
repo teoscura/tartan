@@ -4,6 +4,7 @@
 </div>
 
 I genuinely have no idea where this project will end up, _if it ends anywhere to be honest_
+The goal of this project is to learn as much stuff as i possibly can, overkill is welcome.
 
 TODO = write a todo-list:
 

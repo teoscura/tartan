@@ -33,3 +33,4 @@ when special block destroyed->chunkloader gone
 
 LONGTERM:
     figure out a way to manage ticks and timesteps.
+    saving player data, and inventory and position and stuff.

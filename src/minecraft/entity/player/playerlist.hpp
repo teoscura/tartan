@@ -2,17 +2,17 @@
 #define MC_PLAYERLIST_H
 
 #include "player.hpp"
-#include "../../helpers/map.hpp"
+#include "../../../helpers/ts_set.hpp"
 #include <memory>
 
-typedef ThreadSafeMap<int32_t, std::shared_ptr<Player>> PlayerMap;
+typedef ThreadSafeSet<std::shared_ptr<Player>> PlayerList;
 
 class GlobalPlayerList{
     private:
-        static inline PlayerMap *list;
+        static inline PlayerList *list;
     public:
         GlobalPlayerList();
-        static PlayerMap* getGlobalPlayerList();
+        static PlayerList* getGlobalPlayerList();
         ~GlobalPlayerList();
 };
 

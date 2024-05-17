@@ -1,23 +1,27 @@
 #include "loginhandler.hpp"
 
+#include <memory>
 #include <string>
 
 #include "../../packet/packets/p_Kick.hpp"
 
-DsPacket* LoginHandler::handlepacket(DsPacket* p){
-    DsPacket* pack;
+std::unique_ptr<DsPacket> LoginHandler::handlepacket(std::unique_ptr<DsPacket> p){
+    DsPacket* res;
+    DsPacket* tmp = p.release();
     switch(p->getID()){
         case 0x00:
             //TODO implement tick timer.
             break;
         case 0x01: 
-            pack = handleLoginRequest((p_LoginRequest*)p);
+            res = handleLoginRequest((p_LoginRequest*)tmp);
             break;
         case 0x02:
-            pack = handleHandshake((p_HandShake*)p);
+            res = handleHandshake((p_HandShake*)tmp);
             break;
         default: break;  
     }
+
+    std::unique_ptr<DsPacket> pack(res);
     return pack;
 }
 
@@ -40,7 +44,7 @@ DsPacket* LoginHandler::handleHandshake(p_HandShake* pack){
 }
 
 
-p_LoginRequest* LoginHandler::handleLoginRequest(p_LoginRequest *pack){
+DsPacket* LoginHandler::handleLoginRequest(p_LoginRequest *pack){
     p_LoginRequest resp;
     resp.dimension = 0x00;
     resp.seed = 0;

@@ -1,8 +1,7 @@
 #ifndef LOGINHANDLER_H
 #define LOGINHANDLER_H 
 
-#include <set>
-#include <string>
+#include <memory>
 #include <sqlite3.h>
 
 #include "../../packet/packets/p_LoginRequest.hpp"
@@ -10,12 +9,11 @@
 #include "../../packet/packets/packet.hpp"
 
 class LoginHandler{
-    private:
-        std::set<std::u16string> usernames;
+    protected:
     public:
-        DsPacket* handlepacket(DsPacket* p);
+        std::unique_ptr<DsPacket> handlepacket(std::unique_ptr<DsPacket> p);
         DsPacket* handleHandshake(p_HandShake* pack);
-        p_LoginRequest* handleLoginRequest(p_LoginRequest* pack);
+        DsPacket* handleLoginRequest(p_LoginRequest* pack);
 };
 
 #endif

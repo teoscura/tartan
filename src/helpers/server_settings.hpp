@@ -12,6 +12,7 @@ class ServerSettings{
         std::map<std::string, std::string> settings;
         static inline std::map<std::string, std::string> defaults = {
             {"max_players"   ,"10"},
+            {"thr_foreach_player","5"},
             {"server_ip"     ,"127.0.0.1"},
             {"server_port"   ,"25565"},
             {"view_distance" ,"3"},

@@ -3,9 +3,13 @@
 #include <utility>
 
 #include "../../helpers/loggerhandler.hpp"
-#include "../../util/byteops.hpp"
-#include "../p_deflist.hpp"
 #include "p_deserial.hpp"
+
+#include "../packets/p_KeepAlive.hpp"
+#include "../packets/p_LoginRequest.hpp"
+#include "../packets/p_HandShake.hpp"
+#include "../packets/p_Kick.hpp"
+
 
 PacketDeserializer::PacketDeserializer(){
     this->lg = LoggerHandler::getLogger();
@@ -17,7 +21,6 @@ PacketDeserializer::~PacketDeserializer(){
 
 void PacketDeserializer::addPacket(std::unique_ptr<Packet> p){
     std::unique_ptr<DsPacket> pack;
-    print_bytes(std::cout, p->bytes, p->size);
     if(!isImplemented(p->bytes[0])){
         lg->LogPrint(ERROR, "Invalid packet recieved >{:0x}< skipping ahead.", (int)p->bytes[0]);
         std::cerr<<"[ERROR] Invalid packet recieved (> "<<std::hex << (int)p->bytes[0]<< std::dec <<" <), skipping ahead.\n";

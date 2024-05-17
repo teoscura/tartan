@@ -3,9 +3,9 @@
 
 #include <string>
 
-#include "../../packet/packets/packet.hpp"
-#include "../entity/livingentity.hpp"
-#include "../world/vector.hpp"
+#include "../../../packet/packets/packet.hpp"
+#include "../../entity/livingentity.hpp"
+#include "../../world/vector.hpp"
 
 enum PlayerStances{
     STAND,
@@ -16,8 +16,6 @@ enum PlayerStances{
 class Player : public LivingEntity{
     private:
         PacketReturnInfo info;
-        uint32_t blob;
-        v2<int32_t> currentChunk;
     protected:
         std::u16string username;
 
@@ -30,7 +28,7 @@ class Player : public LivingEntity{
         const double width = 0.6;
 	    const double depth = 0.6;
         PlayerStances stance;
-
+        v2<int32_t> respawn_pos;
     public:
         uint8_t updated_stats; // handled by main server, mask defining changes:
         /*  <<0 movement or look
@@ -43,10 +41,8 @@ class Player : public LivingEntity{
         *///<<7 equip change
         uint8_t render_updates;
 
-
         void updateBlob(uint8_t newBlob);
-        void updatePosLook();
-        void getChunksToSend();
+        void updatePosLook();//TODO 
 
         uint32_t getEntityId() override;
 
