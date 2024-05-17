@@ -12,12 +12,13 @@
 #include "../util/byteops.hpp"
 #include "../headers/defines.hpp"
 
-EpollHandler::EpollHandler(){
-    this->info.running = true;;
+EpollHandler::EpollHandler(uint32_t id) : 
+    deserializer(DeserializerHandler::getDeserializer()), 
+    serializer(this->serializer = SerializerHandler::getSerializer()),
+    lg(LoggerHandler::getLogger()){
+    this->info.ID = id;
+    this->info.running = true;
     this->info.epoll_fd = epoll_create1(0);
-    this->deserializer = DeserializerHandler::getDeserializer();
-    this->serializer = SerializerHandler::getSerializer();
-    this->lg = LoggerHandler::getLogger();
 }
 
 void EpollHandler::mainLoop(){
@@ -30,6 +31,7 @@ void EpollHandler::mainLoop(){
 void EpollHandler::handleEvents(){
     int i;
     int fd;
+    std::unique_ptr<Packet> ptr;
     std::queue<std::unique_ptr<Packet>>* packetQueue = serializer->get_next()->get_map(this->info.ID);
     for (i = 0; i < this->info.ready; i++) {
         fd = events[i].data.fd;
@@ -38,7 +40,7 @@ void EpollHandler::handleEvents(){
         } 
     }
     while(packetQueue->size()>0){
-        std::unique_ptr<Packet> ptr = std::move(packetQueue->front());
+        ptr = std::move(packetQueue->front());
         packetQueue->pop();
         handleWrite(ptr->info.epoll_fd, std::move(ptr));
     }
@@ -131,10 +133,6 @@ EpollHandler::~EpollHandler(){
     for(uint32_t fd : allfds){
         close(fd);
     }
-}
-
-void EpollHandler::setID(uint32_t id){
-    this->info.ID = id;
 }
 
 int EpollHandler::getID(){

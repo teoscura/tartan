@@ -16,8 +16,6 @@ struct HandlerState{
     bool running;
 };
 
-//TODO replace allfds with a set
-
 class EpollHandler{
     private:
         HandlerState info;
@@ -33,15 +31,12 @@ class EpollHandler{
         void handleEvents();
         void handleRead(uint32_t fd);
         void handleWrite(uint32_t fd, std::unique_ptr<Packet>);
-
         void eventOp(uint32_t fd, uint32_t state, uint32_t _op);
         
         int getHowMany();
         int getID();
-
-        void setID(uint32_t id);
-
-        EpollHandler();
+        
+        EpollHandler(uint32_t id);
         ~EpollHandler(); 
 };
 

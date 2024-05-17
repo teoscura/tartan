@@ -4,25 +4,19 @@
 //LONGTERM structure mcserver
 
 #include <memory>
-#include <set>
-#include <thread>
 
-#include "player/playerlist.hpp"
+#include "../network/server.hpp"
+#include "entity/player/playerlist.hpp"
+#include "logic/loginhandler.hpp"
 //#include "blob.hpp"
 
-
-
-class MCServer{
+class MCServer : public Server{
     private:
         GlobalPlayerList globalPlayerList;
-        std::set<std::jthread> blobs;
-        //TODO implement RegionPool.
+        std::map<std::string, std::string> settings;
+        LoginHandler loginhandler;
     public:
         MCServer();
-        void handleBlobs();
-        void mergeBlobs();
-        void diviteBlob();
-        void recievePacket();
         void sendGlobalPacket(std::unique_ptr<DsPacket> pack);
         ~MCServer();
 };

@@ -1,6 +1,7 @@
 #include "threadworker.hpp"
+#include "epollhandler.hpp"
 
-ThreadWorker::ThreadWorker(){
+ThreadWorker::ThreadWorker(uint32_t id) : e_handler(id){
     thr = std::jthread(&EpollHandler::mainLoop, &e_handler);
 }
 

@@ -1,10 +1,10 @@
 #include "playerlist.hpp"
 
 GlobalPlayerList::GlobalPlayerList(){
-    this->list = new PlayerMap;
+    this->list = new PlayerList;
 }
 
-PlayerMap* GlobalPlayerList::getGlobalPlayerList(){
+PlayerList* GlobalPlayerList::getGlobalPlayerList(){
     return list;
 }
 

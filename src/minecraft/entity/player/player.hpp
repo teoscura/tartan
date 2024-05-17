@@ -18,13 +18,10 @@ class Player : public LivingEntity{
         PacketReturnInfo info;
     protected:
         std::u16string username;
-
         const uint8_t maxhp = 20;
         uint8_t hp;
-        
 	    const double stand_height = 1.62;
         double actual_height;
-
         const double width = 0.6;
 	    const double depth = 0.6;
         PlayerStances stance;

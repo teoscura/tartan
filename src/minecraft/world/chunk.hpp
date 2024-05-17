@@ -24,6 +24,7 @@ class Chunk{
 	    const std::size_t size = 32768;
 
 	    bool isModified;
+        bool updated;
         std::chrono::time_point<std::chrono::system_clock> last_accessed;
 	    std::array<uint8_t, 32768> blocks;
 	    std::array<uint8_t, 16384> metadata;

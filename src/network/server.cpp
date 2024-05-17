@@ -13,10 +13,7 @@
 #include "server.hpp"
 
 
-Server::Server(){
-    this->running = true;
-    this->settings = SettingsHandler::getSettings();
-    this->lg = LoggerHandler::getLogger();
+Server::Server() : running(true), settings(SettingsHandler::getSettings()), lg(this->lg = LoggerHandler::getLogger()){
     uint32_t port = atoi(settings->getSettings().at("server_port").c_str());
     if((listener.sockfd = socket(AF_INET,SOCK_STREAM,0))==-1){
         lg->LogPrint(ERROR, "Couldn't create main entry socket!");
@@ -27,7 +24,6 @@ Server::Server(){
     listener.sock.sin_family = AF_INET;
 
     //FIXME REWORK WHEN CHANGES TO SETTINGS IN SERVERSETTINGS
-
     inet_pton(AF_INET, settings->getSettings().at("server_ip").c_str(), &listener.sock.sin_addr);
     listener.sock.sin_port = htons(port);
     if (bind(listener.sockfd, (struct sockaddr*)&listener.sock, listener.socksize) == -1) {

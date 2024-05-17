@@ -12,7 +12,7 @@ class ThreadWorker{
         EpollHandler e_handler;
         int how_full; //out of 0..FD_FOREACH_THR;
     public:
-        ThreadWorker();
+        ThreadWorker(uint32_t id);
         ~ThreadWorker(); 
         int UpdateState();
         EpollHandler *getEpollHandler();

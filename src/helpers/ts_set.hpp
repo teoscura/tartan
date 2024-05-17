@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <mutex>
 #include <set>
+#include <string>
 
 #include "loggerhandler.hpp"
 
@@ -18,6 +19,7 @@ class ThreadSafeSet{
     public:
         ThreadSafeSet<O>();
         bool contains(const O& object);
+        bool containsUsername(std::u16string string);
         std::size_t size();
         void erase(const O& obj);
         void insert(const O object);
@@ -37,6 +39,21 @@ bool ThreadSafeSet<O>::contains(const O& obj){
     var.notify_one(); 
     return isthere;
 };
+
+template<typename O>
+bool ThreadSafeSet<O>::containsUsername(std::u16string username){
+    bool isthere = false;
+    std::unique_lock<std::mutex> lock(mut); 
+    for(O tmp: this->set){
+        if(tmp.username == username){
+            isthere = true;
+        }
+    }
+    lock.unlock();
+    var.notify_one(); 
+    return isthere;
+}
+
 
 template<typename O>
 std::size_t ThreadSafeSet<O>::size(){  

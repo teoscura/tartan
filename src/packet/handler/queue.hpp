@@ -6,6 +6,8 @@
 #include <mutex>
 #include <queue>
 
+#include "../packets/packet.hpp"
+
 template<class T>
 class ThreadSafeQueue{
     private:
@@ -57,5 +59,7 @@ std::size_t ThreadSafeQueue<T>::size(){
     var.notify_one();
     return res;
 }
+
+using PacketQueue = ThreadSafeQueue<std::unique_ptr<DsPacket>>;
 
 #endif

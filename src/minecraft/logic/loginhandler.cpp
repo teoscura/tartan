@@ -5,18 +5,16 @@
 
 #include "../../packet/packets/p_Kick.hpp"
 
-std::unique_ptr<DsPacket> LoginHandler::handlepacket(std::unique_ptr<DsPacket> p){
+
+std::unique_ptr<DsPacket> LoginHandler::handlepacket(std::unique_ptr<DsPacket> p, PlayerList* plist){
     DsPacket* res;
     DsPacket* tmp = p.release();
     switch(p->getID()){
-        case 0x00:
-            //TODO implement tick timer.
-            break;
         case 0x01: 
             res = handleLoginRequest((p_LoginRequest*)tmp);
             break;
         case 0x02:
-            res = handleHandshake((p_HandShake*)tmp);
+            res = handleHandshake((p_HandShake*)tmp, plist);
             break;
         default: break;  
     }
@@ -25,12 +23,12 @@ std::unique_ptr<DsPacket> LoginHandler::handlepacket(std::unique_ptr<DsPacket> p
     return pack;
 }
 
-DsPacket* LoginHandler::handleHandshake(p_HandShake* pack){
+DsPacket* LoginHandler::handleHandshake(p_HandShake* pack, PlayerList* plist){
     std::u16string string;
 
     //TODO when server player list is implemented, change this
     //To use main player list for checkups.
-    if(this->usernames.contains(pack->username)){
+    if(plist->containsUsername(pack->username)){
         string = u"Server is full!";
         p_Kick* result = new p_Kick(string, string.length());
         delete pack;

@@ -11,7 +11,6 @@ std::map<std::string, std::string> ServerSettings::getSettings(){
 }
 
 ServerSettings::ServerSettings(){
-    this->defaults = getDefaultSettings();
     std::string key, value;
     std::fstream reader("./server_preferences.txt", std::fstream::in);
 

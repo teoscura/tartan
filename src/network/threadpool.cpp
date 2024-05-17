@@ -8,14 +8,13 @@
 ThreadPool::ThreadPool(){
     this->lg = LoggerHandler::getLogger();
     for(int i=0;i<TP_MAX_THREADS;i++){
-        ThreadWorker *threadworker = new ThreadWorker(); //starts associated EpollHandler
+        ThreadWorker *threadworker = new ThreadWorker(i); //starts associated EpollHandler
         if(!(threadworker)){
             lg->LogPrint(ERROR, "Couldn't allocate and construct ThreadWorker #{}", i);
             std::cerr << "[ERROR] Couldn't allocate and construct ThreadWorker #"<<i<<"\n";
             exit(1);
         }
         this->threads[i]=threadworker; //starts everything using the nested costructors
-        threads[i]->getEpollHandler()->setID(i);
     }
 }
 
