@@ -11,7 +11,7 @@
 
 class WorldBlob{
     protected:
-        std::map<v2<int32_t>, std::shared_ptr<Chunk>> chunks;
+        std::map<v2<int32_t>, std::unique_ptr<Chunk>> chunks;
         FlatlandGenerator terrain_generator;
         std::size_t radius;
     public:

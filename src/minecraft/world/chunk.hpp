@@ -45,6 +45,7 @@ class Chunk{
         uint8_t getBlockID(v3<int32_t> coords);
         void setHeight(v3<int32_t> coords, uint8_t new_hgt);
         std::string serialize();
+        ~Chunk();
 };
 
 struct ChunkInstance{

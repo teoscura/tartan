@@ -6,14 +6,16 @@
 #include <memory>
 
 #include "../network/server.hpp"
+#include "blob/blobpool.hpp"
 #include "entity/player/playerlist.hpp"
 #include "logic/loginhandler.hpp"
 //#include "blob.hpp"
 
 class MCServer : public Server{
     private:
-        GlobalPlayerList globalPlayerList;
         std::map<std::string, std::string> settings;
+        GlobalPlayerList globalPlayerList;
+        BlobPool bp;
         LoginHandler loginhandler;
     public:
         MCServer();

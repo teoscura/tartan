@@ -94,3 +94,7 @@ std::string Chunk::serialize(){
 		}
 		return str;
 }
+
+Chunk::~Chunk(){
+	//TODO WRITE TO DATABASE or FILE.
+}
