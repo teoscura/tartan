@@ -16,7 +16,9 @@ class Blob : public WorldBlob{
     public:
         Blob(std::size_t radius);
         Blob(v2<int32_t> center_chunk_coords, std::size_t radius);
-        Blob(WorldBlob blob, PlayerList new_local, std::jthread merged_thread, PacketProcessor merged_processor);
+        Blob(WorldBlob blob, PlayerList& new_local);
+
+        PlayerList& getLocalPlayers();
 
         void eventLoop();
         void welcomePlayer(std::shared_ptr<Player> moved_p);

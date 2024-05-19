@@ -23,6 +23,7 @@ class ThreadSafeSet{
         std::size_t size();
         void erase(const O& obj);
         void insert(const O object);
+        void merge(ThreadSafeSet<O>& set2);
         O* begin();
         O* end();
 };
@@ -89,6 +90,14 @@ void ThreadSafeSet<O>::insert(const O object){
         return;        
     }
     l->LogPrint(ERROR, "Attempted to insert object: {} but object was already present!\n", object);
+    lock.unlock();
+    var.notify_one();
+}
+
+template<typename O>
+void ThreadSafeSet<O>::merge(ThreadSafeSet<O>& set2){
+    std::unique_lock<std::mutex> lock(mut);
+    this->set.merge(set2);
     lock.unlock();
     var.notify_one();
 }

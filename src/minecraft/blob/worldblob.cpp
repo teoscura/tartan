@@ -14,6 +14,11 @@ void WorldBlob::genChunk(v2<int32_t> chunk_coords){
     this->chunks.insert(std::move(pair));
 }
 
+//consumes worldblob
+std::map<v2<int32_t>, std::unique_ptr<Chunk>> WorldBlob::moveChunks(){
+    return std::move(this->chunks);
+}
+
 WorldBlob::WorldBlob(std::size_t radius){
     for(int x=-radius+1;x<radius;x++){
         for(int z=-radius+1;z<radius;z++){
@@ -23,6 +28,11 @@ WorldBlob::WorldBlob(std::size_t radius){
             this->chunks.insert(std::move(tmp));
         }
     }
+}
+
+WorldBlob::WorldBlob(std::map<v2<int32_t>, std::unique_ptr<Chunk>> chunks, std::size_t radius):
+    chunks(chunks),
+    radius(radius){
 }
 
 WorldBlob::WorldBlob(v2<int32_t> center_chunk_coords, std::size_t radius){

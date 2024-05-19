@@ -3,6 +3,7 @@
 
 #include "blob.hpp"
 #include <cstddef>
+#include <memory>
 
 class BlobPool{
     protected:
@@ -12,7 +13,7 @@ class BlobPool{
     public:
         BlobPool(std::size_t radius);    
         void handleBlobs();
-        void mergeBlobs();
+        void mergeBlobs(std::unique_ptr<Blob> b1, std::unique_ptr<Blob> b2);
         void divideBlob();
         
         bool areLinked(std::set<v2<double>> a, std::set<v2<double>> b);

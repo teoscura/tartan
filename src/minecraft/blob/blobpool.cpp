@@ -23,3 +23,16 @@ bool BlobPool::areLinked(std::set<v2<double>> a, std::set<v2<double>> b){
     // TODO return correct if.
     return (tmpmax2-tmpmax1).norm() < 4*this->radius;
 }
+
+void BlobPool::mergeBlobs(std::unique_ptr<Blob> b1, std::unique_ptr<Blob> b2){
+    auto chunks1 = b1->moveChunks();
+    auto chunks2 = b2->moveChunks();
+    chunks1.merge(chunks2);
+    PlayerList mergedPlayers;
+    mergedPlayers.merge(b1->getLocalPlayers());
+    mergedPlayers.merge(b2->getLocalPlayers());
+    WorldBlob tmpworld(chunks1, this->radius);
+    std::unique_ptr<Blob> blob = std::make_unique<Blob>(std::move(tmpworld), mergedPlayers);
+    this->blobs.insert(std::move(blob));
+}
+

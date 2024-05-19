@@ -1,6 +1,7 @@
 #include "blob.hpp"
 
 #include "../entity/player/playerlist.hpp"
+#include <functional>
 #include <memory>
 
 Blob::Blob(std::size_t radius) : 
@@ -14,6 +15,17 @@ Blob::Blob(v2<int32_t> center_chunk_coords, std::size_t radius) :
     global_Players(GlobalPlayerList::getGlobalPlayerList()), 
     blob_thread(&Blob::eventLoop, this){
 
+}
+
+Blob::Blob(WorldBlob blob, PlayerList& new_local):
+    WorldBlob(blob){
+    for(auto t: new_local){
+        this->local_players.insert(std::move(t));
+    }
+}
+
+PlayerList& Blob::getLocalPlayers(){
+    return std::ref(this->local_players);
 }
 
 void Blob::welcomePlayer(std::shared_ptr<Player> p){;

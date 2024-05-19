@@ -20,7 +20,7 @@ class ThreadSafeQueue{
         void push(T item);
         T pop();
         T front();
-        std::size_t size();
+        const std::size_t size();
 };
 
 template<class T>
@@ -51,7 +51,7 @@ bool ThreadSafeQueue<T>::isEmpty(){
 }
 
 template<class T>
-std::size_t ThreadSafeQueue<T>::size(){
+const std::size_t ThreadSafeQueue<T>::size(){
     std::size_t res;
     std::unique_lock<std::mutex> lock(mut); 
     res = queue.size();

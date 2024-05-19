@@ -10,6 +10,7 @@ PacketProcessor::PacketProcessor() :
     serializer(SerializerHandler::getSerializer()){
 }
 
+
 void PacketProcessor::queuePacket(std::unique_ptr<DsPacket> p ){
     this->in.push(std::move(p));
 }
@@ -37,7 +38,6 @@ void PacketProcessor::processPackets(){
                 LoggerHandler::getLogger()->LogPrint(ERROR, "Unimplemented packet recieved! ID: {}", tmp->getID());
                 break;
         }
-
         this->serializer->serialize(std::move(tmp));
     }
 }
