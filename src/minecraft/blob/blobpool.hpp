@@ -14,8 +14,9 @@ class BlobPool{
         BlobPool(std::size_t radius);    
         void handleBlobs();
         void mergeBlobs(std::unique_ptr<Blob> b1, std::unique_ptr<Blob> b2);
-        void divideBlob();
+        void divideBlob(std::unique_ptr<Blob> b1);
         
+        bool shouldSplit(std::set<v2<double>> coords);
         bool areLinked(std::set<v2<double>> a, std::set<v2<double>> b);
 
         ~BlobPool();
