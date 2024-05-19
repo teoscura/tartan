@@ -10,8 +10,8 @@ v3<int32_t> FlatlandGenerator::getSpawnPoint(){
     return this->spawnpoint;
 }
 
-std::shared_ptr<Chunk> FlatlandGenerator::generateChunk(v2<int32_t> coords){
-    std::shared_ptr<Chunk> newChunk = std::make_shared<Chunk>();
+std::unique_ptr<Chunk> FlatlandGenerator::generateChunk(v2<int32_t> coords){
+    std::unique_ptr<Chunk> newChunk = std::make_unique<Chunk>(coords);
     int y=0;
     while (y < 10) {
 		for (int x = 0; x < 16; x++) {

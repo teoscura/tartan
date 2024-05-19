@@ -12,6 +12,7 @@ class Entity{
         bool despawned;
         bool to_update;
     public:
+        v3<double> getXYZ();
 };
 
 #endif

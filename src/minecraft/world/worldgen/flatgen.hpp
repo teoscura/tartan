@@ -11,7 +11,7 @@ class FlatlandGenerator{
     public:
 		FlatlandGenerator();
 		v3<int32_t> getSpawnPoint();
-		std::shared_ptr<Chunk> generateChunk(v2<int32_t> coords);
+		std::unique_ptr<Chunk> generateChunk(v2<int32_t> coords);
 };
 
 #endif

@@ -1,6 +1,25 @@
 #include "blobpool.hpp"
+#include <algorithm>
+#include <memory>
+#include <numeric>
 
 BlobPool::BlobPool(std::size_t rad) : 
-    lg(LoggerHandler::getLogger()){
+    lg(LoggerHandler::getLogger()),
+    radius(rad){
     this->blobs.insert(std::make_unique<Blob>(rad));
+}
+
+bool BlobPool::areLinked(std::set<v2<double>> a, std::set<v2<double>> b){
+    // Calculating the two average points
+    auto avg1 = std::accumulate(a.begin(), a.end(), v2<double>(0,0)) / a.size();
+    auto avg2 = std::accumulate(b.begin(), b.end(), v2<double>(0,0)) / b.size();
+    //Vector connecting two average points and normalize it to calculate dot product.
+    v2<double> line=avg2-avg1;
+    line = line.normalize();
+    // Line starts at avg1 to avg2 first we find the vector thats furthest along that line in a
+    auto tmpmax2 = *std::ranges::max_element(a, {}, [&](auto pt){return v2<double>::dotProduct(pt-avg1, line);});
+    // flip the line and swap the origin to and find the furthest point for b
+    auto tmpmax1 = *std::ranges::max_element(b, {}, [&](auto pt){return v2<double>::dotProduct(pt-avg2, -line);});
+    // TODO return correct if.
+    return (tmpmax2-tmpmax1).norm() < 4*this->radius;
 }

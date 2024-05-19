@@ -12,8 +12,14 @@ struct v2{
 
     v2(T x, T z);
     v2();
+    v2<T> operator+(v2<T> v2);
+    v2<T> operator-();
+    v2<T> operator-(v2<T> v2);
+    v2<T> operator/(double n);
+    v2<T> normalize();
+    T norm();
+    static T dotProduct(const v2<T> v1, const v2<T> v2);
 };
-
 
 template<typename T>
 struct v3{
@@ -24,7 +30,6 @@ struct v3{
     v3(T x,T y,T z);
     v3();
 };
-
 
 static const v2<int32_t> zero2();
 static const v2<int32_t> one2();
@@ -41,7 +46,6 @@ static const v3<int32_t> right3(); //EAST 1x
 static const v3<int32_t> forwards3(); //SOUTH 1z
 static const v3<int32_t> backwards3();
 
-
 template<typename T>
 v2<T>::v2(T x, T z){
    this->x = x;
@@ -55,26 +59,50 @@ v2<T>::v2(){
 }
 
 template<typename T>
-v2<T> minv2(v2<T> v1, v2<T> v2){
-    return v2(min(v1.x,v2.x),
-                    min(v1.z,v2.z));
+v2<T> v2<T>::operator+(v2<T> v2){
+    return v2(this->x+v2.x,this->z+v2.z);
 }
+
+template<typename T>
+v2<T> v2<T>::operator-(){
+    return v2(-this->x, -this->z);
+}
+template<typename T>
+v2<T> v2<T>::operator-(v2<T> v2){
+    return v2(this->x-v2.x, this->z-v2.z);
+}
+
+template<typename T>
+v2<T> v2<T>::operator/(double n){
+    return v2(this->x/n,this->z/n);
+}
+
+template<typename T>
+v2<T> minv2(v2<T> v1, v2<T> v2){
+    return v2(min(v1.x,v2.x), min(v1.z,v2.z));
+}
+
 template<typename T>
 v2<T>  maxv2(const v2<T>& v1, const v2<T>& v2){
-    return createv2(max(v1.x,v2.x),
-                    max(v1.z,v2.z));
+    return v2(max(v1.x,v2.x), max(v1.z,v2.z));
 }
+
 template<typename T>
-double v2distancefrom(const v2<T>& v, const v2<T>& point){
-    return sqrt(pow(v.x-point.x, 2.0)+
-                pow(v.z-point.z, 2.0));
+double v2distancefrom(const v2<T>& v1, const v2<T>& v2){
+    return sqrt(pow(v2.x-v1.x, 2.0)+pow(v2.z-v1.z, 2.0));
 }
+
 template<typename T>
-v2<T> normalize2(const v2<T>& v){
-    double l = v2distancefrom(v, zero2());
-    return createv2(v.x/l,
-                    v.z/l);
+T v2<T>::norm(){
+    return sqrt(pow(this->x, 2.0)+pow(this->z, 2.0));
 }
+
+template<typename T>
+v2<T> v2<T>::normalize(){
+    auto l = this->norm();
+    return v2(this->x/l, this->z/l);
+}
+
 template<typename T>
 int isEqual2(const v2<T>& v1, const v2<T>& v2){
     if(v1.x==v2.x&&v1.z==v2.z){
@@ -82,23 +110,37 @@ int isEqual2(const v2<T>& v1, const v2<T>& v2){
     }
     return 0;
 }
+
 template<typename T>
 v2<T> floorv2(const v2<T>& v){
-    return createv2(floor(v.x),
-                    floor(v.z));
+    return v2(floor(v.x),
+                floor(v.z));
 }
+
+template<typename T>
+T v2<T>::dotProduct(const v2<T> v1,const v2<T> v2){
+    return (v1.x*v2.x + v1.z*v2.z);
+}
+
+template<typename T>
+v2<T> conv3d_2d(const v3<T>& v){
+    return v2<T>(v.x,v.z);
+}
+
 template<typename T>
 v3<T>::v3(T x, T y, T z){
     this->x = x;
     this->y = y;
     this->z = z;
 }
+
 template<typename T>
 v3<T>::v3(){
     this->x = 0;
     this->y = 0;
     this->z = 0;
 }
+
 template<typename T>
 v3<T> minv3(const v3<T>& v1, const v3<T>& v2){
     v3<T> vector;
@@ -107,6 +149,7 @@ v3<T> minv3(const v3<T>& v1, const v3<T>& v2){
     vector.z = min(v1.z,v2.z);
     return vector;
 }
+
 template<typename T>
 v3<T> maxv3(const v3<T>& v1, const v3<T>& v2){
     v3<T> vector;
@@ -115,10 +158,12 @@ v3<T> maxv3(const v3<T>& v1, const v3<T>& v2){
     vector.z = max(v1.z,v2.z);
     return vector;
 }
+
 template<typename T>
 v3<T> conv2d_3d(const v2<T>& v){
     return createv3(v.x, 0, v.z);
 }
+
 template<typename T>
 double v3distancefrom(const v3<T>& v1, const v3<T>& point){
     return sqrt(pow(v1.x-point.x, 2.0)+
@@ -133,6 +178,7 @@ v3<T> normalize3(const v3<T>& v){
                     v.y/l,
                     v.z/l);
 }
+
 template<typename T>
 int isEqual3(const v3<T>& v1, const v3<T>& v2){
     if(v1.x==v2.x&&v1.y==v2.y&&v1.z==v2.z){
@@ -140,12 +186,12 @@ int isEqual3(const v3<T>& v1, const v3<T>& v2){
     }
     return 0;
 }
+
 template<typename T>
 v3<T> floorv3(const v3<T>& v){
     return createv3(floor(v.x),
                     floor(v.y),
                     floor(v.z));
 }
-
 
 #endif

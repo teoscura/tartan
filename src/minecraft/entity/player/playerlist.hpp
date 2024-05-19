@@ -5,7 +5,12 @@
 #include "../../../helpers/ts_set.hpp"
 #include <memory>
 
-typedef ThreadSafeSet<std::shared_ptr<Player>> PlayerList;
+
+class PlayerList{
+    public:
+        ThreadSafeSet<std::shared_ptr<Player>> list;
+        std::set<v2<double>> getCoordList();
+};
 
 class GlobalPlayerList{
     private:

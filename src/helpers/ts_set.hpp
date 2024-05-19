@@ -23,6 +23,8 @@ class ThreadSafeSet{
         std::size_t size();
         void erase(const O& obj);
         void insert(const O object);
+        O* begin();
+        O* end();
 };
 
 template<typename O>
@@ -91,4 +93,16 @@ void ThreadSafeSet<O>::insert(const O object){
     var.notify_one();
 }
 
+template<typename O>
+O* ThreadSafeSet<O>::begin(){
+    return this->set.begin();
+}
+template<typename O>
+O* ThreadSafeSet<O>::end(){
+    std::unique_lock<std::mutex> lock(mut);
+    auto a = this->set.begin();
+    lock.unlock();
+    var.notify_one();
+    return a;
+}    
 #endif

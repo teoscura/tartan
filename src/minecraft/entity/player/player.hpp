@@ -42,7 +42,7 @@ class Player : public LivingEntity{
         void updatePosLook();//TODO 
 
         uint32_t getEntityId() override;
-
+        operator v2<double>();
         Player();
         ~Player();
 
