@@ -63,7 +63,7 @@ void EpollHandler::handleRead(uint32_t fd){
         close(fd);
     }
     else {
-        lg->LogPrint(DATA, "Incoming Packets from: {}/{}\n{}", fd, this->info.ID, hexStr(buffer, nread));
+        lg->LogPrint(DATA, "Incoming Packets from: {}/{}\n[DATA] {}", fd, this->info.ID, hexStr(buffer, nread));
         std::cout<<"Read message from fd: "<<fd<<" from thread: "<< this->info.ID<<"\n";
         std::cout<<"[nread = " << nread <<"]\n";
         PacketReturnInfo info;
