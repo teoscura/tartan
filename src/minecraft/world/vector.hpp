@@ -29,6 +29,13 @@ struct v3{
 
     v3(T x,T y,T z);
     v3();
+    v3<T> operator+(v3<T> v2);
+    v3<T> operator-();
+    v3<T> operator-(v3<T> v2);
+    v3<T> operator/(double n);
+    v3<T> normalize();
+    T norm();
+    static T dotProduct(const v3<T> v1, const v3<T> v2);
 };
 
 static const v2<int32_t> zero2();
@@ -142,6 +149,25 @@ v3<T>::v3(){
 }
 
 template<typename T>
+v3<T> v3<T>::operator+(v3<T> v3){
+    return v3(this->x+v3.x,this->y+v3.y,this->z+v3.z);
+}
+
+template<typename T>
+v3<T> v3<T>::operator-(){
+    return v3(-this->x, -this->y, -this->z);
+}
+template<typename T>
+v3<T> v3<T>::operator-(v3<T> v3){
+    return v3(this->x-v3.x, this->y-v3.y, this->z-v3.z);
+}
+
+template<typename T>
+v3<T> v3<T>::operator/(double n){
+    return v3(this->x/n, this->y/n, this->z/n);
+}
+
+template<typename T>
 v3<T> minv3(const v3<T>& v1, const v3<T>& v2){
     v3<T> vector;
     vector.x = min(v1.x,v2.x);
@@ -172,14 +198,6 @@ double v3distancefrom(const v3<T>& v1, const v3<T>& point){
 }
 
 template<typename T>
-v3<T> normalize3(const v3<T>& v){
-    double l = v3distancefrom(v, v3(0,0,0));
-    return v3<T>(v.x/l,
-                    v.y/l,
-                    v.z/l);
-}
-
-template<typename T>
 int isEqual3(const v3<T>& v1, const v3<T>& v2){
     if(v1.x==v2.x&&v1.y==v2.y&&v1.z==v2.z){
         return 1;
@@ -192,6 +210,22 @@ v3<T> floorv3(const v3<T>& v){
     return createv3(floor(v.x),
                     floor(v.y),
                     floor(v.z));
+}
+
+template<typename T>
+T v3<T>::norm(){
+    return sqrt(pow(this->x, 2.0)+pow(this->y, 2.0)+pow(this->z, 2.0));
+}
+
+template<typename T>
+v3<T> v3<T>::normalize(){
+    auto l = this->norm();
+    return v3(this->x/l, this->y/l, this->z/l);
+}
+
+template<typename T>
+T v3<T>::dotProduct(const v3<T> v1,const v3<T> v2){
+    return (v1.x*v2.x + v1.y*v2.y + v1.z*v2.z);
 }
 
 #endif

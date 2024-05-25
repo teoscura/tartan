@@ -6,10 +6,6 @@
 #include "../../helpers/loggerhandler.hpp"
 #include "p_Kick.hpp"
 
-uint8_t p_Kick::getID(){
-    return 0xFF;
-}
-
 p_Kick::p_Kick(std::unique_ptr<Packet> pack){
     Logger* lg = LoggerHandler::getLogger();
     this->info = pack->info;
@@ -26,6 +22,15 @@ p_Kick::p_Kick(std::u16string resp, uint16_t len){
     this->reason = resp;
     this->reason_len = len;
 }
+
+uint8_t p_Kick::getID(){
+    return 0xFF;
+}
+
+PacketCategories p_Kick::getType(){
+    return LOGIN;
+}
+
 
 std::unique_ptr<Packet> p_Kick::serialize(){
     std::unique_ptr<Packet> result = std::make_unique<Packet>();

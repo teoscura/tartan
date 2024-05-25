@@ -6,10 +6,6 @@
 #include "../../helpers/loggerhandler.hpp"
 #include "p_HandShake.hpp"
 
-uint8_t p_HandShake::getID(){
-    return 0x02;
-}
-
 p_HandShake::p_HandShake(std::unique_ptr<Packet> pack){
     Logger* lg = LoggerHandler::getLogger();
     this->info = pack->info;
@@ -26,6 +22,14 @@ p_HandShake::p_HandShake(std::unique_ptr<Packet> pack){
 p_HandShake::p_HandShake(std::u16string resp, uint16_t len){
     this->username = resp;
     this->username_len = len;
+}
+
+uint8_t p_HandShake::getID(){
+    return 0x02;
+}
+
+PacketCategories p_HandShake::getType(){
+    return LOGIN;
 }
 
 std::unique_ptr<Packet> p_HandShake::serialize(){

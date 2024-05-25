@@ -1,21 +1,20 @@
 #include "playerlist.hpp"
+#include <memory>
+#include <string>
 
-std::set<v2<double>> PlayerList::getCoordList(){
-    std::set<v2<double>> cl;
-    for(auto p: this->list){
-        cl.insert(conv3d_2d(p->getXYZ()));
+void PlayerList::insert(std::shared_ptr<Player> playerin){
+    this->list.insert(std::move(playerin));
+}
+
+void PlayerList::remove(std::shared_ptr<Player> playerin){
+    this->list.erase(std::move(playerin));
+}
+
+bool PlayerList::containsname(std::u16string username){
+    for(auto t : this->list){
+        if(t->getUsername() == username){
+            return true;
+        }
     }
-    return cl;
-}
-
-GlobalPlayerList::GlobalPlayerList(){
-    this->list = new PlayerList;
-}
-
-PlayerList* GlobalPlayerList::getGlobalPlayerList(){
-    return list;
-}
-
-GlobalPlayerList::~GlobalPlayerList(){
-    delete this->list;
+    return false;
 }

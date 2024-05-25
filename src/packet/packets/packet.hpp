@@ -5,6 +5,15 @@
 #include <cstddef>
 #include <memory>
 
+enum PacketCategories{
+    NOT_IMPLEMENTED,
+    LOGIN,
+    PLAYER,
+    ENTITY,
+    CHUNK_BLOCK,
+    MISC,
+};
+
 struct PacketReturnInfo{
     uint32_t epoll_fd;
     uint32_t thread_ID;
@@ -24,9 +33,13 @@ class DsPacket{
     protected:
         PacketReturnInfo info;
     public:
+
         PacketReturnInfo getInfo();
         void setInfo(PacketReturnInfo inf);
+
+        
         virtual uint8_t getID();
+        virtual PacketCategories getType();
         virtual std::unique_ptr<Packet> serialize();
         virtual ~DsPacket() = default;
 };

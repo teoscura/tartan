@@ -6,9 +6,7 @@
 #include "../../helpers/loggerhandler.hpp"
 #include "../../util/byteops.hpp"
 
-uint8_t p_SpawnPosition::getID(){
-    return 0x06;
-}
+
 
 p_SpawnPosition::p_SpawnPosition(std::unique_ptr<Packet> pack){
     auto lg = LoggerHandler::getLogger();
@@ -21,6 +19,15 @@ p_SpawnPosition::p_SpawnPosition(std::unique_ptr<Packet> pack){
     this->y = read4byteInt_BE(pack->bytes+5);
     this->z = read4byteInt_BE(pack->bytes+9);
 }
+
+uint8_t p_SpawnPosition::getID(){
+    return 0x06;
+}
+
+PacketCategories p_SpawnPosition::getType(){
+    return PLAYER;
+}
+
 
 std::unique_ptr<Packet> p_SpawnPosition::serialize(){
     std::unique_ptr<Packet> result = std::make_unique<Packet>();

@@ -79,20 +79,7 @@ void Chunk::setHeight(v3<int32_t> coords, uint8_t new_hgt){
 }
 
 std::string Chunk::serialize(){
-	std::string str;
-		for (int i = 0; i < this->size; i++) {
-			str.push_back(this->blocks[i]);
-		}
-		for (int i = 0; i < this->size; i++){
-			str.push_back(0x00);
-		}
-		for (int i = 0; i < this->size; i++){
-			str.push_back(0xFF);
-		}
-		for (int i = 0; i < this->size; i++){
-			str.push_back(0xFF);
-		}
-		return str;
+	//TODO this
 }
 
 Chunk::~Chunk(){

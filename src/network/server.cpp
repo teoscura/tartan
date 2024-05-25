@@ -13,7 +13,12 @@
 #include "server.hpp"
 
 
-Server::Server() : running(true), settings(SettingsHandler::getSettings()), lg(this->lg = LoggerHandler::getLogger()){
+Server::Server(PacketDeserializer* pdeserial, PacketSerializer* pserial) : 
+    tp(pdeserial, pserial),
+    running(true), 
+    settings(SettingsHandler::getSettings()), 
+    lg(this->lg = LoggerHandler::getLogger()){
+
     uint32_t port = atoi(settings->getSettings().at("server_port").c_str());
     if((listener.sockfd = socket(AF_INET,SOCK_STREAM,0))==-1){
         lg->LogPrint(ERROR, "Couldn't create main entry socket!");

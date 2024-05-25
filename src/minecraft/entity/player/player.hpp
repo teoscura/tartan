@@ -4,7 +4,7 @@
 #include <string>
 
 #include "../../../packet/packets/packet.hpp"
-#include "../../entity/livingentity.hpp"
+#include "../../entity/entity.hpp"
 #include "../../world/vector.hpp"
 
 enum PlayerStances{
@@ -13,9 +13,20 @@ enum PlayerStances{
     SLEEP,
 };
 
-class Player : public LivingEntity{
+enum PlayerState{
+    FIRSTCONN = 0x00,
+    LOGGING,
+    PLAYING,
+};
+
+struct PlayerConnectionInfo{
+    PacketReturnInfo packetinfo;
+    PlayerState state;
+};
+
+class Player : public Entity{
     private:
-        PacketReturnInfo info;
+        PlayerConnectionInfo info;
     protected:
         std::u16string username;
         const uint8_t maxhp = 20;
@@ -42,7 +53,8 @@ class Player : public LivingEntity{
         void updatePosLook();//TODO 
 
         uint32_t getEntityId() override;
-        operator v2<double>();
+        std::u16string getUsername();
+
         Player();
         ~Player();
 

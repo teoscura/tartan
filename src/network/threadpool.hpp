@@ -13,7 +13,7 @@ class ThreadPool{
         Logger* lg;
         std::array<ThreadWorker*, TP_MAX_THREADS> threads;
     public:
-        ThreadPool();
+        ThreadPool(PacketDeserializer* pdeserial,PacketSerializer*pserial);
         ~ThreadPool();
         void close();
         void AllocateJob(uint32_t fd);

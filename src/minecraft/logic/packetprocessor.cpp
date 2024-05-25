@@ -1,43 +1,60 @@
 #include "packetprocessor.hpp"
 
+#include <iostream>
 #include <memory>
 
-#include "../../packet/handler/p_serialhandler.hpp"
 #include "../../helpers/loggerhandler.hpp"
-#include "logic.hpp"
 
-PacketProcessor::PacketProcessor() : 
-    serializer(SerializerHandler::getSerializer()){
+PacketProcessor::PacketProcessor(PacketDeserializer* pdeserial,PacketSerializer* pserial, PlayerList* plist) : 
+    deserializer(pdeserial),
+    serializer(pserial),
+    plist(plist){}
+
+//temporary function for single blob server
+//mainserver will do this and send to others one at a time.
+//FIXME
+void PacketProcessor::retrieveQueue(){
+    std::unique_ptr<DsPacket> tmp;
+    while((tmp = std::move(this->deserializer->retrievePacket()))!=nullptr){
+        this->in.push(std::move(tmp));
+        std::cout<<"Moved pp\n";
+    }
 }
-
 
 void PacketProcessor::queuePacket(std::unique_ptr<DsPacket> p ){
     this->in.push(std::move(p));
 }
-//remember, never add packets and process at the same time.
+
 void PacketProcessor::processPackets(){
     std::unique_ptr<DsPacket> tmp;
     while(!in.isEmpty()){
-        tmp = std::move(this->in.front());
-        this->in.pop();
-        switch(whatCategory(tmp->getID())){
-            //TODO remove continues when fixed
+        std::cout<<"sheesh3333\n";
+        tmp = std::move(this->in.pop());
+        std::cout<<"sheesh3333\n";
+        switch(tmp->getType()){
+            //TODO
+            case LOGIN:
+                std::cout<<"sheesh\n";
+                tmp = loginhandler.handlepacket(std::move(tmp), plist);
+                std::cout<<"sheesh32\n";
+                this->serializer->serialize(std::move(tmp));
+                std::cout<<"sent packet!\n";
+                break;
             case PLAYER:
-                continue;
                 break;
             case ENTITY:
-                tmp = entityhandler.processPacket(std::move(tmp));
                 break;
             case CHUNK_BLOCK:
-                continue;
                 break;
             case MISC:
-                continue;
                 break;
             case NOT_IMPLEMENTED:
                 LoggerHandler::getLogger()->LogPrint(ERROR, "Unimplemented packet recieved! ID: {}", tmp->getID());
                 break;
         }
-        this->serializer->serialize(std::move(tmp));
     }
+}
+
+PacketProcessor::~PacketProcessor(){
+
 }

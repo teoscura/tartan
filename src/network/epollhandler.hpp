@@ -36,7 +36,7 @@ class EpollHandler{
         int getHowMany();
         int getID();
         
-        EpollHandler(uint32_t id);
+        EpollHandler(uint32_t id, PacketDeserializer* pdeserial, PacketSerializer*pserial);
         ~EpollHandler(); 
 };
 

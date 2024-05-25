@@ -1,9 +1,12 @@
 #ifndef MC_BLOBPOOL_H
 #define MC_BLOBPOOL_H
 
-#include "blob.hpp"
+
 #include <cstddef>
 #include <memory>
+
+#include "../../helpers/logger.hpp"
+#include "blob.hpp"
 
 class BlobPool{
     protected:

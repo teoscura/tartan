@@ -4,16 +4,16 @@
 #include "player.hpp"
 #include "../../../helpers/ts_set.hpp"
 #include <memory>
+#include <string>
 
-using PlayerList = ThreadSafeSet<std::shared_ptr<Player>>;
 
-class GlobalPlayerList{
+class PlayerList{
     private:
-        static inline PlayerList *list;
+        std::set<std::shared_ptr<Player>> list;
     public:
-        GlobalPlayerList();
-        static PlayerList* getGlobalPlayerList();
-        ~GlobalPlayerList();
+        void insert(std::shared_ptr<Player> playerin);
+        void remove(std::shared_ptr<Player> playerin);
+        bool containsname(std::u16string username);
 };
 
 

@@ -5,10 +5,10 @@
 #include "../helpers/loggerhandler.hpp"
 #include "threadpool.hpp"
 
-ThreadPool::ThreadPool(){
+ThreadPool::ThreadPool(PacketDeserializer* pdeserial, PacketSerializer*pserial){
     this->lg = LoggerHandler::getLogger();
     for(int i=0;i<TP_MAX_THREADS;i++){
-        ThreadWorker *threadworker = new ThreadWorker(i); //starts associated EpollHandler
+        ThreadWorker *threadworker = new ThreadWorker(i, pdeserial, pserial); //starts associated EpollHandler
         if(!(threadworker)){
             lg->LogPrint(ERROR, "Couldn't allocate and construct ThreadWorker #{}", i);
             std::cerr << "[ERROR] Couldn't allocate and construct ThreadWorker #"<<i<<"\n";

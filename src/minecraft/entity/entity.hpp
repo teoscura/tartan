@@ -5,6 +5,7 @@
 
 class Entity{
     protected:
+        uint32_t ID;
         v3<double> xyz;
         v3<double> velocity;
         float pitch;
@@ -13,6 +14,7 @@ class Entity{
         bool to_update;
     public:
         v3<double> getXYZ();
+        virtual uint32_t getEntityId();
 };
 
 #endif

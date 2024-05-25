@@ -11,9 +11,11 @@ class p_Kick : public DsPacket{
         uint16_t reason_len;
         std::u16string reason;
 
-        uint8_t getID() override;
         p_Kick(std::unique_ptr<Packet> pack);
         p_Kick(std::u16string resp, uint16_t len);
+
+        uint8_t getID() override;
+        PacketCategories getType() override;
         std::unique_ptr<Packet> serialize() override; 
         ~p_Kick() override;
 };

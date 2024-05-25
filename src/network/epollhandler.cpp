@@ -6,15 +6,13 @@
 #include <memory>
 #include <sys/epoll.h>
 
-#include "../packet/handler/p_deserhandler.hpp"
-#include "../packet/handler/p_serialhandler.hpp"
 #include "../helpers/loggerhandler.hpp"
 #include "../util/byteops.hpp"
 #include "../headers/defines.hpp"
 
-EpollHandler::EpollHandler(uint32_t id) : 
-    deserializer(DeserializerHandler::getDeserializer()), 
-    serializer(this->serializer = SerializerHandler::getSerializer()),
+EpollHandler::EpollHandler(uint32_t id, PacketDeserializer* pdeserial,PacketSerializer*pserial) : 
+    deserializer(pdeserial), 
+    serializer(pserial),
     lg(LoggerHandler::getLogger()){
     this->info.ID = id;
     this->info.running = true;

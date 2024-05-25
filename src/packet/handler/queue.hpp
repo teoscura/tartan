@@ -19,7 +19,6 @@ class ThreadSafeQueue{
         bool isEmpty();
         void push(T item);
         T pop();
-        T front();
         const std::size_t size();
 };
 
@@ -35,7 +34,7 @@ template<class T>
 T ThreadSafeQueue<T>::pop(){
     std::unique_lock<std::mutex> lock(mut); 
     var.wait(lock, [this]() { return !queue.empty(); });
-    T item = queue.front(); 
+    T item = std::move(queue.front()); 
     queue.pop(); 
     return std::move(item); 
 }

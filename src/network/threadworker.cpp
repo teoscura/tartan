@@ -1,7 +1,8 @@
 #include "threadworker.hpp"
 #include "epollhandler.hpp"
 
-ThreadWorker::ThreadWorker(uint32_t id) : e_handler(id){
+ThreadWorker::ThreadWorker(uint32_t id, PacketDeserializer* pdeserial,PacketSerializer*pserial) : 
+    e_handler(id, pdeserial, pserial){
     thr = std::jthread(&EpollHandler::mainLoop, &e_handler);
 }
 

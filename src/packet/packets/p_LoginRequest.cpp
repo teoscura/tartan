@@ -5,8 +5,8 @@
 #include "../../util/byteops.hpp"
 #include "p_LoginRequest.hpp"
 
-uint8_t p_LoginRequest::getID(){
-    return 0x01;
+p_LoginRequest::p_LoginRequest(){
+
 }
 
 p_LoginRequest::p_LoginRequest(std::unique_ptr<Packet> pack){
@@ -22,6 +22,14 @@ p_LoginRequest::p_LoginRequest(std::unique_ptr<Packet> pack){
     this->username = std::u16string(wstring_fromBytes(pack->bytes+7, this->username_len));
     this->seed = read8byteInt_BE(pack->bytes+(7+this->username_len*2));
     this->dimension = pack->bytes[15+this->username_len*2];
+}
+
+uint8_t p_LoginRequest::getID(){
+    return 0x01;
+}
+
+PacketCategories p_LoginRequest::getType(){
+    return LOGIN;
 }
 
 std::unique_ptr<Packet> p_LoginRequest::serialize(){

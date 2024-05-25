@@ -1,5 +1,11 @@
 #include "player.hpp"
 
-Player::operator v2<double>(){
-    return conv3d_2d(this->getXYZ());
+#include <string>
+
+uint32_t Player::getEntityId(){
+    return this->ID;
+}
+
+std::u16string Player::getUsername(){
+    return this->username;
 }

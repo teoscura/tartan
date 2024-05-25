@@ -11,8 +11,11 @@ class p_SpawnPosition : public DsPacket {
         int32_t x;
         int32_t y;
         int32_t z;
-        uint8_t getID() override;
+        
         p_SpawnPosition(std::unique_ptr<Packet> pack);
+
+        uint8_t getID() override;
+        PacketCategories getType() override;
         std::unique_ptr<Packet> serialize() override; 
         ~p_SpawnPosition() override;
 };

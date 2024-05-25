@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <memory>
 #include <utility>
@@ -9,6 +10,7 @@
 #include "../packets/p_LoginRequest.hpp"
 #include "../packets/p_HandShake.hpp"
 #include "../packets/p_Kick.hpp"
+#include "queue.hpp"
 
 
 PacketDeserializer::PacketDeserializer(){
@@ -65,3 +67,9 @@ void PacketDeserializer::addPacket(std::unique_ptr<Packet> p){
     this->queue.push(std::move(pack));
 }
 
+std::unique_ptr<DsPacket> PacketDeserializer::retrievePacket(){
+    if(queue.isEmpty()){
+        return nullptr;
+    }
+    return std::move(this->queue.pop());
+}

@@ -9,6 +9,7 @@ class p_KeepAlive: public DsPacket{
     public:
         p_KeepAlive(std::unique_ptr<Packet> pack);
         uint8_t getID() override;
+        PacketCategories getType() override;
 };
 
 #endif

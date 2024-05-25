@@ -14,7 +14,7 @@ class Server{
         Connection listener;
         bool running;
     public:
-        Server();
+        Server(PacketDeserializer* pdeserial,PacketSerializer*pserial);
         ~Server();
         void listen_loop();
         void shutdown();

@@ -1,6 +1,8 @@
 # Source directories separated by space
 # Example ./ src1/ src2/
-SRCDIR   =  src/ src/network/ src/packet/ src/packet/handler/ src/packet/packets/ src/util/ src/helpers/ src/headers/
+SRCDIR   =  src/ src/network/ src/packet/ src/packet/handler/ src/packet/packets/ src/util/ src/helpers/ src/headers/ \
+			src/minecraft/ src/minecraft/entity/ src/minecraft/entity/player/ src/minecraft/logic/ src/minecraft/world/ \
+			src/minecraft/world/worldgen/
 OBJDIR   = target/objects/
 # Include directories separated by space
 INCDIR   = include/
@@ -27,6 +29,9 @@ $(OBJDIR)%.o : %.cpp
 	@echo Compiling $< in $@...
 	@mkdir -p $(OBJDIR)
 	@$(CXX) $(CXXFLAGS) $(addprefix -I,$(INCDIR)) -c -o $@ $<
+
+clean:
+	rm ./target/objects/ -rf
 
 settingstest:
 	g++ -std=c++23 src/util/miscutil.cpp test/settingsmain.cpp ./src/helpers/server_settings.cpp -o target/settingstest

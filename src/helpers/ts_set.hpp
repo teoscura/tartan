@@ -70,7 +70,7 @@ template<typename O>
 void ThreadSafeSet<O>::erase(const O& obj){  
     std::unique_lock<std::mutex> lock(mut); 
     if(this->contains(obj)){
-        this->obj.erase(obj);
+        this->set.erase(obj);
         lock.unlock();
         var.notify_one();
         return;        
@@ -84,7 +84,7 @@ template<typename O>
 void ThreadSafeSet<O>::insert(const O object){
     std::unique_lock<std::mutex> lock(mut); 
     if(!this->contains(object)){
-        this->object.insert(object);
+        this->set.insert(object);
         lock.unlock();
         var.notify_one();
         return;        
@@ -102,16 +102,4 @@ void ThreadSafeSet<O>::merge(ThreadSafeSet<O>& set2){
     var.notify_one();
 }
 
-template<typename O>
-O* ThreadSafeSet<O>::begin(){
-    return this->set.begin();
-}
-template<typename O>
-O* ThreadSafeSet<O>::end(){
-    std::unique_lock<std::mutex> lock(mut);
-    auto a = this->set.begin();
-    lock.unlock();
-    var.notify_one();
-    return a;
-}    
 #endif

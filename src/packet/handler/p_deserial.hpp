@@ -13,6 +13,7 @@ class PacketDeserializer{
     public:
         PacketDeserializer();
         void addPacket(std::unique_ptr<Packet> p);
+        std::unique_ptr<DsPacket> retrievePacket();
         ~PacketDeserializer();
 };
 

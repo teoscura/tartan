@@ -1,7 +1,10 @@
 #include "blobpool.hpp"
+
 #include <algorithm>
 #include <memory>
 #include <numeric>
+
+#include "../../helpers/loggerhandler.hpp"
 
 BlobPool::BlobPool(std::size_t rad) : 
     lg(LoggerHandler::getLogger()),
