@@ -8,6 +8,9 @@
 
 std::unique_ptr<DsPacket> LoginHandler::handlepacket(std::unique_ptr<DsPacket> p, PlayerList* plist){
     std::cout<<"sheesh1\n";
+
+    //FIX ME REMAKE THIS PROPERLY DAMN.
+
     DsPacket* res;
     DsPacket* tmp = p.release();
     switch(p->getID()){

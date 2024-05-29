@@ -28,6 +28,10 @@ uint8_t DsPacket::getID(){
     return 0x00;
 }
 
+PacketCategories DsPacket::getType(){
+    return NOT_IMPLEMENTED;
+}
+
 PacketReturnInfo DsPacket::getInfo(){
     return this->info;
 }

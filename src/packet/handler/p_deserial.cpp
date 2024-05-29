@@ -35,7 +35,7 @@ void PacketDeserializer::addPacket(std::unique_ptr<Packet> p){
                 std::cerr<<"[ERROR] Data isnt a valid 0x00 packet!\n";
                 return;   
             }
-            pack = std::make_unique<DsPacket>(p_KeepAlive(std::move(p)));
+            pack = std::make_unique<p_KeepAlive>(std::move(p));
             break;
         case 0x01:
             if(p->size<16 || p->size > 48){
@@ -43,7 +43,7 @@ void PacketDeserializer::addPacket(std::unique_ptr<Packet> p){
                 std::cerr<<"[ERROR] Data isnt a valid 0x01 packet!\n";
                 return;
             }
-            pack = std::make_unique<DsPacket>(p_LoginRequest(std::move(p)));
+            pack = std::make_unique<p_LoginRequest>(std::move(p));
             break;
         case 0x02:
             if(p->size<3){
@@ -51,7 +51,7 @@ void PacketDeserializer::addPacket(std::unique_ptr<Packet> p){
                 std::cerr<<"[ERROR] Data isnt a valid 0x02 packet!\n";
                 return;
             }
-            pack = std::make_unique<DsPacket>(p_HandShake(std::move(p)));
+            pack = std::make_unique<p_HandShake>(std::move(p));
             break;
         case 0xFF:
             if(p->size!=1){
@@ -59,7 +59,7 @@ void PacketDeserializer::addPacket(std::unique_ptr<Packet> p){
                 std::cerr<<"[ERROR] Data isnt a valid 0xFF packet!\n";
                 return;
             }
-            pack = std::make_unique<DsPacket>(p_Kick(std::move(p)));
+            pack = std::make_unique<p_Kick>(std::move(p));
             break;
         default:
             break;

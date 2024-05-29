@@ -17,7 +17,6 @@ void PacketProcessor::retrieveQueue(){
     std::unique_ptr<DsPacket> tmp;
     while((tmp = std::move(this->deserializer->retrievePacket()))!=nullptr){
         this->in.push(std::move(tmp));
-        std::cout<<"Moved pp\n";
     }
 }
 
@@ -36,7 +35,6 @@ void PacketProcessor::processPackets(){
             case LOGIN:
                 std::cout<<"sheesh\n";
                 tmp = loginhandler.handlepacket(std::move(tmp), plist);
-                std::cout<<"sheesh32\n";
                 this->serializer->serialize(std::move(tmp));
                 std::cout<<"sent packet!\n";
                 break;

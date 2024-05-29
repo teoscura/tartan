@@ -16,7 +16,6 @@ p_HandShake::p_HandShake(std::unique_ptr<Packet> pack){
         return;
     }
     this->username = wstring_fromBytes(pack->bytes+3, username_len);
-    pack = nullptr;
 }
 
 p_HandShake::p_HandShake(std::u16string resp, uint16_t len){
