@@ -32,6 +32,8 @@ $(OBJDIR)%.o : %.cpp
 
 clean:
 	rm ./target/objects/ -rf
+	rm ./logs/ -rf
+	mkdir logs
 
 settingstest:
 	g++ -std=c++23 src/util/miscutil.cpp test/settingsmain.cpp ./src/helpers/server_settings.cpp -o target/settingstest

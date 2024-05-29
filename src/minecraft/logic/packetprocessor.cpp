@@ -27,17 +27,12 @@ void PacketProcessor::queuePacket(std::unique_ptr<DsPacket> p ){
 void PacketProcessor::processPackets(){
     std::unique_ptr<DsPacket> tmp;
     while(!in.isEmpty()){
-        std::cout<<"sheesh3333\n";
         tmp = std::move(this->in.pop());
-        std::cout<<"sheesh3333\n";
         switch(tmp->getType()){
             //TODO
             case LOGIN:
-                std::cout<<"sheesh\n";
                 tmp = loginhandler.handlepacket(std::move(tmp), plist);
-                std::cout<<"caca\n";
                 this->serializer->serialize(std::move(tmp));
-                std::cout<<"sent packet!\n";
                 break;
             case PLAYER:
                 break;

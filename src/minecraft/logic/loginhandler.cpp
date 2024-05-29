@@ -1,6 +1,6 @@
 #include "loginhandler.hpp"
 
-#include <iostream>
+
 #include <memory>
 #include <string>
 
@@ -22,19 +22,18 @@ std::unique_ptr<DsPacket> LoginHandler::handlepacket(std::unique_ptr<DsPacket> p
             LoggerHandler::getLogger()->LogPrint(ERROR, "Recieved Invalid packet in loginhandler");
             break;
     }
-    std::cout<<(int)p->getInfo().thread_ID<<std::endl;
     return std::move(tmp);
 }
 
 std::unique_ptr<DsPacket> LoginHandler::handleLoginRequest(std::unique_ptr<DsPacket> pack){
     auto tmp = dynamic_cast<p_LoginRequest&>(*pack);
-    std::unique_ptr<p_LoginRequest> resp;
-    resp->setInfo(pack->getInfo());
     if(tmp.protocol!=14){
         std::u16string string = u"Invalid version!";
         return std::make_unique<p_Kick>(string, string.length());
     }
-    return std::move(resp);
+    auto result = std::make_unique<p_LoginRequest>();
+    result->setInfo(pack->getInfo());
+    return std::move(result);
 }
 
 

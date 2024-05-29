@@ -76,10 +76,10 @@ void print_bytes(std::ostream& out, uint8_t* msg_buf, int dataLen, bool format) 
 
 std::string hexStr(const uint8_t *data, int len){
     std::stringstream out;
-    out << std::setfill('0');
+    out << std::setfill('0') << "                    [DATA] ";
     for(size_t i = 0; i < len; ++i) {
         out << std::hex << std::setw(2) << (int)data[i];
-        out << (((i + 1) % 32 == 0) ? "\n" : " ");
+        out << (((i + 1) % 32 == 0) ? "\n                           " : " ");
     }
     return out.str();
 }

@@ -2,19 +2,20 @@
 #define P_INTERFACE_H
 
 #include <cstdint>
-#include <map>
 #include <memory>
-#include <queue>
+#include <vector>
 
+
+#include "../../headers/defines.hpp"
 #include "../packets/packet.hpp"
 
 class PacketInterface{
     private:
-        std::map<uint32_t, std::queue<std::unique_ptr<Packet>>*> processedPackets;
+        std::array<std::vector<std::unique_ptr<Packet>>, TP_MAX_THREADS> processedPackets;
     public:
         PacketInterface();
-        void insert_packet(std::unique_ptr<Packet>);
-        std::queue<std::unique_ptr<Packet>>* get_map(uint32_t n);
+        void insert_packet(std::unique_ptr<Packet> p);
+        std::vector<std::unique_ptr<Packet>>* get_map(uint32_t n);
         ~PacketInterface();
 };
 

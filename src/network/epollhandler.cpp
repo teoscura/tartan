@@ -1,7 +1,6 @@
 #include "epollhandler.hpp"
 
 #include <arpa/inet.h>
-#include <cstring>
 #include <iostream>
 #include <memory>
 #include <sys/epoll.h>
@@ -30,7 +29,7 @@ void EpollHandler::handleEvents(){
     int i;
     int fd;
     std::unique_ptr<Packet> ptr;
-    std::queue<std::unique_ptr<Packet>>* packetQueue = serializer->get_next()->get_map(this->info.ID);
+    auto packetQueue = serializer->get_next()->get_map(this->info.ID);
     for (i = 0; i < this->info.ready; i++) {
         fd = events[i].data.fd;
         if (events[i].events == (EPOLLIN | EPOLLOUT)){
@@ -39,8 +38,9 @@ void EpollHandler::handleEvents(){
     }
     while(packetQueue->size()>0){
         ptr = std::move(packetQueue->front());
-        packetQueue->pop();
-        handleWrite(ptr->info.epoll_fd, std::move(ptr));
+        auto tmp = ptr->info.epoll_fd;
+        packetQueue->erase(packetQueue->begin());
+        handleWrite(tmp, std::move(ptr));
     }
 }
 
@@ -61,29 +61,26 @@ void EpollHandler::handleRead(uint32_t fd){
         close(fd);
     }
     else {
-        lg->LogPrint(DATA, "Incoming Packets from: {}/{}\n[DATA] {}", fd, this->info.ID, hexStr(buffer, nread));
+        lg->LogPrint(INFO, "Incoming Packets from: {}/{}\n{}", fd, this->info.ID, hexStr(buffer, nread));
         std::cout<<"Read message from fd: "<<fd<<" from thread: "<< this->info.ID<<"\n";
         std::cout<<"[nread = " << nread <<"]\n";
         PacketReturnInfo info;
         info.epoll_fd = fd;
         info.thread_ID = this->info.ID;
-
         std::unique_ptr<Packet> pack = std::make_unique<Packet>(buffer, nread, info);
         this->deserializer->addPacket(std::move(pack));
     }
 }
 
 void EpollHandler::handleWrite(uint32_t fd, std::unique_ptr<Packet> pack){
-    int bytes;
-    bytes = send(fd, pack->bytes, pack->size, 0);
-    strerror(errno);
+    int bytes = send(fd, pack->bytes, pack->size, 0);
     if (bytes == -1) {
         lg->LogPrint(ERROR, "Couldn't write to FD #", fd);
         std::cerr << "[ERROR] Couldn't write to FD #"<<fd<<"\n";
         eventOp(fd, EPOLLIN|EPOLLOUT, EPOLL_CTL_DEL);
     }
     else{
-        lg->LogPrint(DATA, "Sent packet to: {}\n{}", fd, hexStr(pack->bytes, pack->size));
+        lg->LogPrint(INFO, "Sent packet to: {}\n{}", fd, hexStr(pack->bytes, pack->size));
         std::cout<<"[INFO] Packet response sent!\n";
     }
 }
