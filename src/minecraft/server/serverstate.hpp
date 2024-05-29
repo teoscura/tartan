@@ -10,6 +10,7 @@ struct ServerState{
     //WILL IMPLEMENT
     // EntityList local_elist;
     //TODO IMPLEMENT EVENT SCHEDULE.
+    
 };
 
 #endif

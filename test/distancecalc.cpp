@@ -51,5 +51,3 @@ int main(){
 
     std::cout<< dur2.count() <<std::endl;
 }
-
-//TODO fix alg1, alg2 also broken.
