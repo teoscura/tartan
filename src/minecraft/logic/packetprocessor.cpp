@@ -1,14 +1,14 @@
 #include "packetprocessor.hpp"
 
-#include <iostream>
 #include <memory>
 
 #include "../../helpers/loggerhandler.hpp"
 
-PacketProcessor::PacketProcessor(PacketDeserializer* pdeserial,PacketSerializer* pserial, PlayerList* plist) : 
+PacketProcessor::PacketProcessor(PacketDeserializer* pdeserial,PacketSerializer* pserial, ServerState* state) : 
     deserializer(pdeserial),
     serializer(pserial),
-    plist(plist){}
+    state(state){
+}
 
 //temporary function for single blob server
 //mainserver will do this and send to others one at a time.
@@ -31,8 +31,8 @@ void PacketProcessor::processPackets(){
         switch(tmp->getType()){
             //TODO
             case LOGIN:
-                tmp = loginhandler.handlepacket(std::move(tmp), plist);
-                this->serializer->serialize(std::move(tmp));
+                tmp = loginhandler.handlepacket(std::move(tmp), state->global_plist);
+                this->out.push(std::move(tmp));
                 break;
             case PLAYER:
                 break;
@@ -46,6 +46,14 @@ void PacketProcessor::processPackets(){
                 LoggerHandler::getLogger()->LogPrint(ERROR, "Unimplemented packet recieved! ID: {}", tmp->getID());
                 break;
         }
+    }
+}
+
+void PacketProcessor::sendPackets(){
+    std::unique_ptr<DsPacket> tmp;
+    while(!this->out.isEmpty()){
+        tmp = std::move(out.pop());
+        this->serializer->serialize(std::move(tmp));
     }
 }
 
