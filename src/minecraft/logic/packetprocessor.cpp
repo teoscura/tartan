@@ -35,6 +35,7 @@ void PacketProcessor::processPackets(){
             case LOGIN:
                 std::cout<<"sheesh\n";
                 tmp = loginhandler.handlepacket(std::move(tmp), plist);
+                std::cout<<"caca\n";
                 this->serializer->serialize(std::move(tmp));
                 std::cout<<"sent packet!\n";
                 break;

@@ -6,7 +6,10 @@
 #include "p_LoginRequest.hpp"
 
 p_LoginRequest::p_LoginRequest(){
-
+    this->dimension=0;
+    this->seed = 0;
+    this->protocol = 0x0e;
+    this->username_len=0;
 }
 
 p_LoginRequest::p_LoginRequest(std::unique_ptr<Packet> pack){

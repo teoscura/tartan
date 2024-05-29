@@ -4,16 +4,15 @@
 #include <memory>
 
 #include "../entity/player/playerlist.hpp"
-#include "../../packet/packets/p_LoginRequest.hpp"
-#include "../../packet/packets/p_HandShake.hpp"
+
 #include "../../packet/packets/packet.hpp"
 
 class LoginHandler{
     protected:
     public:
         std::unique_ptr<DsPacket> handlepacket(std::unique_ptr<DsPacket> p, PlayerList* plist);
-        DsPacket* handleHandshake(p_HandShake* pack, PlayerList* plist);
-        DsPacket* handleLoginRequest(p_LoginRequest* pack);
+        std::unique_ptr<DsPacket> handleLoginRequest(std::unique_ptr<DsPacket> pack);
+        std::unique_ptr<DsPacket> handleHandshake(std::unique_ptr<DsPacket>, PlayerList* plist);
 };
 
 #endif

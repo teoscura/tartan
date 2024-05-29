@@ -4,58 +4,54 @@
 #include <memory>
 #include <string>
 
+#include "../../packet/packets/p_LoginRequest.hpp"
+#include "../../packet/packets/p_HandShake.hpp"
 #include "../../packet/packets/p_Kick.hpp"
 
 std::unique_ptr<DsPacket> LoginHandler::handlepacket(std::unique_ptr<DsPacket> p, PlayerList* plist){
-    std::cout<<"sheesh1\n";
-
     //FIX ME REMAKE THIS PROPERLY DAMN.
-
-    DsPacket* res;
-    DsPacket* tmp = p.release();
+    std::unique_ptr<DsPacket> tmp;
     switch(p->getID()){
-        case 0x01: 
-            res = handleLoginRequest((p_LoginRequest*)tmp);
+        case 0x01:
+            tmp = handleLoginRequest(std::move(p));
             break;
         case 0x02:
-            res = handleHandshake((p_HandShake*)tmp, plist);
+            tmp = handleHandshake(std::move(p), plist);
             break;
-        default: break;  
+        default:
+            LoggerHandler::getLogger()->LogPrint(ERROR, "Recieved Invalid packet in loginhandler");
+            break;
     }
-    delete tmp;
-    std::unique_ptr<DsPacket> pack(res);
-    return pack;
-    std::cout<<"sheesh2\n";
+    std::cout<<(int)p->getInfo().thread_ID<<std::endl;
+    return std::move(tmp);
 }
 
-DsPacket* LoginHandler::handleHandshake(p_HandShake* pack, PlayerList* plist){
-    std::u16string string;
+std::unique_ptr<DsPacket> LoginHandler::handleLoginRequest(std::unique_ptr<DsPacket> pack){
+    auto tmp = dynamic_cast<p_LoginRequest&>(*pack);
+    std::unique_ptr<p_LoginRequest> resp;
+    resp->setInfo(pack->getInfo());
+    if(tmp.protocol!=14){
+        std::u16string string = u"Invalid version!";
+        return std::make_unique<p_Kick>(string, string.length());
+    }
+    return std::move(resp);
+}
 
-    //TODO when server player list is implemented, change this
-    //To use main player list for checkups.
-    if(plist->containsname(pack->username)){
+
+std::unique_ptr<DsPacket> LoginHandler::handleHandshake(std::unique_ptr<DsPacket> pack, PlayerList* plist){
+    std::u16string string;
+    auto tmp = dynamic_cast<p_HandShake&>(*pack);
+    if(plist->containsname(tmp.username)){
         string = u"Server is full!";
-        p_Kick* result = new p_Kick(string, string.length());
-        return result;
+        auto t = std::make_unique<p_Kick>(string, string.length());
+        t->setInfo(tmp.getInfo());
+        return std::move(t);
     }
     string = u"-";
-    p_HandShake* result = new p_HandShake(string, string.length());
-    result->setInfo(pack->getInfo());
+    auto result = std::make_unique<p_HandShake>(string, string.length());
+    result->setInfo(tmp.getInfo());
     return result;
 }
 
 
-DsPacket* LoginHandler::handleLoginRequest(p_LoginRequest *pack){
-    p_LoginRequest resp;
-    resp.dimension = 0x00;
-    resp.seed = 0;
-    resp.protocol = 0x0e;
-    resp.username_len=0;
-    resp.setInfo(pack->getInfo());
-    if(pack->protocol!=14){
-        std::u16string string = u"Invalid version!";
-        return new p_Kick(string, string.length());
-    }
-    return new p_LoginRequest(resp);
-}
 
