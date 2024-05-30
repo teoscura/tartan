@@ -9,8 +9,6 @@ struct ServerState{
     PlayerList local_plist; 
     //WILL IMPLEMENT
     // EntityList local_elist;
-    //TODO IMPLEMENT EVENT SCHEDULE.
-    
 };
 
 #endif

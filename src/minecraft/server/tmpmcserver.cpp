@@ -3,7 +3,9 @@
 #include <chrono>
 #include <thread>
 
+#include "../logic/events/eventschedule.hpp"
 #include "../logic/packetprocessor.hpp"
+
 
 TempServer::TempServer(PacketDeserializer* pdeserial, PacketSerializer* pserial):
     pp_processor(pdeserial, pserial, &this->state),
@@ -26,9 +28,16 @@ void TempServer::tickloop(){
     }
 }
 
+void TempServer::processEvents(){
+    for(auto t : this->schedule.getExpectedEvents(this->time_state.s_tick)){
+        t->process(&this->state);
+    }
+}
+
 void TempServer::tickevents(){
     this->pp_processor.retrieveQueue();
     this->pp_processor.processPackets();
     this->processEvents();
     this->pp_processor.sendPackets();
 }
+

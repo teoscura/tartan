@@ -3,9 +3,8 @@
 
 #include <memory>
 
-#include "../entity/player/playerlist.hpp"
-
 #include "../../packet/packets/packet.hpp"
+#include "../entity/player/playerlist.hpp"
 
 class LoginHandler{
     protected:

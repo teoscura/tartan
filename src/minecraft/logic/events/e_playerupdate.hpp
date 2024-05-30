@@ -9,7 +9,7 @@ class Event_PlayerUpdate : public EventBase{
         //TODO fields.
     public:
         Event_PlayerUpdate(/*TODO fields*/uint64_t destination_tick, EventDeliveryType delivery_type);
-        EventType getType() override;
+        void process(ServerState* state) override;
         ~Event_PlayerUpdate() override;
 };
 

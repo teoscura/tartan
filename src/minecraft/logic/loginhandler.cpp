@@ -31,8 +31,7 @@ std::unique_ptr<DsPacket> LoginHandler::handleLoginRequest(std::unique_ptr<DsPac
         std::u16string string = u"Invalid version!";
         return std::make_unique<p_Kick>(string, string.length());
     }
-    auto result = std::make_unique<p_LoginRequest>();
-    result->setInfo(pack->getInfo());
+    auto result = std::make_unique<p_LoginRequest>(pack->getInfo());
     return std::move(result);
 }
 

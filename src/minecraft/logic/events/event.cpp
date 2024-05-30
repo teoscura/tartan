@@ -7,6 +7,10 @@ uint64_t EventBase::getDeliveryTick(){
     return this->delivery_tick;
 }
 
-EventType EventBase::getType(){
-    return BASE;
+uint32_t EventBase::getDestinationPlayerId(){
+    return this->destination_player_id;
+}
+
+void EventBase::process(ServerState *state){
+    return;
 }

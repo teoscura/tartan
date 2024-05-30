@@ -16,7 +16,7 @@ class p_LoginRequest : public DsPacket {
         int64_t seed;
         uint8_t dimension;
     
-        p_LoginRequest();
+        p_LoginRequest(PacketReturnInfo inf);
         p_LoginRequest(std::unique_ptr<Packet> pack);
 
         uint8_t getID() override;

@@ -5,19 +5,15 @@
 
 #include "../../helpers/loggerhandler.hpp"
 #include "../../util/byteops.hpp"
+#include "packet.hpp"
 
 
 
-p_SpawnPosition::p_SpawnPosition(std::unique_ptr<Packet> pack){
-    auto lg = LoggerHandler::getLogger();
-    if((1+3*sizeof(int32_t))!=pack->size){
-        lg->LogPrint(ERROR, "{:0x} Packet invalid!", (int)pack->bytes[0]);
-        std::cerr<<"[ERROR] 0x06 Packet invalid!, returning\n";
-        return;
-    }
-    this->x = read4byteInt_BE(pack->bytes+1);
-    this->y = read4byteInt_BE(pack->bytes+5);
-    this->z = read4byteInt_BE(pack->bytes+9);
+p_SpawnPosition::p_SpawnPosition(PacketReturnInfo inf, v3<int32_t> coords){
+    this->setInfo(inf);
+    this->x = coords.x;
+    this->y = coords.y;
+    this->z = coords.z;
 }
 
 uint8_t p_SpawnPosition::getID(){

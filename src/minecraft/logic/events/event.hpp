@@ -3,6 +3,8 @@
 
 #include <cstdint>
 
+#include "../../server/serverstate.hpp"
+
 enum EventType{
     BASE = 0x00,
 };
@@ -14,11 +16,13 @@ enum EventDeliveryType{
 class EventBase{
     private:
         uint64_t delivery_tick;
+        uint32_t destination_player_id;
     public: 
         const EventDeliveryType delivery_type;
         EventBase(uint64_t, EventDeliveryType delivery_type);
         uint64_t getDeliveryTick();
-        virtual EventType getType();
+        uint32_t getDestinationPlayerId();
+        virtual void process(ServerState* state);
         virtual ~EventBase() = default;
 };
 
