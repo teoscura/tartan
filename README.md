@@ -11,10 +11,10 @@ TODO = write a todo-list:
 So far it just gets us across the login procedure, or at least, used to.
 
 Dependencies:
-+ Sqlite3 
++ C++23 
 + That's it.
 
-### How to Run ###
+### How to Run - linux ###
 ```
     git clone https://github.com/teoscura/tartan
     cd tartan
