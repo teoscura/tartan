@@ -1,6 +1,23 @@
 #include "player.hpp"
 
+#include <cstdint>
 #include <string>
+
+void Player::updateBlob(uint8_t new_blob){
+    this->info.blob = new_blob;
+}
+
+void Player::updatePosLook(v3<double> new_xyz, v2<float> new_yp){
+    this->xyz = new_xyz;
+    this->yp = new_yp;
+}
+
+void Player::updatePlayerState(PlayerState new_state){
+    if(new_state<=this->info.state){
+        return;
+    }
+    this->info.state = new_state;
+}
 
 uint32_t Player::getEntityId(){
     return this->ID;
@@ -8,4 +25,8 @@ uint32_t Player::getEntityId(){
 
 std::u16string Player::getUsername(){
     return this->username;
+}
+
+const PacketReturnInfo& Player::getReturnInfo(){
+    return this->info.packetinfo;
 }

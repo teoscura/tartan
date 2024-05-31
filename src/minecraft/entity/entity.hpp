@@ -8,11 +8,11 @@ class Entity{
         uint32_t ID;
         v3<double> xyz;
         v3<double> velocity;
-        float pitch;
-        float yaw;
+        v2<float> yp;
+        bool on_ground;
         bool despawned;
-        bool to_update;
     public:
+        void updateOnGround(bool new_on_ground);
         v3<double> getXYZ();
         virtual uint32_t getEntityId();
 };
