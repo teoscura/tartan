@@ -9,7 +9,6 @@
 
 class p_LoginRequest : public DsPacket {
     public:
-        const PacketCategories type = LOGIN;
         int32_t protocol;
         uint16_t username_len;
         std::u16string username;

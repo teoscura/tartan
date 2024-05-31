@@ -3,9 +3,11 @@
 
 #include "../../helpers/loggerhandler.hpp"
 #include "../../util/byteops.hpp"
+#include "packet.hpp"
 #include "p_LoginRequest.hpp"
 
-p_LoginRequest::p_LoginRequest(){
+p_LoginRequest::p_LoginRequest(PacketReturnInfo inf){
+    this->setInfo(inf);
     this->dimension=0;
     this->seed = 0;
     this->protocol = 0x0e;
