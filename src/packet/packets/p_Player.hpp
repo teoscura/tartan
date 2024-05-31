@@ -25,11 +25,12 @@ class p_Player_Pos : public p_PlayerBase {
         v3<double> xyz;
         double stance;
 
-        p_Player_Pos(v3<double> xyz, double stance, bool on_ground, PacketReturnInfo inf);
+        p_Player_Pos(PacketReturnInfo inf, bool on_ground, v3<double> xyz, double stance);
         p_Player_Pos(std::unique_ptr<Packet> pack);
 
         uint8_t getID() override;
         std::unique_ptr<Packet> serialize() override;
+        ~p_Player_Pos() override;
 };
 
 #endif

@@ -32,3 +32,10 @@ std::unique_ptr<Packet> p_PlayerBase::serialize(){
 
 p_PlayerBase::~p_PlayerBase(){
 }
+
+p_Player_Pos::p_Player_Pos(PacketReturnInfo inf, bool on_ground, v3<double> xyz, double stance) : 
+    p_PlayerBase(inf, on_ground),
+    xyz(xyz),
+    stance(stance){
+}
+//TODO continue this
