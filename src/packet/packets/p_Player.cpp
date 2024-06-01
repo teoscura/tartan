@@ -38,4 +38,6 @@ p_Player_Pos::p_Player_Pos(PacketReturnInfo inf, bool on_ground, v3<double> xyz,
     xyz(xyz),
     stance(stance){
 }
+
+
 //TODO continue this
