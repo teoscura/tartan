@@ -4,8 +4,8 @@
 #include <string>
 
 void writeBytes_from16bit(uint8_t *arr, uint16_t var);
-void writeBytes_from32bit(uint8_t *arr, uint16_t var);
-void writeBytes_from64bit(uint8_t *arr, uint16_t var);
+void writeBytes_from32bit(uint8_t *arr, uint32_t var);
+void writeBytes_from64bit(uint8_t *arr, uint64_t var);
 void writeBytes_fromWstring(uint8_t *arr, std::u16string string);
 std::u16string wstring_fromBytes(const uint8_t* raw, std::size_t size);
 uint16_t read2byteInt_BE(const uint8_t* raw);

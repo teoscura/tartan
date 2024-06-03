@@ -4,7 +4,7 @@
 
 #include "helpers/loggerhandler.hpp"
 #include "helpers/settingshandler.hpp"
-#include "minecraft/tmpmcserver.hpp"
+#include "minecraft/server/tmpmcserver.hpp"
 #include "packet/handler/p_deserial.hpp"
 #include "util/miscutil.hpp" 
 #include "network/server.hpp"

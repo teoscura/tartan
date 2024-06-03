@@ -33,6 +33,8 @@ class DsPacket{
     protected:
         PacketReturnInfo info;
     public:
+        DsPacket();
+        DsPacket(PacketReturnInfo inf);
 
         PacketReturnInfo getInfo();
         void setInfo(PacketReturnInfo inf);

@@ -34,7 +34,10 @@ class Player : public Entity{
         const uint8_t maxhp = 20;
         uint8_t hp;
 
-        uint8_t held_slot;
+        bool sleeping;
+        
+        //TODO Inventory player_inv
+        uint16_t held_slot;
 
 	    const double stand_height = 1.62;
         double actual_height;

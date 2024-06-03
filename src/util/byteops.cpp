@@ -9,12 +9,12 @@ void writeBytes_from16bit(uint8_t *arr, uint16_t var){
         arr[i] = var>>8*((1-i));
     }//short-size
 }
-void writeBytes_from32bit(uint8_t *arr, uint16_t var){
+void writeBytes_from32bit(uint8_t *arr, uint32_t var){
     for(int i=0;i<4;i++){
         arr[i] = var>>(8*(3-i));
     }//protocol
 }
-void writeBytes_from64bit(uint8_t *arr, uint16_t var){
+void writeBytes_from64bit(uint8_t *arr, uint64_t var){
     for(int i=0;i<8;i++){
         arr[i] = var>>(8*(7-i));
     }//seed

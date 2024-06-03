@@ -33,6 +33,13 @@ Packet::~Packet(){
     delete[] this->bytes;
 }
 
+DsPacket::DsPacket(){
+}
+
+DsPacket::DsPacket(PacketReturnInfo inf):
+    info(inf){
+}
+
 uint8_t DsPacket::getID(){
     return 0x00;
 }
