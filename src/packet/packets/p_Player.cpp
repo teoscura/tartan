@@ -4,11 +4,9 @@
 #include <cstdint>
 #include <memory>
 
+#include "../../helpers/loggerhandler.hpp"
 #include "../../util/byteops.hpp"
 #include "packet.hpp"
-
-//FIXME for packets that take a serialized packed and deserialize it, check size.
-
 
 p_KeepAlive::p_KeepAlive(std::unique_ptr<Packet> pack){
     this->info = pack->info;
@@ -64,6 +62,10 @@ p_PlayerBase::p_PlayerBase(PacketReturnInfo inf, bool on_ground) :
 
 p_PlayerBase::p_PlayerBase(std::unique_ptr<Packet> pack):
     DsPacket(pack->info){
+    if(pack->size<2){
+        LoggerHandler::getLogger()->LogPrint(ERROR, "{:0x} Packet invalid!", (int)pack->bytes[0]);
+        return;
+    }
     this->on_ground = pack->bytes[pack->size-1];
 }
 
@@ -104,6 +106,10 @@ p_Player_Pos::p_Player_Pos(PacketReturnInfo inf, bool on_ground, v3<double> xyz,
 
 p_Player_Pos::p_Player_Pos(std::unique_ptr<Packet> pack) : 
     p_PlayerBase(pack->info, pack->bytes[33]){
+    if(pack->size!=34){
+        LoggerHandler::getLogger()->LogPrint(ERROR, "{:0x} Packet invalid!", (int)pack->bytes[0]);
+        return;
+    }
     this->xyz.x = std::bit_cast<double>(read8byteInt_BE(pack->bytes+1));
     this->xyz.y = std::bit_cast<double>(read8byteInt_BE(pack->bytes+9));
     this->stance = std::bit_cast<double>(read8byteInt_BE(pack->bytes+17));
@@ -141,6 +147,10 @@ p_Player_Look::p_Player_Look(PacketReturnInfo inf, bool on_ground, v2<float> yp)
 
 p_Player_Look::p_Player_Look(std::unique_ptr<Packet> pack) :
     p_PlayerBase(pack->info, pack->bytes[9]){
+    if(pack->size!=10){
+        LoggerHandler::getLogger()->LogPrint(ERROR, "{:0x} Packet invalid!", (int)pack->bytes[0]);
+        return;
+    }
     this->yp.x = (float)std::bit_cast<double>(read8byteInt_BE(pack->bytes+1));
     this->yp.z = (float)std::bit_cast<double>(read8byteInt_BE(pack->bytes+5));
 }
@@ -172,6 +182,10 @@ p_Player_PosLook::p_Player_PosLook(PacketReturnInfo inf, bool on_ground, v3<doub
 p_Player_PosLook::p_Player_PosLook(std::unique_ptr<Packet> pack) :
     p_Player_Look(pack->info, pack->bytes[41], v2<float>(read4byteInt_BE(pack->bytes+33), read4byteInt_BE(pack->bytes+37))),
     p_Player_Pos(pack->info, pack->bytes[41], v3<double>(read8byteInt_BE(pack->bytes+1), read8byteInt_BE(pack->bytes+9), read8byteInt_BE(pack->bytes+17)), read8byteInt_BE(pack->bytes+25)){
+    if(pack->size!=42){
+        LoggerHandler::getLogger()->LogPrint(ERROR, "{:0x} Packet invalid!", (int)pack->bytes[0]);
+        return;
+    }
 }
 
 uint8_t p_Player_PosLook::getID(){
@@ -205,6 +219,10 @@ p_Player_Dig::p_Player_Dig(std::unique_ptr<Packet> pack):
     y(pack->bytes[6]),
     z(read4byteInt_BE(pack->bytes+7)),
     face((Block_Face)pack->bytes[11]){
+    if(pack->size!=12){
+        LoggerHandler::getLogger()->LogPrint(ERROR, "{:0x} Packet invalid!", (int)pack->bytes[0]);
+        return;
+    }
 };
 
 uint8_t p_Player_Dig::getID(){
@@ -239,6 +257,10 @@ p_Player_BlockPlace::p_Player_BlockPlace(std::unique_ptr<Packet> pack) :
     z(read4byteInt_BE(pack->bytes+6)),
     face((Block_Face)pack->bytes[10]),
     block_id(read2byteInt_BE(pack->bytes+12)){
+    if(pack->size!=13){
+        LoggerHandler::getLogger()->LogPrint(ERROR, "{:0x} Packet invalid!", (int)pack->bytes[0]);
+        return;
+    }
 }
 
 uint8_t p_Player_BlockPlace::getID(){
@@ -265,6 +287,10 @@ p_Player_BlockPlaceItem::p_Player_BlockPlaceItem(std::unique_ptr<Packet> pack) :
     block_id(read2byteInt_BE(pack->bytes+12)),
     amount(pack->bytes[14]),
     damage(read2byteInt_BE(pack->bytes+15)){
+    if(pack->size!=16){
+        LoggerHandler::getLogger()->LogPrint(ERROR, "{:0x} Packet invalid!", (int)pack->bytes[0]);
+        return;
+    }
 }
 
 uint8_t p_Player_BlockPlaceItem::getID(){
@@ -285,6 +311,10 @@ p_Player_BlockPlaceItem::~p_Player_BlockPlaceItem(){
 p_Player_HoldChange::p_Player_HoldChange(std::unique_ptr<Packet> pack):
     DsPacket(pack->info),
     slot(read2byteInt_BE(pack->bytes+1)){
+    if(pack->size!=3){
+        LoggerHandler::getLogger()->LogPrint(ERROR, "{:0x} Packet invalid!", (int)pack->bytes[0]);
+        return;
+    }
 }
 
 uint8_t p_Player_HoldChange::getID(){
@@ -359,4 +389,36 @@ std::unique_ptr<Packet> p_Player_updateHp::serialize(){
 }
 
 p_Player_updateHp::~p_Player_updateHp(){
+}
+
+p_Player_Respawn::p_Player_Respawn(PacketReturnInfo inf, int8_t dimension) :
+    DsPacket(inf),
+    dimension(dimension){
+}
+
+p_Player_Respawn::p_Player_Respawn(std::unique_ptr<Packet> pack) :
+    DsPacket(pack->info){
+    if(pack->size!=2){
+        LoggerHandler::getLogger()->LogPrint(ERROR, "{:0x} Packet invalid!", (int)pack->bytes[0]);
+        return;
+    }
+    this->dimension = pack->bytes[1];
+}
+
+uint8_t p_Player_Respawn::getID(){
+    return 0x09;
+}
+
+PacketCategories p_Player_Respawn::getType(){
+    return PLAYER;
+}
+
+std::unique_ptr<Packet> p_Player_Respawn::serialize(){
+    Packet pack(new uint8_t[2], 2, this->getInfo());
+    pack.bytes[0] = this->getID();
+    pack.bytes[1] = this->getID();
+    return std::make_unique<Packet>(pack);
+}
+
+p_Player_Respawn::~p_Player_Respawn(){
 }

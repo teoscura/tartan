@@ -172,10 +172,10 @@ class p_Entity_SpawnMob : p_EntityBase { /* 0x18 */
 };
 
 enum PaintingDirections{
-    NEGZ = 0x00,
-    NEGX,
-    POSZ,
-    POSX,
+    NEGZ_PAINT = 0x00,
+    NEGX_PAINT,
+    POSX_PAINT,
+    POSZ_PAINT,
 };
 
 class p_Entity_Painting : p_EntityBase { /* 0x19 */

@@ -2,7 +2,7 @@
 # Example ./ src1/ src2/
 SRCDIR   =  src/ src/network/ src/packet/ src/packet/handler/ src/packet/packets/ src/util/ src/helpers/ src/headers/ \
 			src/minecraft/ src/minecraft/entity/ src/minecraft/entity/player/ src/minecraft/logic/ src/minecraft/world/ \
-			src/minecraft/world/worldgen/
+			src/minecraft/world/worldgen/ src/minecraft/server/ src/minecraft/logic/events/
 OBJDIR   = target/objects/
 # Include directories separated by space
 INCDIR   = include/

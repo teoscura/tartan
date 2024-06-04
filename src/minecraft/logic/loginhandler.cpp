@@ -4,9 +4,7 @@
 #include <memory>
 #include <string>
 
-#include "../../packet/packets/p_LoginRequest.hpp"
-#include "../../packet/packets/p_HandShake.hpp"
-#include "../../packet/packets/p_Kick.hpp"
+#include "../../packet/packets/p_Login.hpp"
 
 std::unique_ptr<DsPacket> LoginHandler::handlepacket(std::unique_ptr<DsPacket> p, PlayerList* plist){
     //FIX ME REMAKE THIS PROPERLY DAMN.

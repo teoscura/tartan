@@ -19,7 +19,7 @@ int main(){
     TempServer tserver(&deserial, &serial);
     Server server(&deserial, &serial);
     std::jthread NetworkThread(&Server::listen_loop, server);
-    std::jthread GameThread(&TempServer::loop, std::ref(tserver));
+    std::jthread GameThread(&TempServer::tickloop, std::ref(tserver));
     while(1){
         //ctrlC to destroy is strange but works.
         std::this_thread::sleep_for(std::chrono::milliseconds(10000));

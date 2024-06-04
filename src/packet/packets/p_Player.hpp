@@ -7,14 +7,14 @@
 #include "../../minecraft/world/vector.hpp"
 #include "packet.hpp"
 
-class p_KeepAlive: public DsPacket{
+class p_KeepAlive: public DsPacket{ /* 0x00 */
     public:
         p_KeepAlive(std::unique_ptr<Packet> pack);
         uint8_t getID() override;
         PacketCategories getType() override;
 };
 
-class p_SpawnPosition : public DsPacket {
+class p_SpawnPosition : public DsPacket { /* 0x06 */
     public:
         int32_t x;
         int32_t y;
@@ -27,7 +27,32 @@ class p_SpawnPosition : public DsPacket {
         ~p_SpawnPosition() override;
 };
 
-class p_PlayerBase : public DsPacket {
+class p_Player_updateHp : DsPacket{ /* 0x08 */
+    private:
+        uint16_t new_hp;
+    public:
+        p_Player_updateHp(PacketReturnInfo inf, uint16_t new_hp);
+
+        uint8_t getID() override;
+        PacketCategories getType() override;
+        std::unique_ptr<Packet> serialize() override; 
+        ~p_Player_updateHp() override;
+};
+
+class p_Player_Respawn : public DsPacket { /* 0x09 */
+    private:
+        int8_t dimension;
+    public:
+        p_Player_Respawn(PacketReturnInfo inf, int8_t dimension);
+        p_Player_Respawn(std::unique_ptr<Packet> pack);
+
+        uint8_t getID() override;
+        PacketCategories getType() override;
+        std::unique_ptr<Packet> serialize() override; 
+        ~p_Player_Respawn() override;
+};
+
+class p_PlayerBase : public DsPacket { /* 0x0A */
     private:
         bool on_ground;
     public:
@@ -42,7 +67,7 @@ class p_PlayerBase : public DsPacket {
         ~p_PlayerBase() override;
 };
 
-class p_Player_Pos : public p_PlayerBase {
+class p_Player_Pos : public p_PlayerBase { /* 0x0B */
     private:
         v3<double> xyz;
         double stance;
@@ -58,7 +83,7 @@ class p_Player_Pos : public p_PlayerBase {
         ~p_Player_Pos() override;
 };
 
-class p_Player_Look : public p_PlayerBase {
+class p_Player_Look : public p_PlayerBase { /* 0x0C */
     private:    
         v2<float> yp;
     public:
@@ -72,7 +97,7 @@ class p_Player_Look : public p_PlayerBase {
         ~p_Player_Look() override;
 };
 
-class p_Player_PosLook : public p_Player_Look, public p_Player_Pos {
+class p_Player_PosLook : public p_Player_Look, public p_Player_Pos { /* 0x0D */
     public:
         p_Player_PosLook(PacketReturnInfo inf, bool on_ground, v3<double> xyz, double stance, v2<float> yp);
         p_Player_PosLook(std::unique_ptr<Packet> pack);
@@ -97,7 +122,7 @@ enum Block_Face{
     POSX,
 };
 
-class p_Player_Dig : public DsPacket{
+class p_Player_Dig : public DsPacket{ /* 0x0E */
     private:
         P_DigStatus status;
         int32_t x,z;
@@ -112,7 +137,7 @@ class p_Player_Dig : public DsPacket{
         ~p_Player_Dig() override;
 };
 
-class p_Player_BlockPlace : public DsPacket{
+class p_Player_BlockPlace : public DsPacket{ /* 0x0F */
     private:
         int32_t x,z;
         uint8_t y;
@@ -128,7 +153,7 @@ class p_Player_BlockPlace : public DsPacket{
 };
 
 
-class p_Player_BlockPlaceItem : public DsPacket{
+class p_Player_BlockPlaceItem : public DsPacket{ /* 0x0F */
     private:
         double x,z;
         uint8_t y;
@@ -145,7 +170,7 @@ class p_Player_BlockPlaceItem : public DsPacket{
         ~p_Player_BlockPlaceItem() override;
 };
 
-class p_Player_HoldChange : public DsPacket{
+class p_Player_HoldChange : public DsPacket{ /* 0x10 */
     private:
         uint16_t slot;
     public:
@@ -157,7 +182,7 @@ class p_Player_HoldChange : public DsPacket{
         ~p_Player_HoldChange() override;
 };
 
-class p_Player_UseBed : public DsPacket {
+class p_Player_UseBed : public DsPacket { /* 0x11 */
     private:
         int32_t eid;
         int8_t in_bed;
@@ -172,17 +197,6 @@ class p_Player_UseBed : public DsPacket {
         ~p_Player_UseBed() override;
 };
 
-class p_Player_updateHp : DsPacket{
-    private:
-        uint16_t new_hp;
-    public:
-        p_Player_updateHp(PacketReturnInfo inf, uint16_t new_hp);
-
-        uint8_t getID() override;
-        PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
-        ~p_Player_updateHp() override;
-};
 
 
 #endif

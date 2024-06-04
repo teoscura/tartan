@@ -6,10 +6,9 @@
 #include "../../helpers/loggerhandler.hpp"
 #include "p_deserial.hpp"
 
-#include "../packets/p_KeepAlive.hpp"
-#include "../packets/p_LoginRequest.hpp"
-#include "../packets/p_HandShake.hpp"
-#include "../packets/p_Kick.hpp"
+#include "../packets/p_Login.hpp"
+#include "../packets/p_Player.hpp"
+#include "../packets/p_Entity.hpp"
 #include "queue.hpp"
 
 

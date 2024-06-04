@@ -1,5 +1,9 @@
 LONGTERM packets implement topacket all packet types. dash:not impl, x: impl.
 
+39/56
+
+VERY GOOD CAZZO
+
 Packets -----
     ->Deserial - Logic - Serial
     0x00 x-N
