@@ -8,19 +8,19 @@
 #include "../../minecraft/world/vector.hpp"
 #include "packet.hpp"
 
-
 class p_EntityBase : public DsPacket{ /* 0x1E */
     private:
         uint32_t eid;
     public:
         p_EntityBase(PacketReturnInfo inf, uint32_t eid);
 
+        uint32_t getEID();
+
         uint8_t getID() override;
         PacketCategories getType() override;
         std::unique_ptr<Packet> serialize() override; 
         ~p_EntityBase() override;
 };
-
 
 class p_Entity_Equipment : public p_EntityBase { /* 0x05 */
     private:
@@ -51,6 +51,8 @@ class p_Entity_useEntity : public p_EntityBase { /* 0x07 */
         ~p_Entity_useEntity() override;
 };
 
+
+
 class p_Entity_Animation : public p_EntityBase { /* 0x12 */
     private:
         uint8_t animation;
@@ -79,12 +81,12 @@ class p_Entity_NamedSpawn : public p_EntityBase { /* 0x14 */
     private:
         std::u16string e_name;
         v3<int32_t> xyz;
-        v2<uint8_t> yp;
+        v2<int8_t> yp;
         uint8_t held_item;
     public:
         p_Entity_NamedSpawn(PacketReturnInfo inf, uint32_t eid, 
                             std::u16string e_name, v3<int32_t> xyz, 
-                            v2<uint8_t> yp);
+                            v2<int8_t> yp, uint8_t held_item);
         uint8_t getID() override;
         PacketCategories getType() override;
         std::unique_ptr<Packet> serialize() override; 
@@ -97,19 +99,77 @@ class p_Entity_SpawnGroundItem : public p_EntityBase { /* 0x15 */
         uint8_t count;
         uint16_t damage_or_metadata;
         v3<int32_t> xyz;
-        v3<uint8_t> rpr;
+        v3<int8_t> rpr;
     public:
         p_Entity_SpawnGroundItem(PacketReturnInfo inf, uint32_t eid,
                                  uint16_t item_id, uint8_t count,
                                  uint16_t damage_or_metadata,
-                                 v3<int32_t> xyz, v3<int32_t> rpr);
+                                 v3<int32_t> xyz, v3<int8_t> rpr);
         uint8_t getID() override;
         PacketCategories getType() override;
         std::unique_ptr<Packet> serialize() override; 
         ~p_Entity_SpawnGroundItem() override;
 };
 
-//TODO code mobspawn
+class p_Entity_Collect : public p_EntityBase { /* 0x16 */
+    private:
+        uint32_t collector_id;
+    public:
+        p_Entity_Collect(PacketReturnInfo inf, uint32_t eid, uint32_t collector_id);
+        uint8_t getID() override;
+        PacketCategories getType() override;
+        std::unique_ptr<Packet> serialize() override; 
+        ~p_Entity_Collect() override;
+};
+
+class p_Entity_SpawnVehicle : public p_EntityBase { /* 0x17 */
+    private:
+        uint8_t type;
+        v3<int32_t> xyz;
+        int32_t unknown;
+        v3<int16_t> unknowns;
+    public:
+        p_Entity_SpawnVehicle(PacketReturnInfo inf, uint32_t eid, uint8_t type, v3<int32_t> xyz, int32_t unknown, v3<int16_t> unknowns);
+
+        uint8_t getID() override;
+        PacketCategories getType() override;
+        std::unique_ptr<Packet> serialize() override; 
+        ~p_Entity_SpawnVehicle() override;
+};
+
+enum MobType_Ids{
+    CREEPER = 0x32,
+    SKELETON,
+    SPIDER,
+    GZOMBIE,
+    ZOMBIE,
+    SLIME,
+    GHAST,
+    ZPIGMAN,
+    PIG = 0x5A,
+    SHEEP,
+    COW,
+    HEN,
+    SQUID,
+    WOLF,
+};
+
+class p_Entity_SpawnMob : p_EntityBase { /* 0x18 */
+    private:
+        uint8_t mob_type;
+        v3<int32_t> xyz;
+        v2<int8_t> yp;
+        std::vector<uint8_t> metadata;
+    public:
+        p_Entity_SpawnMob(PacketReturnInfo inf, uint32_t eid,
+                          uint8_t mob_type, v3<int32_t> xyz,
+                          v2<int8_t> yp, std::vector<uint8_t> metadata);
+        
+        uint8_t getID() override;
+        PacketCategories getType() override;
+        std::unique_ptr<Packet> serialize() override; 
+        ~p_Entity_SpawnMob() override;
+};
 
 enum PaintingDirections{
     NEGZ = 0x00,
@@ -162,6 +222,8 @@ class p_Entity_RelativeMove : public p_EntityBase { /* 0x1F */
     public:
         p_Entity_RelativeMove(PacketReturnInfo inf, uint32_t eid, v3<int8_t> d_xyz);
 
+        v3<int8_t> getXYZ();
+
         uint8_t getID() override;
         PacketCategories getType() override;
         std::unique_ptr<Packet> serialize() override; 
@@ -170,9 +232,11 @@ class p_Entity_RelativeMove : public p_EntityBase { /* 0x1F */
 
 class p_Entity_Look : public p_EntityBase{ /* 0x20 */
     private:    
-        v2<uint8_t> yp;
+        v2<int8_t> yp;
     public:
-        p_Entity_Look(PacketReturnInfo inf, uint32_t eid, v2<uint8_t> yp);
+        p_Entity_Look(PacketReturnInfo inf, uint32_t eid, v2<int8_t> yp);
+
+        v2<int8_t> getYP();
 
         uint8_t getID() override;
         PacketCategories getType() override;
@@ -182,7 +246,7 @@ class p_Entity_Look : public p_EntityBase{ /* 0x20 */
 
 class p_Entity_RelMoveLook : public p_Entity_RelativeMove, public p_Entity_Look { /* 0x21 */
     public:
-        p_Entity_RelMoveLook(PacketReturnInfo inf, uint32_t eid, v3<int8_t> d_xyz, v2<uint8_t> yp);
+        p_Entity_RelMoveLook(PacketReturnInfo inf, uint32_t eid, v3<int8_t> d_xyz, v2<int8_t> yp);
 
         uint8_t getID() override;
         PacketCategories getType() override;
@@ -190,9 +254,11 @@ class p_Entity_RelMoveLook : public p_Entity_RelativeMove, public p_Entity_Look 
         ~p_Entity_RelMoveLook() override;
 };
 
-class p_Entity_Teleport : public p_Entity_RelMoveLook { /* 0x22 */
+class p_Entity_Teleport : public p_Entity_Look { /* 0x22 */
+    private:
+        v3<int32_t> xyz;
     public:
-        p_Entity_Teleport(PacketReturnInfo inf, uint32_t eid, v3<int8_t> d_xyz, v2<uint8_t> yp);
+        p_Entity_Teleport(PacketReturnInfo inf, uint32_t eid, v3<int32_t> xyz, v2<int8_t> yp);
 
         uint8_t getID() override;
         PacketCategories getType() override;
@@ -228,12 +294,25 @@ class p_Entity_Metadata : public p_EntityBase { /* 0x28 */
     private:
         std::vector<uint8_t> bytes;
     public:
-        p_Entity_Metadata(PacketReturnInfo inf, uint32_t eid, uint32_t vehicle_eid);
+        p_Entity_Metadata(PacketReturnInfo inf, uint32_t eid, std::vector<uint8_t> bytes);
 
         uint8_t getID() override;
         PacketCategories getType() override;
         std::unique_ptr<Packet> serialize() override; 
         ~p_Entity_Metadata() override;
+};
+
+class p_Entity_Thunderbolt : p_EntityBase { /* 0x47 */
+    private:
+        const bool t = true;
+        v3<int32_t> xyz;
+    public:
+        p_Entity_Thunderbolt(PacketReturnInfo inf, uint32_t eid, v3<int32_t> xyz);
+
+        uint8_t getID() override;
+        PacketCategories getType() override;
+        std::unique_ptr<Packet> serialize() override; 
+        ~p_Entity_Thunderbolt() override;
 };
 
 #endif

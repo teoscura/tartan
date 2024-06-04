@@ -7,6 +7,26 @@
 #include "../../minecraft/world/vector.hpp"
 #include "packet.hpp"
 
+class p_KeepAlive: public DsPacket{
+    public:
+        p_KeepAlive(std::unique_ptr<Packet> pack);
+        uint8_t getID() override;
+        PacketCategories getType() override;
+};
+
+class p_SpawnPosition : public DsPacket {
+    public:
+        int32_t x;
+        int32_t y;
+        int32_t z;
+        
+        p_SpawnPosition(PacketReturnInfo inf, v3<int32_t> coords);
+        uint8_t getID() override;
+        PacketCategories getType() override;
+        std::unique_ptr<Packet> serialize() override; 
+        ~p_SpawnPosition() override;
+};
+
 class p_PlayerBase : public DsPacket {
     private:
         bool on_ground;
