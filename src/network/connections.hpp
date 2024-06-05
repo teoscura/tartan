@@ -2,7 +2,6 @@
 #define CONN_STRUCTS_H
 
 #include <netinet/in.h>
-#pragma once
 
 struct Connection{
     uint32_t socksize = sizeof(sockaddr_in);
