@@ -4,7 +4,7 @@
 #include <cstdint>
 
 struct ItemSlotData{
-    uint8_t item_id;
+    int16_t item_id;
     uint8_t count;
     uint16_t damage;
 };
