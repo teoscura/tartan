@@ -6,18 +6,18 @@
 #include "item.hpp"
 
 class InventoryBase{
-    //TODO REFACTOR ALL
+    //TODO REFACTOR ALL and add args to functions
 };
 
 class PlayerInventory{
     private:
-        std::array<ItemSlot, 27> inventory;
-        std::array<ItemSlot, 9> hotbar;
+        std::array<Item, 27> inventory;
+        std::array<Item, 9> hotbar;
     public:
         PlayerInventory();
         std::size_t searchFree();
         std::size_t searchPresent();
-        ItemSlot& getSlot();
+        Item& getItem();
 };
 
 enum FurnaceSlots{
@@ -33,40 +33,40 @@ enum FurnaceBars{
 
 class ChestInventory{
     private:
-        std::array<ItemSlot, 27> inventory;
+        std::array<Item, 27> inventory;
     public:
         ChestInventory();
         std::size_t searchFree();
         std::size_t searchPresent();
-        ItemSlot& getSlot();
+        Item& getItem();
 };
 
 class LargeChestInventory{
     private:
-        std::array<ItemSlot, 54> inventory;
+        std::array<Item, 54> inventory;
     public:
         LargeChestInventory();
         std::size_t searchFree();
         std::size_t searchPresent();
-        ItemSlot& getSlot();
+        Item& getItem();
 };
 
 class FurnaceInventory{
     private:
-        std::array<ItemSlot, 3> slots; 
+        std::array<Item, 3> slots; 
     public:
         FurnaceInventory();
-        ItemSlot& getSlot();
+        Item& getItem();
 };
 
 class DispenserInventory{
     private:
-        std::array<ItemSlot, 9> slots;
+        std::array<Item, 9> slots;
     public:
         DispenserInventory();
         std::size_t searchFree();
         std::size_t searchPresent();
-        ItemSlot& getSlot();
+        Item& getItem();
 };
 
 #endif

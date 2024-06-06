@@ -3,19 +3,19 @@
 
 #include <cstdint>
 
-struct ItemSlotData{
+struct ItemData{
     int16_t item_id;
     uint8_t count;
     uint16_t damage;
 };
 
-class ItemSlot{
+class Item{
     private:
-        ItemSlotData slot;
+        ItemData slot;
     public: 
-        ItemSlot();
-        ItemSlot(uint8_t item_id, uint8_t count, uint16_t damage);
-        ItemSlotData getItemSlotData();
+        Item();
+        Item(uint8_t item_id, uint8_t count, uint16_t damage);
+        ItemData getItemData();
         void modifyID(uint8_t new_id);
         void modifyCount(uint8_t new_count);
         void modifyDamage(uint16_t new_damage);
