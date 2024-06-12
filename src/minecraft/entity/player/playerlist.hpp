@@ -2,18 +2,17 @@
 #define MC_PLAYERLIST_H
 
 #include "player.hpp"
-#include "../../../helpers/ts_set.hpp"
-#include <memory>
 #include <string>
-
+#include <vector>
 
 class PlayerList{
-    private:
-        std::set<std::shared_ptr<Player>> list;
     public:
-        void insert(std::shared_ptr<Player> playerin);
-        void remove(std::shared_ptr<Player> playerin);
-        bool containsname(std::u16string username);
+        std::vector<Player> list;
+        void insert(Player playerin);
+        void remove(std::u16string username);
+        bool isonline(std::u16string username);
+        auto begin();
+        auto end();
 };
 
 

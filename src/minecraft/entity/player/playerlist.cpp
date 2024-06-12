@@ -1,18 +1,24 @@
 #include "playerlist.hpp"
-#include <memory>
+#include "player.hpp"
 #include <string>
 
-void PlayerList::insert(std::shared_ptr<Player> playerin){
-    this->list.insert(std::move(playerin));
+void PlayerList::insert(Player player){
+    this->list.push_back(player);
 }
 
-void PlayerList::remove(std::shared_ptr<Player> playerin){
-    this->list.erase(std::move(playerin));
+void PlayerList::remove(std::u16string username){
+    for(auto i=0;i<this->list.size();i++){
+        if(this->list[i].getUsername()==username){
+            auto where = i;
+            break;
+        }
+    }
+    this->list.erase(this->list.begin());
 }
 
-bool PlayerList::containsname(std::u16string username){
+bool PlayerList::isonline(std::u16string username){
     for(auto t : this->list){
-        if(t->getUsername() == username){
+        if(t.getUsername() == username){
             return true;
         }
     }

@@ -11,7 +11,7 @@ class EntityHandler{
     public:
         std::unique_ptr<DsPacket> processPacket(std::unique_ptr<DsPacket> p);
         //TODO update entities function
-        //TODO send entity updates function
+        //and send entity updates function
 };
 
 #endif

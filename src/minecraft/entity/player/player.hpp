@@ -26,25 +26,24 @@ struct PlayerConnectionInfo{
     uint8_t blob;
 };
 
+struct PlayerStats{
+    const uint8_t maxhp = 20;
+    const double stand_height = 1.62;
+    const double width = 0.6;
+	const double depth = 0.6;
+};
+
 class Player : public Entity{
     private:
         PlayerConnectionInfo info;
     protected:
+        static const PlayerStats stats;
         std::u16string username;
-        const uint8_t maxhp = 20;
         uint8_t hp;
-
         bool sleeping;
-        
-        //TODO Inventory player_inv
         uint16_t held_slot;
-
-	    const double stand_height = 1.62;
         double actual_height;
-        const double width = 0.6;
-	    const double depth = 0.6;
         PlayerStances stance;
-
         v2<int32_t> respawn_pos;
     public:
         uint8_t render_updates;
@@ -59,8 +58,6 @@ class Player : public Entity{
 
         Player();
         ~Player();
-
-
 
         //TODO constructor, destructor and methods specify the arguments for each function.
 };

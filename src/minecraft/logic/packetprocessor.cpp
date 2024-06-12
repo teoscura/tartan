@@ -20,8 +20,27 @@ void PacketProcessor::retrieveQueue(){
     }
 }
 
-void PacketProcessor::queuePacket(std::unique_ptr<DsPacket> p ){
-    this->in.push(std::move(p));
+void PacketProcessor::queuePacket(std::unique_ptr<DsPacket> pack){
+    this->in.push(std::move(pack));
+}
+
+void PacketProcessor::queuePacket_Global(std::unique_ptr<DsPacket> pack){
+    DsPacket packet = *pack.get();
+    for(auto temp : this->state->global_plist->list){
+        packet.setInfo(temp.getReturnInfo());
+        this->out.push(std::make_unique<DsPacket>(packet));
+    }
+}
+
+void PacketProcessor::queuePacket_ToPlayer(std::unique_ptr<DsPacket> pack, uint32_t to_eid){
+    for(auto temp : this->state->global_plist->list){
+        if(temp.getEntityId()==to_eid){
+            pack->setInfo(temp.getReturnInfo());
+            this->out.push(std::move(pack));
+            return;
+        }
+    }
+    LoggerHandler::getLogger()->LogPrint(ERROR, "Couldn't send pack to {}, EID doesnt exist!", to_eid);
 }
 
 void PacketProcessor::processPackets(){
@@ -48,6 +67,7 @@ void PacketProcessor::processPackets(){
         }
     }
 }
+
 
 void PacketProcessor::sendPackets(){
     std::unique_ptr<DsPacket> tmp;

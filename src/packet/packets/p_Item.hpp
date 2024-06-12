@@ -68,9 +68,9 @@ class p_Item_WindowClick : p_WindowOpBase { /* 0x66 */
 class p_Item_SetSlot : public p_WindowOpBase { /* 0x67 */
     private:
         int16_t slot;
-        ItemSlot item;
+        Item item;
     public:
-        p_Item_SetSlot(PacketReturnInfo inf, uint8_t window_id, int16_t slot, ItemSlot item);
+        p_Item_SetSlot(PacketReturnInfo inf, uint8_t window_id, int16_t slot, Item item);
 
         uint8_t getID() override;
         PacketCategories getType() override;
