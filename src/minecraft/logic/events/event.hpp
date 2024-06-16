@@ -3,6 +3,7 @@
 
 #include <cstdint>
 
+#include "../../../packet/handler/p_serial.hpp"
 #include "../../server/serverstate.hpp"
 
 class EventBase{
@@ -11,7 +12,10 @@ class EventBase{
     public: 
         EventBase(uint64_t delivery_tick);
         uint64_t getDeliveryTick();
-        virtual void process(ServerState* state);
+        void queuePacket_Global(DsPacket pack, ServerState* state, PacketSerializer* serializer);
+        void queuePacket_ToPlayer(DsPacket pack, ServerState* state, PacketSerializer* serializer, uint32_t target_eid);
+        void queuePacket_ExPlayer(DsPacket pack, ServerState* state, PacketSerializer* serializer, uint32_t excluded_eid);
+        virtual void process(ServerState* state, PacketSerializer* serial);
         virtual ~EventBase() = default;
 };
 
