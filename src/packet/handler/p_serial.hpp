@@ -3,14 +3,13 @@
 
 #include "p_interface.hpp"
 #include "../packets/packet.hpp"
-#include <memory>
 
 class PacketSerializer{
     private:
         PacketInterface* next;
     public:
         PacketSerializer();
-        void serialize(std::unique_ptr<DsPacket> pack);
+        void serialize(DsPacket pack);
         PacketInterface* get_next();
         ~PacketSerializer();
 };

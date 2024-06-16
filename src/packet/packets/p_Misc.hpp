@@ -2,19 +2,24 @@
 #define PP_MISC_ALL
 
 #include "packet.hpp"
+
 #include <cstdint>
+#include <string>
 
 //TODO packet constructor for the c->s ones
 
 class p_ChatMessage : public DsPacket { /* 0x03 */
     private:
         std::u16string message;
+        uint16_t message_len;
     public:
         p_ChatMessage(PacketReturnInfo inf, std::u16string message);
+        p_ChatMessage(Packet pack);
+        //TODO packet constructor
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_ChatMessage() override;
 };  
 
@@ -26,7 +31,7 @@ class p_TimeUpdate : public DsPacket { /* 0x04*/
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_TimeUpdate() override;
 };
 
@@ -38,7 +43,7 @@ class p_NewState : public DsPacket { /* 0x46 */
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_NewState() override;
 };
 
@@ -51,7 +56,7 @@ class p_StatIncrease : public DsPacket { /* 0xC8 */
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_StatIncrease() override;
 };
 

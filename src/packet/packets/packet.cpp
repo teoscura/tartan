@@ -1,6 +1,5 @@
 #include "packet.hpp"
-#include <cstring>
-#include <memory>
+
 #include <vector>
 
 //FIXME remember to update this
@@ -56,8 +55,8 @@ void DsPacket::setInfo(PacketReturnInfo inf){
     this->info = inf;
 }
 
-std::unique_ptr<Packet> DsPacket::serialize(){
-    return nullptr;
+Packet DsPacket::serialize(){
+    return Packet(nullptr,0,this->getInfo());
 }
 
 

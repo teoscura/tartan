@@ -59,6 +59,6 @@ const std::size_t ThreadSafeQueue<T>::size(){
     return res;
 }
 
-using PacketQueue = ThreadSafeQueue<std::unique_ptr<DsPacket>>;
+using PacketQueue = ThreadSafeQueue<DsPacket>;
 
 #endif

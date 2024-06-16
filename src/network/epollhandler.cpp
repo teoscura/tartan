@@ -2,7 +2,6 @@
 
 #include <arpa/inet.h>
 #include <iostream>
-#include <memory>
 #include <sys/epoll.h>
 
 #include "../helpers/loggerhandler.hpp"
@@ -28,7 +27,7 @@ void EpollHandler::mainLoop(){
 void EpollHandler::handleEvents(){
     int i;
     int fd;
-    std::unique_ptr<Packet> ptr;
+    Packet ptr;
     auto packetQueue = serializer->get_next()->get_map(this->info.ID);
     for (i = 0; i < this->info.ready; i++) {
         fd = events[i].data.fd;
@@ -38,9 +37,9 @@ void EpollHandler::handleEvents(){
     }
     while(packetQueue->size()>0){
         ptr = std::move(packetQueue->front());
-        auto tmp = ptr->info.epoll_fd;
+        auto tmp = ptr.info.epoll_fd;
         packetQueue->erase(packetQueue->begin());
-        handleWrite(tmp, std::move(ptr));
+        handleWrite(tmp, ptr);
     }
 }
 
@@ -67,20 +66,20 @@ void EpollHandler::handleRead(uint32_t fd){
         PacketReturnInfo info;
         info.epoll_fd = fd;
         info.thread_ID = this->info.ID;
-        std::unique_ptr<Packet> pack = std::make_unique<Packet>(buffer, nread, info);
-        this->deserializer->addPacket(std::move(pack));
+        Packet pack = Packet(buffer, nread, info);
+        this->deserializer->addPacket(pack);
     }
 }
 
-void EpollHandler::handleWrite(uint32_t fd, std::unique_ptr<Packet> pack){
-    int bytes = send(fd, pack->bytes, pack->size, 0);
+void EpollHandler::handleWrite(uint32_t fd, Packet pack){
+    int bytes = send(fd, pack.bytes, pack.size, 0);
     if (bytes == -1) {
         lg->LogPrint(ERROR, "Couldn't write to FD #", fd);
         std::cerr << "[ERROR] Couldn't write to FD #"<<fd<<"\n";
         eventOp(fd, EPOLLIN|EPOLLOUT, EPOLL_CTL_DEL);
     }
     else{
-        lg->LogPrint(INFO, "Sent packet to: {}\n{}", fd, hexStr(pack->bytes, pack->size));
+        lg->LogPrint(INFO, "Sent packet to: {}\n{}", fd, hexStr(pack.bytes, pack.size));
         std::cout<<"[INFO] Packet response sent!\n";
     }
 }

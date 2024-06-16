@@ -1,7 +1,10 @@
 #ifndef PP_LOGIN_ALL
 #define PP_LOGIN_ALL
 
+#include <string>
+
 #include "packet.hpp"
+
 
 class p_LoginRequest : public DsPacket {
     public:
@@ -12,11 +15,11 @@ class p_LoginRequest : public DsPacket {
         uint8_t dimension;
     
         p_LoginRequest(PacketReturnInfo inf);
-        p_LoginRequest(std::unique_ptr<Packet> pack);
+        p_LoginRequest(Packet pack);
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_LoginRequest() override;
 };
 
@@ -26,12 +29,12 @@ class p_HandShake : public DsPacket{
         std::u16string username;
 
         
-        p_HandShake(std::unique_ptr<Packet> pack);
+        p_HandShake(Packet pack);
         p_HandShake(std::u16string resp, uint16_t len);
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_HandShake() override;
 };
 
@@ -40,12 +43,12 @@ class p_Kick : public DsPacket{
         uint16_t reason_len;
         std::u16string reason;
 
-        p_Kick(std::unique_ptr<Packet> pack);
+        p_Kick(Packet pack);
         p_Kick(std::u16string resp, uint16_t len);
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Kick() override;
 };
 

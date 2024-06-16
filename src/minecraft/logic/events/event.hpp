@@ -2,9 +2,7 @@
 #define E_BASE_H
 
 #include <cstdint>
-#include <memory>
 
-#include "../../../helpers/loggerhandler.hpp"
 #include "../../server/serverstate.hpp"
 
 class EventBase{

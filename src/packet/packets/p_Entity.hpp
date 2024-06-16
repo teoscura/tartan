@@ -18,7 +18,7 @@ class p_EntityBase : public DsPacket{ /* 0x1E */
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_EntityBase() override;
 };
 
@@ -34,7 +34,7 @@ class p_Entity_Equipment : public p_EntityBase { /* 0x05 */
         
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Entity_Equipment() override;
 };
 
@@ -47,7 +47,7 @@ class p_Entity_useEntity : public p_EntityBase { /* 0x07 */
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Entity_useEntity() override;
 };
 
@@ -61,7 +61,7 @@ class p_Entity_Animation : public p_EntityBase { /* 0x12 */
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Entity_Animation() override;
 };
 
@@ -73,7 +73,7 @@ class p_Entity_Action : public p_EntityBase { /* 0x13 */
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Entity_Action() override;
 };
 
@@ -89,7 +89,7 @@ class p_Entity_NamedSpawn : public p_EntityBase { /* 0x14 */
                             v2<int8_t> yp, uint8_t held_item);
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Entity_NamedSpawn() override;
 };
 
@@ -107,7 +107,7 @@ class p_Entity_SpawnGroundItem : public p_EntityBase { /* 0x15 */
                                  v3<int32_t> xyz, v3<int8_t> rpr);
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Entity_SpawnGroundItem() override;
 };
 
@@ -118,7 +118,7 @@ class p_Entity_Collect : public p_EntityBase { /* 0x16 */
         p_Entity_Collect(PacketReturnInfo inf, uint32_t eid, uint32_t collector_id);
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Entity_Collect() override;
 };
 
@@ -133,7 +133,7 @@ class p_Entity_SpawnVehicle : public p_EntityBase { /* 0x17 */
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Entity_SpawnVehicle() override;
 };
 
@@ -167,7 +167,7 @@ class p_Entity_SpawnMob : p_EntityBase { /* 0x18 */
         
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Entity_SpawnMob() override;
 };
 
@@ -190,7 +190,7 @@ class p_Entity_Painting : p_EntityBase { /* 0x19 */
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Entity_Painting() override;
 };
 
@@ -202,7 +202,7 @@ class p_Entity_Velocity : public p_EntityBase { /* 0x1C */
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Entity_Velocity() override;
 };
 
@@ -212,7 +212,7 @@ class p_Entity_Delete : public p_EntityBase { /* 0x1D */
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Entity_Delete() override;   
 };
 
@@ -226,7 +226,7 @@ class p_Entity_RelativeMove : public p_EntityBase { /* 0x1F */
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Entity_RelativeMove() override;
 };
 
@@ -240,7 +240,7 @@ class p_Entity_Look : public p_EntityBase{ /* 0x20 */
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Entity_Look() override;
 };
 
@@ -250,7 +250,7 @@ class p_Entity_RelMoveLook : public p_Entity_RelativeMove, public p_Entity_Look 
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Entity_RelMoveLook() override;
 };
 
@@ -262,7 +262,7 @@ class p_Entity_Teleport : public p_Entity_Look { /* 0x22 */
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Entity_Teleport() override;
 };
 
@@ -274,7 +274,7 @@ class p_Entity_Status : public p_EntityBase{ /* 0x26 */
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Entity_Status() override;
 };
 
@@ -286,7 +286,7 @@ class p_Entity_Attach : public p_EntityBase { /* 0x27 */
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Entity_Attach() override;
 };
 
@@ -298,7 +298,7 @@ class p_Entity_Metadata : public p_EntityBase { /* 0x28 */
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Entity_Metadata() override;
 };
 
@@ -311,7 +311,7 @@ class p_Entity_Thunderbolt : p_EntityBase { /* 0x47 */
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Entity_Thunderbolt() override;
 };
 

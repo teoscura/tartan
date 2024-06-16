@@ -2,7 +2,7 @@
 #define PP_ITEM_ALL 
 
 #include <cstdint>
-#include <memory>
+#include <string>
 #include <vector>
 
 #include "../../minecraft/inventory/inventory.hpp"
@@ -17,7 +17,7 @@ class p_WindowOpBase : public DsPacket { /* Not a protocol packet. */
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_WindowOpBase() override;
 };
 
@@ -31,7 +31,7 @@ class p_Item_OpenWindow : public p_WindowOpBase { /* 0x64 */
                           std::string window_title, uint8_t slots);
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Item_OpenWindow() override;
 };
 
@@ -39,11 +39,11 @@ class p_Item_CloseWindow : p_WindowOpBase { /* 0x65 */
     private:
     public:
         p_Item_CloseWindow(PacketReturnInfo inf, uint8_t window_id);
-        p_Item_CloseWindow(std::unique_ptr<Packet> pack);
+        p_Item_CloseWindow(Packet pack);
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Item_CloseWindow() override;
 };
 
@@ -57,11 +57,11 @@ class p_Item_WindowClick : p_WindowOpBase { /* 0x66 */
         uint8_t count;
         int16_t damage;
     public:
-        p_Item_WindowClick(std::unique_ptr<Packet> pack);
+        p_Item_WindowClick(Packet pack);
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Item_WindowClick() override;
 };
 
@@ -74,7 +74,7 @@ class p_Item_SetSlot : public p_WindowOpBase { /* 0x67 */
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Item_SetSlot() override;
 };
 
@@ -88,7 +88,7 @@ class p_Item_WindowItemData : public p_WindowOpBase { /* 0x68 */
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Item_WindowItemData() override;
 };
 
@@ -102,7 +102,7 @@ class p_Item_ProgressBarUpdate : p_WindowOpBase { /* 0x69 */
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Item_ProgressBarUpdate() override;    
 };
 
@@ -113,11 +113,11 @@ class p_Item_TransactionResponse : public p_WindowOpBase { /* 0x6A */
     public:
         p_Item_TransactionResponse(PacketReturnInfo inf, uint8_t window_id,
                                    int16_t action_number, bool accepted);
-        p_Item_TransactionResponse(std::unique_ptr<Packet> pack);
+        p_Item_TransactionResponse(Packet pack);
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Item_TransactionResponse() override;
 };
 
@@ -133,7 +133,7 @@ class p_Item_ItemData : public DsPacket { /* 0x83 */
 
         uint8_t getID() override;
         PacketCategories getType() override;
-        std::unique_ptr<Packet> serialize() override; 
+        Packet serialize() override; 
         ~p_Item_ItemData() override;
 };
 

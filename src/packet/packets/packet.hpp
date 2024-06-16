@@ -1,9 +1,9 @@
 #ifndef PACKETS_H
 #define PACKETS_H
 
+#include <cstring>
 #include <cstdint>
 #include <cstddef>
-#include <memory>
 
 enum PacketCategories{
     NOT_IMPLEMENTED,
@@ -38,11 +38,10 @@ class DsPacket{
 
         PacketReturnInfo getInfo();
         void setInfo(PacketReturnInfo inf);
-
         
         virtual uint8_t getID();
         virtual PacketCategories getType();
-        virtual std::unique_ptr<Packet> serialize();
+        virtual Packet serialize();
         virtual ~DsPacket() = default;
 };
 

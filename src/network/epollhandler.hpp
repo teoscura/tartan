@@ -1,7 +1,6 @@
 #ifndef EPOLL_HANDLER_H
 #define EPOLL_HANDLER_H
 
-#include <memory>
 #include <set>
 #include <sys/epoll.h>
 
@@ -30,7 +29,7 @@ class EpollHandler{
 
         void handleEvents();
         void handleRead(uint32_t fd);
-        void handleWrite(uint32_t fd, std::unique_ptr<Packet>);
+        void handleWrite(uint32_t fd, Packet);
         void eventOp(uint32_t fd, uint32_t state, uint32_t _op);
         
         int getHowMany();

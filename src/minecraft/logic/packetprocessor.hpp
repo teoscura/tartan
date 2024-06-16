@@ -1,14 +1,11 @@
 #ifndef MC_PP_PROCESSOR_H
 #define MC_PP_PROCESSOR_H
 
-#include <memory>
-
 #include "../../packet/handler/p_deserial.hpp"
 #include "../../packet/handler/p_serial.hpp"
 #include "../../packet/handler/queue.hpp"
 #include "../server/serverstate.hpp"
 #include "events/eventschedule.hpp"
-#include "loginhandler.hpp"
 
 class PacketProcessor{
     protected:
@@ -18,16 +15,15 @@ class PacketProcessor{
         PacketDeserializer* deserializer;
         PacketSerializer* serializer;
         ServerState* state;
-        EventSchedule e_schedule;
-        LoginHandler loginhandler;
+        EventSchedule* e_schedule;
     public:
-        PacketProcessor(PacketDeserializer* deserial, PacketSerializer* pserial, ServerState* state);
+        PacketProcessor(PacketDeserializer* deserial, PacketSerializer* pserial, ServerState* state, EventSchedule* e_schedule);
         void retrieveQueue();
         
-        void queuePacket(std::unique_ptr<DsPacket> pack);
-        void queuePacket_Global(std::unique_ptr<DsPacket> pack);
-        void queuePacket_ToPlayer(std::unique_ptr<DsPacket> pack, uint32_t target_eid);
-        void queuePacket_ExPlayer(std::unique_ptr<DsPacket> pack, uint32_t excluded_eid);
+        void queuePacket(DsPacket pack);
+        void queuePacket_Global(DsPacket pack);
+        void queuePacket_ToPlayer(DsPacket pack, uint32_t target_eid);
+        void queuePacket_ExPlayer(DsPacket pack, uint32_t excluded_eid);
 
         void processPackets();
         void sendPackets();

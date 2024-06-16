@@ -1,42 +1,42 @@
 #include "packetprocessor.hpp"
 
-#include <iostream>
-#include <memory>
-
 #include "../../helpers/loggerhandler.hpp"
+#include "events/eventschedule.hpp"
 
-PacketProcessor::PacketProcessor(PacketDeserializer* pdeserial,PacketSerializer* pserial, ServerState* state) : 
+PacketProcessor::PacketProcessor(PacketDeserializer* pdeserial,PacketSerializer* pserial, ServerState* state, EventSchedule* e_schedule) : 
     deserializer(pdeserial),
     serializer(pserial),
-    state(state){
+    state(state),
+    e_schedule(e_schedule){
 }
 
 //temporary function for single blob server
 //mainserver will do this and send to others one at a time.
 //FIXME
 void PacketProcessor::retrieveQueue(){
-    std::unique_ptr<DsPacket> tmp;
-    while((tmp = std::move(this->deserializer->retrievePacket()))!=nullptr){
+    DsPacket tmp;
+    while(!this->deserializer->isEmpty()){
+        tmp = this->deserializer->retrievePacket();
         this->in.push(std::move(tmp));
     }
 }
 
-void PacketProcessor::queuePacket(std::unique_ptr<DsPacket> pack){
-    this->in.push(std::move(pack));
+void PacketProcessor::queuePacket(DsPacket pack){
+    this->in.push(pack);
 }
 
-void PacketProcessor::queuePacket_Global(std::unique_ptr<DsPacket> pack){
-    DsPacket packet = *pack.get();
+void PacketProcessor::queuePacket_Global(DsPacket pack){
+    auto packet = pack;
     for(auto temp : this->state->global_plist->list){
-        packet.setInfo(temp.getReturnInfo());
-        this->out.push(std::make_unique<DsPacket>(packet));
+        pack.setInfo(temp.getReturnInfo());
+        this->out.push(pack);
     }
 }
 
-void PacketProcessor::queuePacket_ToPlayer(std::unique_ptr<DsPacket> pack, uint32_t to_eid){
+void PacketProcessor::queuePacket_ToPlayer(DsPacket pack, uint32_t to_eid){
     for(auto temp : this->state->global_plist->list){
         if(temp.getEntityId()==to_eid){
-            pack->setInfo(temp.getReturnInfo());
+            pack.setInfo(temp.getReturnInfo());
             this->out.push(std::move(pack));
             return;
         }
@@ -45,42 +45,17 @@ void PacketProcessor::queuePacket_ToPlayer(std::unique_ptr<DsPacket> pack, uint3
 }
 
 void PacketProcessor::processPackets(){
-    std::unique_ptr<DsPacket> tmp;
-    while(!in.isEmpty()){
-        tmp = std::move(this->in.pop());
-        if(tmp==nullptr){
-            return;
-        }
-        switch(tmp->getType()){
-            //TODO
-            case LOGIN:
-                loginhandler.handlepacket(std::move(tmp), state->global_plist);
-                break;
-            case PLAYER:
-                break;
-            case ENTITY:
-                break;
-            case CHUNK_BLOCK:
-                break;
-            case MISC:
-                break;
-            case NOT_IMPLEMENTED:
-                LoggerHandler::getLogger()->LogPrint(ERROR, "Unimplemented packet recieved! ID: {}", tmp->getID());
-                break;
-        }
-        
-    }
+
 }
 
 
 void PacketProcessor::sendPackets(){
-    std::unique_ptr<DsPacket> tmp;
+    DsPacket tmp;
     while(!this->out.isEmpty()){
-        tmp = std::move(out.pop());
-        this->serializer->serialize(std::move(tmp));
+        tmp = out.pop();
+        this->serializer->serialize(tmp);
     }
 }
 
 PacketProcessor::~PacketProcessor(){
-
 }

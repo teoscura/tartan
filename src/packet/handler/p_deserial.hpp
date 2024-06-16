@@ -4,16 +4,17 @@
 #include "../../helpers/logger.hpp"
 #include "../packets/packet.hpp"
 #include "queue.hpp"
-#include <memory>
+
 
 class PacketDeserializer{
     private:
-        ThreadSafeQueue<std::unique_ptr<DsPacket>> queue;
+        ThreadSafeQueue<DsPacket> queue;
         Logger* lg;
     public:
         PacketDeserializer();
-        void addPacket(std::unique_ptr<Packet> p);
-        std::unique_ptr<DsPacket> retrievePacket();
+        void addPacket(Packet p);
+        bool isEmpty();
+        DsPacket retrievePacket();
         ~PacketDeserializer();
 };
 
