@@ -7,7 +7,6 @@
 #include <memory>
 #include <vector>
 
-
 class EventSchedule{
     private:
         std::vector<std::shared_ptr<EventBase>> event_schedule;

@@ -12,13 +12,6 @@ void Player::updatePosLook(v3<double> new_xyz, v2<float> new_yp){
     this->yp = new_yp;
 }
 
-void Player::updatePlayerState(PlayerState new_state){
-    if(new_state<=this->info.state){
-        return;
-    }
-    this->info.state = new_state;
-}
-
 uint32_t Player::getEntityId(){
     return this->ID;
 }
@@ -29,4 +22,8 @@ std::u16string Player::getUsername(){
 
 const PacketReturnInfo& Player::getReturnInfo(){
     return this->info.packetinfo;
+}
+
+Player::~Player(){
+    //TODO save data to database
 }

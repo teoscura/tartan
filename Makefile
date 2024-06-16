@@ -43,3 +43,6 @@ loggertest:
 
 distancetest:
 	g++ -std=c++23 test/distancecalc.cpp ./src/minecraft/world/vector.cpp -o target/distancetest
+
+ticktest:
+	g++ -std=c++23 test/ticks.cpp -o target/ticktest

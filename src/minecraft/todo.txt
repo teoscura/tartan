@@ -1,36 +1,34 @@
-LONGTERM blobs
-general protocol structure:
-inspired by folia.
+# LONGTERM blobs
+## general protocol structure:
+    inspired by folia.
 
-server generates a mother region, 
-always loading the 2N-1 long sided square centered around spawn, 
-whenever player is not in a range of the region between 0 and 2N, server 
-generates a secondary region thread, to handle any business between it.
-whenever regions overlap, they join. regions are always checking distance between
-whenever a chunk is genned.
-i could really use a visualizer to debug this behaviour, as it will probably be
-really hard to keep track of by text or by any other non visual medium
+    server generates a mother region, 
+    always loading the 2N-1 long sided square centered around spawn, 
+    whenever player is not in a range of the region between 0 and 2N, server 
+    generates a secondary region thread, to handle any business between it.
+    whenever regions overlap, they join. regions are always checking distance between
+    whenever a chunk is genned.
+    i could really use a visualizer to debug this behaviour, as it will probably be
+    really hard to keep track of by text or by any other non visual medium
 
-whenever a packet is recieved and deserialized correctly, the server finds out
-where the receiver is and what regionblob he belongs to.
+    whenever a packet is recieved and deserialized correctly, the server finds out
+    where the receiver is and what regionblob he belongs to.
+    its then sent to the region blob that either treats the packet as a global one, 
+    (chat message, logout/login, sleep, and any global event ill detail after (TODO))
+    or handles locally, like a block cahnge, any player update, or anything like that.
 
-its then sent to the region blob that either treats the packet as a global one, 
-(chat message, logout/login, sleep, and any global event ill detail after (TODO))
-or handles locally, like a block cahnge, any player update, or anything like that.
+    so each regionblob has a packetprocessing unit, a playerlist and a entity list,
+    and generates each chunk singularly with a future/promise system
 
-so each regionblob has a packetprocessing unit, a playerlist and a entity list,
-and generates each chunk singularly with a future/promise system
+    any global event is handled by the mother spawn region, who is the only stable
+    one that guarantees fully working behaviour akin to notchian servers inside it.
 
-any global event is handled by the mother spawn region, who is the only stable
-one that guarantees fully working behaviour akin to notchian servers inside it.
+    should probably make the settings loader beforehand and just test it locally
 
-should probably make the settings loader beforehand and just test it locally
-AYYYy its my first unit test 
+    chunkloaders that keep chunks loaded, using signs or some metadata trickery
+    when special block destroyed->chunkloader gone
 
-chunkloaders that keep chunks loaded, using signs or some metadata trickery
-when special block destroyed->chunkloader gone
+## NEED TO:
 
-
-LONGTERM:
-    figure out a way to manage ticks and timesteps.
-    saving player data, and inventory and position and stuff.
+figure out a way to manage ticks and timesteps.
+saving player data, and inventory and position and stuff.

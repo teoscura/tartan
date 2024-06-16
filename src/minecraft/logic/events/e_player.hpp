@@ -5,7 +5,6 @@
 
 //just using this as a way to keep track of what to implement.
 enum PlayerUpdateType{
-    LOGINPROCEDURE,
     POS,
     LOOK,
     POS_LOOK,
@@ -52,7 +51,6 @@ class Event_PlayerUpdate_PosLook : public Event_PlayerUpdate_Look, public Event_
         void process(ServerState* state) override;
         ~Event_PlayerUpdate_PosLook() override;
 };
-
 
 #endif
 

@@ -7,9 +7,8 @@
 #include "../entity/player/playerlist.hpp"
 
 class LoginHandler{
-    protected:
     public:
-        std::unique_ptr<DsPacket> handlepacket(std::unique_ptr<DsPacket> p, PlayerList* plist);
+        void handlepacket(std::unique_ptr<DsPacket> p, PlayerList* plist);
         std::unique_ptr<DsPacket> handleLoginRequest(std::unique_ptr<DsPacket> pack);
         std::unique_ptr<DsPacket> handleHandshake(std::unique_ptr<DsPacket>, PlayerList* plist);
 };

@@ -1,17 +1,18 @@
 #include "tmpmcserver.hpp"
 
 #include <chrono>
+#include <iostream>
 #include <thread>
 
 #include "../logic/events/eventschedule.hpp"
 #include "../logic/packetprocessor.hpp"
+#include "servertimeutil.hpp"
 
 
 TempServer::TempServer(PacketDeserializer* pdeserial, PacketSerializer* pserial):
     pp_processor(pdeserial, pserial, &this->state),
-    motherchunk(this->terrain_gen.generateChunk(v2(0,0))){
-
-    this->time_state.start_timepoint = this->time_state.Clock.now();
+    motherchunk(this->terrain_gen.generateChunk(v2(0,0))),
+    time_state(time_state.Clock.now(),std::chrono::milliseconds(50), 0, 0){
 };
 
 void TempServer::tickloop(){

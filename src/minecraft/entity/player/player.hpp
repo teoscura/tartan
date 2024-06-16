@@ -14,15 +14,8 @@ enum PlayerStances{
     SLEEP,
 };
 
-enum PlayerState{
-    HANDSHAKE = 0x00,
-    LOGGING,
-    PLAYING,
-};
-
 struct PlayerConnectionInfo{
     PacketReturnInfo packetinfo;
-    PlayerState state;
     uint8_t blob;
 };
 
@@ -50,7 +43,6 @@ class Player : public Entity{
 
         void updateBlob(uint8_t new_blob);
         void updatePosLook(v3<double> new_xyz, v2<float> new_yp);//TODO 
-        void updatePlayerState(PlayerState new_state);
 
         uint32_t getEntityId() override;
         std::u16string getUsername();

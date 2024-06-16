@@ -1,5 +1,6 @@
 #include "packetprocessor.hpp"
 
+#include <iostream>
 #include <memory>
 
 #include "../../helpers/loggerhandler.hpp"
@@ -47,11 +48,13 @@ void PacketProcessor::processPackets(){
     std::unique_ptr<DsPacket> tmp;
     while(!in.isEmpty()){
         tmp = std::move(this->in.pop());
+        if(tmp==nullptr){
+            return;
+        }
         switch(tmp->getType()){
             //TODO
             case LOGIN:
-                tmp = loginhandler.handlepacket(std::move(tmp), state->global_plist);
-                this->out.push(std::move(tmp));
+                loginhandler.handlepacket(std::move(tmp), state->global_plist);
                 break;
             case PLAYER:
                 break;
@@ -65,6 +68,7 @@ void PacketProcessor::processPackets(){
                 LoggerHandler::getLogger()->LogPrint(ERROR, "Unimplemented packet recieved! ID: {}", tmp->getID());
                 break;
         }
+        
     }
 }
 
