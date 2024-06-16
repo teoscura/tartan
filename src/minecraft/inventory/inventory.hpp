@@ -1,23 +1,34 @@
 #ifndef MC_INVENTORY_H
 #define MC_INVENTORY_H
 
-#include <array>
+#include <cstddef>
+#include <vector>
 
 #include "item.hpp"
 
 class InventoryBase{
     //TODO REFACTOR ALL and add args to functions
+    private:
+        std::size_t inv_size;
+        std::vector<Item> inventory;
+    public:
+        InventoryBase(std::size_t inv_size);
+        bool boundsValid(std::size_t pointer);
+        virtual std::size_t searchFree();
+        virtual std::size_t searchPresent(int16_t item_id);
+        Item getItem(std::size_t index);
+        void editItem(std::size_t index, Item new_item);
+        ~InventoryBase() = default;
 };
 
-class PlayerInventory{
+class PlayerInventory : public InventoryBase {
     private:
-        std::array<Item, 27> inventory;
-        std::array<Item, 9> hotbar;
+        const static std::size_t size = 45;
     public:
         PlayerInventory();
-        std::size_t searchFree();
-        std::size_t searchPresent();
-        Item& getItem();
+        std::size_t searchFree() override;
+        std::size_t searchPresent(int16_t item_id) override;
+        ~PlayerInventory() = default;
 };
 
 enum FurnaceSlots{
@@ -31,42 +42,36 @@ enum FurnaceBars{
     FURNFLAME,
 };
 
-class ChestInventory{
+class ChestInventory : public InventoryBase {
     private:
-        std::array<Item, 27> inventory;
+        const static std::size_t size = 27;
     public:
         ChestInventory();
-        std::size_t searchFree();
-        std::size_t searchPresent();
-        Item& getItem();
+        ~ChestInventory() = default;
 };
 
-class LargeChestInventory{
+class LargeChestInventory : public InventoryBase {
     private:
-        std::array<Item, 54> inventory;
+        const static std::size_t size = 54;
     public:
         LargeChestInventory();
-        std::size_t searchFree();
-        std::size_t searchPresent();
-        Item& getItem();
+        ~LargeChestInventory() = default;
 };
 
-class FurnaceInventory{
+class FurnaceInventory : public InventoryBase {
     private:
-        std::array<Item, 3> slots; 
+        const static std::size_t size = 3;
     public:
         FurnaceInventory();
-        Item& getItem();
+        ~FurnaceInventory() = default;
 };
 
-class DispenserInventory{
+class DispenserInventory : public InventoryBase {
     private:
-        std::array<Item, 9> slots;
+        const static std::size_t size = 9;
     public:
         DispenserInventory();
-        std::size_t searchFree();
-        std::size_t searchPresent();
-        Item& getItem();
+        ~DispenserInventory() = default;
 };
 
 #endif

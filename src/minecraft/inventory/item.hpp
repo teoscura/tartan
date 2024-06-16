@@ -14,7 +14,7 @@ class Item{
         ItemData slot;
     public: 
         Item();
-        Item(uint8_t item_id, uint8_t count, uint16_t damage);
+        Item(int16_t item_id, uint8_t count, uint16_t damage);
         ItemData getItemData();
         void modifyID(uint8_t new_id);
         void modifyCount(uint8_t new_count);

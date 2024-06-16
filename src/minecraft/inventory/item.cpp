@@ -1,26 +1,26 @@
 #include "item.hpp"
 #include <cstdint>
 
-ItemSlot::ItemSlot() :
+Item::Item() :
     slot({}){
 }
 
-ItemSlot::ItemSlot(uint8_t item_id, uint8_t count, uint16_t damage):
+Item::Item(int16_t item_id, uint8_t count, uint16_t damage):
     slot(item_id,count,damage){
 }
 
-ItemSlotData ItemSlot::getItemSlotData(){
+ItemData Item::getItemData(){
     return this->slot;
 }
 
-void ItemSlot::modifyCount(uint8_t new_count){
+void Item::modifyCount(uint8_t new_count){
     this->slot.count = new_count;
 }
 
-void ItemSlot::modifyID(uint8_t new_id){
+void Item::modifyID(uint8_t new_id){
     this->slot.item_id = new_id;
 }
 
-void ItemSlot::modifyDamage(uint16_t new_damage){
+void Item::modifyDamage(uint16_t new_damage){
     this->slot.damage = new_damage;
 }
