@@ -2,19 +2,16 @@
 #define E_HANDLER_H
 
 #include "../../packet/handler/p_serial.hpp"
-#include "../../packet/handler/queue.hpp"
 #include "events/eventschedule.hpp"
 
 class EventHandler{
     private:
         ServerState* state;
         EventSchedule e_schedule;
-        PacketQueue out;
         PacketSerializer* serializer;
     public:
         EventHandler(PacketSerializer* serializer, ServerState* state);
-
-        void sendPackets();
+        void processEvents();
 };
 
 
