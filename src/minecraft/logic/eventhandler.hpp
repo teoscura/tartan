@@ -8,10 +8,12 @@ class EventHandler{
     private:
         ServerState* state;
         EventSchedule e_schedule;
+        PacketQueue out;
         PacketSerializer* serializer;
     public:
         EventHandler(PacketSerializer* serializer, ServerState* state);
         void processEvents();
+        void sendPackets();
 };
 
 

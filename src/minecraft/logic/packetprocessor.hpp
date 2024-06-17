@@ -7,7 +7,7 @@
 class PacketProcessor{
     protected:
         PacketQueue in;
-        //FIXME remove deserializer pointer after test
+        /*FIXME remove deserializer pointer after test*/
         PacketDeserializer* deserializer;
     public:
         PacketProcessor(PacketDeserializer* deserial);

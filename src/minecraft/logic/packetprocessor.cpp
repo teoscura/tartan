@@ -7,6 +7,7 @@ PacketProcessor::PacketProcessor(PacketDeserializer* pdeserial) :
     deserializer(pdeserial){
 }
 
+//TEMPORARY
 void PacketProcessor::retrieveQueue(){
     DsPacket tmp;
     while(!this->deserializer->isEmpty()){
