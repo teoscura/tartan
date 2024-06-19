@@ -14,7 +14,7 @@ class PacketDeserializer{
         PacketDeserializer();
         void addPacket(Packet p);
         bool isEmpty();
-        DsPacket retrievePacket();
+        std::optional<DsPacket> retrievePacket();
         ~PacketDeserializer();
 };
 

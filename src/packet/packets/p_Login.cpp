@@ -60,9 +60,10 @@ p_HandShake::p_HandShake(Packet pack){
     this->username = wstring_fromBytes(pack.bytes+3, username_len);
 }
 
-p_HandShake::p_HandShake(std::u16string resp, uint16_t len){
-    this->username = resp;
-    this->username_len = len;
+p_HandShake::p_HandShake(std::u16string resp, PacketReturnInfo inf) : 
+    DsPacket(inf),
+    username(resp),
+    username_len(resp.length()){
 }
 
 uint8_t p_HandShake::getID(){

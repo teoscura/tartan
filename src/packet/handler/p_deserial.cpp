@@ -1,6 +1,7 @@
 #include "p_deserial.hpp"
 
 #include <iostream>
+#include <optional>
 #include <utility>
 
 #include "../../helpers/loggerhandler.hpp"
@@ -66,9 +67,9 @@ bool PacketDeserializer::isEmpty(){
     return this->queue.isEmpty();
 }
 
-DsPacket PacketDeserializer::retrievePacket(){
+std::optional<DsPacket> PacketDeserializer::retrievePacket(){
     if(queue.isEmpty()){
-        return DsPacket();
+        return std::nullopt;
     }
     return this->queue.pop();
 }

@@ -4,6 +4,7 @@
 #include <condition_variable>
 #include <cstddef>
 #include <mutex>
+#include <optional>
 #include <queue>
 
 #include "../packets/packet.hpp"
@@ -18,7 +19,7 @@ class ThreadSafeQueue{
         // Pushes an element to the queue 
         bool isEmpty();
         void push(T item);
-        T pop();
+        std::optional<T> pop();
         const std::size_t size();
 };
 
@@ -31,9 +32,11 @@ void ThreadSafeQueue<T>::push(T item){
 }
 
 template<class T>
-T ThreadSafeQueue<T>::pop(){
+std::optional<T> ThreadSafeQueue<T>::pop(){
     std::unique_lock<std::mutex> lock(mut); 
-    var.wait(lock, [this]() { return !queue.empty(); });
+    if(queue.empty()){
+        return std::nullopt;
+    }
     T item = std::move(queue.front()); 
     queue.pop(); 
     return std::move(item); 

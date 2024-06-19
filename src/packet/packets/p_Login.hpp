@@ -30,7 +30,7 @@ class p_HandShake : public DsPacket{
 
         
         p_HandShake(Packet pack);
-        p_HandShake(std::u16string resp, uint16_t len);
+        p_HandShake(std::u16string resp, PacketReturnInfo inf);
 
         uint8_t getID() override;
         PacketCategories getType() override;
