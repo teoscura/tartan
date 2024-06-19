@@ -37,6 +37,7 @@ class Player : public Entity{
         bool sleeping = false;
         uint16_t held_slot = 0;
         double actual_height;
+        uint64_t last_keepalive;
         PlayerStances stance = STAND;
         v3<int32_t> respawn_pos = v3<int32_t>(0,10,0);
     public:
