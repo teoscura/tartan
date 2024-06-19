@@ -44,7 +44,7 @@ class p_Kick : public DsPacket{
         std::u16string reason;
 
         p_Kick(Packet pack);
-        p_Kick(std::u16string resp, uint16_t len);
+        p_Kick(PacketReturnInfo inf, std::u16string resp, uint16_t len);
 
         uint8_t getID() override;
         PacketCategories getType() override;

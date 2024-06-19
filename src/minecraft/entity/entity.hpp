@@ -14,6 +14,7 @@ class Entity{
     public:
         void updateOnGround(bool new_on_ground);
         v3<double> getXYZ();
+        v2<float> getYP();
         virtual uint32_t getEntityId();
 };
 

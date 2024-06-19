@@ -1,9 +1,14 @@
 #include "playerlist.hpp"
 #include "player.hpp"
+#include <optional>
 #include <string>
 
 void PlayerList::insert(Player player){
     this->list.push_back(player);
+}
+
+void PlayerList::insertLogin(LoginPlayer logplayerin){
+    this->login_list.push_back(logplayerin);
 }
 
 void PlayerList::remove(std::u16string username){
@@ -26,6 +31,33 @@ void PlayerList::cleanupLogin(){
         }
         login_list.erase(login_list.begin()+where);
     }
+}
+
+std::optional<Player*> PlayerList::findPlayer(uint32_t eid){
+    for(Player t : this->list){
+        if(t.getEntityId()==eid){
+            return &t;
+        }
+    }
+    return std::nullopt;
+}
+
+std::optional<Player*> PlayerList::findPlayer(std::u16string username){
+    for(Player t : this->list){
+        if(t.getUsername()==username){
+            return &t;
+        }
+    }
+    return std::nullopt;
+}
+
+std::optional<LoginPlayer*> PlayerList::findLogin(PacketReturnInfo inf){
+    for(LoginPlayer t : this->login_list){
+        if(t.inf.epoll_fd == inf.epoll_fd){
+            return &t;
+        }
+    }
+    return std::nullopt;
 }
 
 bool PlayerList::isonline(std::u16string username){

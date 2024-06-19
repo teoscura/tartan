@@ -8,6 +8,10 @@ v3<double> Entity::getXYZ(){
     return this->xyz;
 }
 
+v2<float> Entity::getYP(){
+    return this->yp;
+}
+
 uint32_t Entity::getEntityId(){
     return this->ID;
 }

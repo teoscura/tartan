@@ -3,6 +3,7 @@
 #include <cstdint>
 
 #include "../../../packet/packets/p_Entity.hpp"
+#include "../../../helpers/loggerhandler.hpp"
 #include "event.hpp"
 
 Event_PlayerUpdateBase::Event_PlayerUpdateBase(uint64_t destination_tick, bool on_ground) : 
@@ -11,11 +12,13 @@ Event_PlayerUpdateBase::Event_PlayerUpdateBase(uint64_t destination_tick, bool o
 }
 
 void Event_PlayerUpdateBase::process(ServerState* state, PacketQueue* queue){
-    //TODO:
-    //update onground on the player
-    //send everyone entity base packet.
-    PacketReturnInfo a;
-    auto t = p_EntityBase(a, this->EID);
+    std::optional<Player*> player = state->global_plist->findPlayer(this->EID);
+    if(!player.has_value()){
+        LoggerHandler::getLogger()->LogPrint(ERROR, "EID {} is not a player/is present!");
+        return;
+    }
+    player.value()->updateOnGround(this->on_ground);
+    auto t = p_EntityBase(PacketReturnInfo(), this->EID);
     this->queuePacket_ExPlayer(t, state, queue, this->EID);
 }
 
@@ -32,6 +35,7 @@ void Event_PlayerUpdate_Pos::process(ServerState* state, PacketQueue* queue){
     //TODO  
     //then process stance, on ground and xyz, 
     //send entity pos packet to everyone
+    
 }
 
 Event_PlayerUpdate_Pos::~Event_PlayerUpdate_Pos(){

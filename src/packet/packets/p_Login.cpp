@@ -4,6 +4,7 @@
 
 #include "../../helpers/loggerhandler.hpp"
 #include "../../util/byteops.hpp"
+#include "packet.hpp"
 
 p_LoginRequest::p_LoginRequest(PacketReturnInfo inf){
     this->setInfo(inf);
@@ -96,9 +97,10 @@ p_Kick::p_Kick(Packet pack){
     this->reason = wstring_fromBytes(pack.bytes+3, reason_len);
 }
 
-p_Kick::p_Kick(std::u16string resp, uint16_t len){
-    this->reason = resp;
-    this->reason_len = len;
+p_Kick::p_Kick(PacketReturnInfo inf, std::u16string resp, uint16_t len) : 
+    DsPacket(inf), 
+    reason(resp),
+    reason_len(len){
 }
 
 uint8_t p_Kick::getID(){

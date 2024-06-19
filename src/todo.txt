@@ -1,0 +1,2 @@
+TODO:
+    use std::optionals througout the code to ease error handling.

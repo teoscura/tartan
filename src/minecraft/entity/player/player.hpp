@@ -1,6 +1,7 @@
 #ifndef MC_PLAYER_H
 #define MC_PLAYER_H
 
+#include <cstdint>
 #include <string>
 
 
@@ -32,23 +33,25 @@ class Player : public Entity{
     protected:
         static const PlayerStats stats;
         std::u16string username;
-        uint8_t hp;
-        bool sleeping;
-        uint16_t held_slot;
+        uint8_t hp = 20;
+        bool sleeping = false;
+        uint16_t held_slot = 0;
         double actual_height;
-        PlayerStances stance;
-        v2<int32_t> respawn_pos;
+        PlayerStances stance = STAND;
+        v3<int32_t> respawn_pos = v3<int32_t>(0,10,0);
     public:
+        Player(PacketReturnInfo inf, std::u16string username, uint32_t EID);
+
         uint8_t render_updates;
 
         void updateBlob(uint8_t new_blob);
-        void updatePosLook(v3<double> new_xyz, v2<float> new_yp);//TODO 
+
+        void updatePosLook(v3<double> new_xyz, v2<float> new_yp);
 
         uint32_t getEntityId() override;
         std::u16string getUsername();
         const PacketReturnInfo& getReturnInfo();
 
-        Player();
         ~Player();
 
         //TODO constructor, destructor and methods specify the arguments for each function.
