@@ -25,8 +25,9 @@ void Event_LoginLogRequest::process(ServerState *state, PacketQueue* queue){
         queue->push(p_Kick(this->inf, reason, reason.length()));
         return;
     }
-
-    state->global_plist->insert(Player())
+    auto eid= state->global_elist->allocateEID();
+    Player new_user(this->inf, state->global_plist->findLogin(this->inf).value()->username, eid);
+    state->global_elist->insert(new_user);
+    state->global_plist->insert(new_user); 
     queue->push(p_LoginRequest(this->inf));
-    //TODO implenment entitylist end finish this shit uwu.
 }   

@@ -18,7 +18,7 @@ class p_WindowOpBase : public DsPacket { /* Not a protocol packet. */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_WindowOpBase() override;
+        ~p_WindowOpBase() override = default;
 };
 
 class p_Item_OpenWindow : public p_WindowOpBase { /* 0x64 */
@@ -32,7 +32,7 @@ class p_Item_OpenWindow : public p_WindowOpBase { /* 0x64 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Item_OpenWindow() override;
+        ~p_Item_OpenWindow() override = default;
 };
 
 class p_Item_CloseWindow : p_WindowOpBase { /* 0x65 */
@@ -44,7 +44,7 @@ class p_Item_CloseWindow : p_WindowOpBase { /* 0x65 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Item_CloseWindow() override;
+        ~p_Item_CloseWindow() override = default;
 };
 
 class p_Item_WindowClick : p_WindowOpBase { /* 0x66 */
@@ -62,7 +62,7 @@ class p_Item_WindowClick : p_WindowOpBase { /* 0x66 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Item_WindowClick() override;
+        ~p_Item_WindowClick() override = default;
 };
 
 class p_Item_SetSlot : public p_WindowOpBase { /* 0x67 */
@@ -75,7 +75,7 @@ class p_Item_SetSlot : public p_WindowOpBase { /* 0x67 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Item_SetSlot() override;
+        ~p_Item_SetSlot() override = default;
 };
 
 class p_Item_WindowItemData : public p_WindowOpBase { /* 0x68 */
@@ -89,7 +89,7 @@ class p_Item_WindowItemData : public p_WindowOpBase { /* 0x68 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Item_WindowItemData() override;
+        ~p_Item_WindowItemData() override = default;
 };
 
 class p_Item_ProgressBarUpdate : p_WindowOpBase { /* 0x69 */
@@ -103,7 +103,7 @@ class p_Item_ProgressBarUpdate : p_WindowOpBase { /* 0x69 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Item_ProgressBarUpdate() override;    
+        ~p_Item_ProgressBarUpdate() override = default;    
 };
 
 class p_Item_TransactionResponse : public p_WindowOpBase { /* 0x6A */
@@ -118,7 +118,7 @@ class p_Item_TransactionResponse : public p_WindowOpBase { /* 0x6A */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Item_TransactionResponse() override;
+        ~p_Item_TransactionResponse() override = default;
 };
 
 class p_Item_ItemData : public DsPacket { /* 0x83 */
@@ -134,7 +134,7 @@ class p_Item_ItemData : public DsPacket { /* 0x83 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Item_ItemData() override;
+        ~p_Item_ItemData() override = default;
 };
 
 #endif

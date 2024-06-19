@@ -9,7 +9,6 @@
 struct LoginPlayer{
     std::u16string username;
     PacketReturnInfo inf;
-    bool handshake;
 };
 
 class PlayerList{

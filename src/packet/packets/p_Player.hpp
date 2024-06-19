@@ -11,6 +11,7 @@ class p_KeepAlive: public DsPacket{ /* 0x00 */
         p_KeepAlive(Packet pack);
         uint8_t getID() override;
         PacketCategories getType() override;
+        ~p_KeepAlive() override = default;
 };
 
 class p_SpawnPosition : public DsPacket { /* 0x06 */
@@ -23,7 +24,7 @@ class p_SpawnPosition : public DsPacket { /* 0x06 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_SpawnPosition() override;
+        ~p_SpawnPosition() override = default;
 };
 
 class p_Player_updateHp : DsPacket{ /* 0x08 */
@@ -35,7 +36,7 @@ class p_Player_updateHp : DsPacket{ /* 0x08 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Player_updateHp() override;
+        ~p_Player_updateHp() override = default;
 };
 
 class p_Player_Respawn : public DsPacket { /* 0x09 */
@@ -48,7 +49,7 @@ class p_Player_Respawn : public DsPacket { /* 0x09 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Player_Respawn() override;
+        ~p_Player_Respawn() override = default;
 };
 
 class p_PlayerBase : public DsPacket { /* 0x0A */
@@ -63,7 +64,7 @@ class p_PlayerBase : public DsPacket { /* 0x0A */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_PlayerBase() override;
+        ~p_PlayerBase() override = default;
 };
 
 class p_Player_Pos : public p_PlayerBase { /* 0x0B */
@@ -79,7 +80,7 @@ class p_Player_Pos : public p_PlayerBase { /* 0x0B */
 
         uint8_t getID() override;
         Packet serialize() override;
-        ~p_Player_Pos() override;
+        ~p_Player_Pos() override = default;
 };
 
 class p_Player_Look : public p_PlayerBase { /* 0x0C */
@@ -93,7 +94,7 @@ class p_Player_Look : public p_PlayerBase { /* 0x0C */
 
         uint8_t getID() override;
         Packet serialize() override;
-        ~p_Player_Look() override;
+        ~p_Player_Look() override = default;
 };
 
 class p_Player_PosLook : public p_Player_Look, public p_Player_Pos { /* 0x0D */
@@ -103,7 +104,7 @@ class p_Player_PosLook : public p_Player_Look, public p_Player_Pos { /* 0x0D */
 
         uint8_t getID() override;
         Packet serialize() override;
-        ~p_Player_PosLook() override;
+        ~p_Player_PosLook() override = default;
 };
 
 enum P_DigStatus{
@@ -133,7 +134,7 @@ class p_Player_Dig : public DsPacket{ /* 0x0E */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override;
-        ~p_Player_Dig() override;
+        ~p_Player_Dig() override = default;
 };
 
 class p_Player_BlockPlace : public DsPacket{ /* 0x0F */
@@ -148,7 +149,7 @@ class p_Player_BlockPlace : public DsPacket{ /* 0x0F */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override;
-        ~p_Player_BlockPlace() override;
+        ~p_Player_BlockPlace() override = default;
 };
 
 
@@ -166,7 +167,7 @@ class p_Player_BlockPlaceItem : public DsPacket{ /* 0x0F */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override;
-        ~p_Player_BlockPlaceItem() override;
+        ~p_Player_BlockPlaceItem() override = default;
 };
 
 class p_Player_HoldChange : public DsPacket{ /* 0x10 */
@@ -178,7 +179,7 @@ class p_Player_HoldChange : public DsPacket{ /* 0x10 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override;
-        ~p_Player_HoldChange() override;
+        ~p_Player_HoldChange() override = default;
 };
 
 class p_Player_UseBed : public DsPacket { /* 0x11 */
@@ -193,7 +194,7 @@ class p_Player_UseBed : public DsPacket { /* 0x11 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override;
-        ~p_Player_UseBed() override;
+        ~p_Player_UseBed() override = default;
 };
 
 #endif

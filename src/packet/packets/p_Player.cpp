@@ -44,8 +44,6 @@ Packet p_SpawnPosition::serialize(){
     return result;
 }
 
-p_SpawnPosition::~p_SpawnPosition(){}
-
 bool p_PlayerBase::getOnGround(){
     return this->on_ground;
 }
@@ -77,9 +75,6 @@ Packet p_PlayerBase::serialize(){
     result.bytes[0] = this->getID();
     result.bytes[1] = this->on_ground;
     return result;
-}
-
-p_PlayerBase::~p_PlayerBase(){
 }
 
 v3<double> p_Player_Pos::getXYZ(){
@@ -125,9 +120,6 @@ Packet p_Player_Pos::serialize(){
     return pack;
 }
 
-p_Player_Pos::~p_Player_Pos(){
-}
-
 v2<float> p_Player_Look::getYP(){
     return this->yp;
 }
@@ -158,9 +150,6 @@ Packet p_Player_Look::serialize(){
     writeBytes_from32bit(pack.bytes+5, this->yp.z);
     pack.bytes[9] = this->getOnGround();
     return pack;
-}
-
-p_Player_Look::~p_Player_Look(){
 }
 
 p_Player_PosLook::p_Player_PosLook(PacketReturnInfo inf, bool on_ground, v3<double> xyz, double stance, v2<float> yp) :
@@ -198,9 +187,6 @@ Packet p_Player_PosLook::serialize(){
     return pack;
 }
 
-p_Player_PosLook::~p_Player_PosLook(){
-}
-
 p_Player_Dig::p_Player_Dig(Packet pack):
     DsPacket(pack.info),
     status((P_DigStatus)pack.bytes[1]),
@@ -236,9 +222,6 @@ Packet p_Player_Dig::serialize(){
     return pack;
 }
 
-p_Player_Dig::~p_Player_Dig(){
-}
-
 p_Player_BlockPlace::p_Player_BlockPlace(Packet pack) :
     DsPacket(pack.info),
     x(read4byteInt_BE(pack.bytes+1)),
@@ -262,9 +245,6 @@ PacketCategories p_Player_BlockPlace::getType(){
 
 Packet p_Player_BlockPlace::serialize(){
     return Packet(nullptr,0,this->getInfo());
-}
-
-p_Player_BlockPlace::~p_Player_BlockPlace(){
 }
 
 p_Player_BlockPlaceItem::p_Player_BlockPlaceItem(Packet pack) :
@@ -294,9 +274,6 @@ Packet p_Player_BlockPlaceItem::serialize(){
     return Packet(nullptr, 0, this->getInfo());
 }
 
-p_Player_BlockPlaceItem::~p_Player_BlockPlaceItem(){
-}
-
 p_Player_HoldChange::p_Player_HoldChange(Packet pack):
     DsPacket(pack.info),
     slot(read2byteInt_BE(pack.bytes+1)){
@@ -317,10 +294,6 @@ PacketCategories p_Player_HoldChange::getType(){
 Packet p_Player_HoldChange::serialize(){
     return Packet(nullptr,0,this->getInfo());
 }
-
-p_Player_HoldChange::~p_Player_HoldChange(){
-}
-
 
 p_Player_UseBed::p_Player_UseBed(PacketReturnInfo inf, int32_t eid, v3<int32_t> xyz):
     eid(eid),
@@ -351,9 +324,6 @@ Packet p_Player_UseBed::serialize(){
     return pack;
 }
 
-p_Player_UseBed::~p_Player_UseBed(){
-}
-
 p_Player_updateHp::p_Player_updateHp(PacketReturnInfo inf, uint16_t new_hp) :
     DsPacket(inf),
     new_hp(new_hp){
@@ -375,9 +345,6 @@ Packet p_Player_updateHp::serialize(){
     pack.bytes[0] = this->getID();
     writeBytes_from16bit(pack.bytes+1, this->new_hp);
     return pack;
-}
-
-p_Player_updateHp::~p_Player_updateHp(){
 }
 
 p_Player_Respawn::p_Player_Respawn(PacketReturnInfo inf, int8_t dimension) :
@@ -407,7 +374,4 @@ Packet p_Player_Respawn::serialize(){
     pack.bytes[0] = this->getID();
     pack.bytes[1] = this->getID();
     return pack;
-}
-
-p_Player_Respawn::~p_Player_Respawn(){
 }

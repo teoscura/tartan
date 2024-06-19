@@ -22,7 +22,7 @@ class Event_PlayerUpdateBase : public EventBase{
     public:
         Event_PlayerUpdateBase(uint64_t destination_tick, bool on_ground);
         void process(ServerState* state, PacketQueue* queue) override;
-        ~Event_PlayerUpdateBase() override;
+        ~Event_PlayerUpdateBase() override = default;
 };
 
 class Event_PlayerUpdate_Pos : public Event_PlayerUpdateBase{
@@ -32,7 +32,7 @@ class Event_PlayerUpdate_Pos : public Event_PlayerUpdateBase{
     public:
         Event_PlayerUpdate_Pos(uint64_t destination_tick, bool on_ground, v3<double> xyz, double stance);
         void process(ServerState* state, PacketQueue* queue) override;
-        ~Event_PlayerUpdate_Pos() override;
+        ~Event_PlayerUpdate_Pos() override = default;
 };
 
 class Event_PlayerUpdate_Look : public Event_PlayerUpdateBase{
@@ -41,7 +41,7 @@ class Event_PlayerUpdate_Look : public Event_PlayerUpdateBase{
     public:
         Event_PlayerUpdate_Look(uint64_t destination_tick, bool on_ground, v2<float> new_yp);
         void process(ServerState* state, PacketQueue* queue) override;
-        ~Event_PlayerUpdate_Look() override;
+        ~Event_PlayerUpdate_Look() override = default;
 };
 
 class Event_PlayerUpdate_PosLook : public Event_PlayerUpdate_Look, public Event_PlayerUpdate_Pos{
@@ -49,7 +49,7 @@ class Event_PlayerUpdate_PosLook : public Event_PlayerUpdate_Look, public Event_
     public:
         Event_PlayerUpdate_PosLook(uint64_t destination_tick, bool on_ground, v3<double> new_xyz, double stance, v2<float> new_yp);
         void process(ServerState* state, PacketQueue* queue) override;
-        ~Event_PlayerUpdate_PosLook() override;
+        ~Event_PlayerUpdate_PosLook() override = default;
 };
 
 #endif

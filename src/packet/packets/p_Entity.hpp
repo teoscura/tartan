@@ -19,7 +19,7 @@ class p_EntityBase : public DsPacket{ /* 0x1E */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_EntityBase() override;
+        ~p_EntityBase() override = default;
 };
 
 class p_Entity_Equipment : public p_EntityBase { /* 0x05 */
@@ -35,7 +35,7 @@ class p_Entity_Equipment : public p_EntityBase { /* 0x05 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Entity_Equipment() override;
+        ~p_Entity_Equipment() override = default;
 };
 
 class p_Entity_useEntity : public p_EntityBase { /* 0x07 */
@@ -48,7 +48,7 @@ class p_Entity_useEntity : public p_EntityBase { /* 0x07 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Entity_useEntity() override;
+        ~p_Entity_useEntity() override = default;
 };
 
 
@@ -62,7 +62,7 @@ class p_Entity_Animation : public p_EntityBase { /* 0x12 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Entity_Animation() override;
+        ~p_Entity_Animation() override = default;
 };
 
 class p_Entity_Action : public p_EntityBase { /* 0x13 */
@@ -74,7 +74,7 @@ class p_Entity_Action : public p_EntityBase { /* 0x13 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Entity_Action() override;
+        ~p_Entity_Action() override = default;
 };
 
 class p_Entity_NamedSpawn : public p_EntityBase { /* 0x14 */
@@ -90,7 +90,7 @@ class p_Entity_NamedSpawn : public p_EntityBase { /* 0x14 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Entity_NamedSpawn() override;
+        ~p_Entity_NamedSpawn() override = default;
 };
 
 class p_Entity_SpawnGroundItem : public p_EntityBase { /* 0x15 */
@@ -108,7 +108,7 @@ class p_Entity_SpawnGroundItem : public p_EntityBase { /* 0x15 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Entity_SpawnGroundItem() override;
+        ~p_Entity_SpawnGroundItem() override = default;
 };
 
 class p_Entity_Collect : public p_EntityBase { /* 0x16 */
@@ -119,7 +119,7 @@ class p_Entity_Collect : public p_EntityBase { /* 0x16 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Entity_Collect() override;
+        ~p_Entity_Collect() override = default;
 };
 
 class p_Entity_SpawnVehicle : public p_EntityBase { /* 0x17 */
@@ -134,7 +134,7 @@ class p_Entity_SpawnVehicle : public p_EntityBase { /* 0x17 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Entity_SpawnVehicle() override;
+        ~p_Entity_SpawnVehicle() override = default;
 };
 
 enum MobType_Ids{
@@ -168,7 +168,7 @@ class p_Entity_SpawnMob : p_EntityBase { /* 0x18 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Entity_SpawnMob() override;
+        ~p_Entity_SpawnMob() override = default;
 };
 
 enum PaintingDirections{
@@ -191,7 +191,7 @@ class p_Entity_Painting : p_EntityBase { /* 0x19 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Entity_Painting() override;
+        ~p_Entity_Painting() override = default;
 };
 
 class p_Entity_Velocity : public p_EntityBase { /* 0x1C */
@@ -203,7 +203,7 @@ class p_Entity_Velocity : public p_EntityBase { /* 0x1C */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Entity_Velocity() override;
+        ~p_Entity_Velocity() override = default;
 };
 
 class p_Entity_Delete : public p_EntityBase { /* 0x1D */
@@ -213,7 +213,7 @@ class p_Entity_Delete : public p_EntityBase { /* 0x1D */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Entity_Delete() override;   
+        ~p_Entity_Delete() override = default;   
 };
 
 class p_Entity_RelativeMove : public p_EntityBase { /* 0x1F */
@@ -227,7 +227,7 @@ class p_Entity_RelativeMove : public p_EntityBase { /* 0x1F */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Entity_RelativeMove() override;
+        ~p_Entity_RelativeMove() override = default;
 };
 
 class p_Entity_Look : public p_EntityBase{ /* 0x20 */
@@ -241,7 +241,7 @@ class p_Entity_Look : public p_EntityBase{ /* 0x20 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Entity_Look() override;
+        ~p_Entity_Look() override = default;
 };
 
 class p_Entity_RelMoveLook : public p_Entity_RelativeMove, public p_Entity_Look { /* 0x21 */
@@ -251,7 +251,7 @@ class p_Entity_RelMoveLook : public p_Entity_RelativeMove, public p_Entity_Look 
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Entity_RelMoveLook() override;
+        ~p_Entity_RelMoveLook() override = default;
 };
 
 class p_Entity_Teleport : public p_Entity_Look { /* 0x22 */
@@ -263,7 +263,7 @@ class p_Entity_Teleport : public p_Entity_Look { /* 0x22 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Entity_Teleport() override;
+        ~p_Entity_Teleport() override = default;
 };
 
 class p_Entity_Status : public p_EntityBase{ /* 0x26 */
@@ -275,7 +275,7 @@ class p_Entity_Status : public p_EntityBase{ /* 0x26 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Entity_Status() override;
+        ~p_Entity_Status() override = default;
 };
 
 class p_Entity_Attach : public p_EntityBase { /* 0x27 */
@@ -287,7 +287,7 @@ class p_Entity_Attach : public p_EntityBase { /* 0x27 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Entity_Attach() override;
+        ~p_Entity_Attach() override = default;
 };
 
 class p_Entity_Metadata : public p_EntityBase { /* 0x28 */
@@ -299,7 +299,7 @@ class p_Entity_Metadata : public p_EntityBase { /* 0x28 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Entity_Metadata() override;
+        ~p_Entity_Metadata() override = default;
 };
 
 class p_Entity_Thunderbolt : p_EntityBase { /* 0x47 */
@@ -312,7 +312,7 @@ class p_Entity_Thunderbolt : p_EntityBase { /* 0x47 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Entity_Thunderbolt() override;
+        ~p_Entity_Thunderbolt() override = default;
 };
 
 #endif

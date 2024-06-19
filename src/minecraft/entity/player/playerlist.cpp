@@ -83,11 +83,11 @@ bool PlayerList::isLogin(std::u16string username){
     return false;
 }
 
-bool PlayerList::ishandshake(std::u16string username){
-    for(auto t: this->login_list){
-        if(t.username==username){
-            return t.handshake;
-        }
-    }
-    return false;
-}
+// bool PlayerList::ishandshake(std::u16string username){
+//     for(auto t: this->login_list){
+//         if(t.username==username){
+//             return t.handshake;
+//         }
+//     }
+//     return false;
+// }

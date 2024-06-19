@@ -20,7 +20,7 @@ class p_LoginRequest : public DsPacket {
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_LoginRequest() override;
+        ~p_LoginRequest() override = default;
 };
 
 class p_HandShake : public DsPacket{
@@ -35,7 +35,7 @@ class p_HandShake : public DsPacket{
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_HandShake() override;
+        ~p_HandShake() override = default;
 };
 
 class p_Kick : public DsPacket{
@@ -49,7 +49,7 @@ class p_Kick : public DsPacket{
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_Kick() override;
+        ~p_Kick() override = default;
 };
 
 #endif

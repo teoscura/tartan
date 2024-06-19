@@ -6,7 +6,6 @@
 #include <cstdint>
 #include <string>
 
-//TODO packet constructor for the c->s ones
 
 class p_ChatMessage : public DsPacket { /* 0x03 */
     private:
@@ -15,12 +14,11 @@ class p_ChatMessage : public DsPacket { /* 0x03 */
     public:
         p_ChatMessage(PacketReturnInfo inf, std::u16string message);
         p_ChatMessage(Packet pack);
-        //TODO packet constructor
 
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_ChatMessage() override;
+        ~p_ChatMessage() override = default;
 };  
 
 class p_TimeUpdate : public DsPacket { /* 0x04*/
@@ -32,7 +30,7 @@ class p_TimeUpdate : public DsPacket { /* 0x04*/
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_TimeUpdate() override;
+        ~p_TimeUpdate() override = default;
 };
 
 class p_NewState : public DsPacket { /* 0x46 */
@@ -44,7 +42,7 @@ class p_NewState : public DsPacket { /* 0x46 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_NewState() override;
+        ~p_NewState() override = default; 
 };
 
 class p_StatIncrease : public DsPacket { /* 0xC8 */
@@ -57,7 +55,7 @@ class p_StatIncrease : public DsPacket { /* 0xC8 */
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 
-        ~p_StatIncrease() override;
+        ~p_StatIncrease() override = default;
 };
 
 #endif

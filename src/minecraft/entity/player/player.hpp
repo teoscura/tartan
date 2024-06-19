@@ -42,17 +42,11 @@ class Player : public Entity{
     public:
         Player(PacketReturnInfo inf, std::u16string username, uint32_t EID);
 
-        uint8_t render_updates;
-
         void updateBlob(uint8_t new_blob);
-
-        void updatePosLook(v3<double> new_xyz, v2<float> new_yp);
-
-        uint32_t getEntityId() override;
         std::u16string getUsername();
         const PacketReturnInfo& getReturnInfo();
 
-        ~Player();
+        ~Player() override;
 
         //TODO constructor, destructor and methods specify the arguments for each function.
 };

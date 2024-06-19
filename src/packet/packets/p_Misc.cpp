@@ -8,8 +8,8 @@ p_ChatMessage::p_ChatMessage(PacketReturnInfo inf, std::u16string message) :
     message(message){
 }
 
-p_ChatMessage::p_ChatMessage(Packet pack){
-    this->info = pack.info;
+p_ChatMessage::p_ChatMessage(Packet pack) : 
+    DsPacket(pack.info){
     this->message_len = read2byteInt_BE(pack.bytes+1);
     this->message = wstring_fromBytes(pack.bytes+1, this->message_len);
 }
@@ -28,9 +28,6 @@ Packet p_ChatMessage::serialize(){
     writeBytes_from16bit(pack.bytes+1, message.length());
     writeBytes_fromWstring(pack.bytes+3, message);
     return pack;
-}
-
-p_ChatMessage::~p_ChatMessage(){ 
 }
 
 p_TimeUpdate::p_TimeUpdate(PacketReturnInfo inf, uint64_t time) : 
@@ -53,9 +50,6 @@ Packet p_TimeUpdate::serialize(){
     return pack;
 }
 
-p_TimeUpdate::~p_TimeUpdate(){
-}
-
 p_NewState::p_NewState(PacketReturnInfo inf, uint8_t reason) :
     DsPacket(inf),
     reason(reason){
@@ -74,9 +68,6 @@ Packet p_NewState::serialize(){
     pack.bytes[0] = this->getID();
     pack.bytes[1] = this->reason;
     return Packet(pack);
-}
-
-p_NewState::~p_NewState(){
 }
 
 p_StatIncrease::p_StatIncrease(PacketReturnInfo inf, int32_t stat_id, int8_t amount) :
@@ -99,7 +90,4 @@ Packet p_StatIncrease::serialize(){
     writeBytes_from32bit(pack.bytes+1, this->stat_id);
     pack.bytes[5] = this->amount;
     return pack;
-}
-
-p_StatIncrease::~p_StatIncrease(){
 }

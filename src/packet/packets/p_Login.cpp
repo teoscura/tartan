@@ -48,8 +48,6 @@ Packet p_LoginRequest::serialize(){
     return result;
 }
 
-p_LoginRequest::~p_LoginRequest(){}
-
 p_HandShake::p_HandShake(Packet pack){
     Logger* lg = LoggerHandler::getLogger();
     this->info = pack.info;
@@ -82,8 +80,6 @@ Packet p_HandShake::serialize(){
     writeBytes_fromWstring(result.bytes+3, this->username);
     return result;
 } 
-
-p_HandShake::~p_HandShake(){}
 
 p_Kick::p_Kick(Packet pack){
     Logger* lg = LoggerHandler::getLogger();
@@ -119,5 +115,3 @@ Packet p_Kick::serialize(){
     writeBytes_fromWstring(result.bytes+3, this->reason);
     return result;
 }
-
-p_Kick::~p_Kick(){}

@@ -30,9 +30,6 @@ Packet p_EntityBase::serialize(){
     return pack;
 }
 
-p_EntityBase::~p_EntityBase(){
-}
-
 p_Entity_Equipment::p_Entity_Equipment(PacketReturnInfo inf, uint32_t eid, uint16_t slot, int16_t item_id, uint16_t data) :
     p_EntityBase(inf, eid),
     slot(slot),
@@ -58,9 +55,6 @@ Packet p_Entity_Equipment::serialize(){
     return pack;
 }
 
-p_Entity_Equipment::~p_Entity_Equipment(){
-}
-
 p_Entity_useEntity::p_Entity_useEntity(PacketReturnInfo inf, uint32_t eid, uint32_t target, bool leftclick):
     p_EntityBase(inf, eid),
     target(target),
@@ -84,9 +78,6 @@ Packet p_Entity_useEntity::serialize(){
     return pack;
 }
 
-p_Entity_useEntity::~p_Entity_useEntity(){
-}
-
 p_Entity_Animation::p_Entity_Animation(PacketReturnInfo inf, uint32_t eid, uint8_t animation) : 
     p_EntityBase(inf, eid),
     animation(animation){
@@ -108,9 +99,6 @@ Packet p_Entity_Animation::serialize(){
     return pack;
 }
 
-p_Entity_Animation::~p_Entity_Animation(){
-}
-
 p_Entity_Action::p_Entity_Action(PacketReturnInfo inf, uint32_t eid, uint8_t action) :
     p_EntityBase(inf, eid),
     action(action){
@@ -130,9 +118,6 @@ Packet p_Entity_Action::serialize(){
     writeBytes_from32bit(pack.bytes+1, this->getEID());
     pack.bytes[5] = this->action;
     return pack;
-}
-
-p_Entity_Action::~p_Entity_Action(){
 }
 
 p_Entity_NamedSpawn::p_Entity_NamedSpawn(PacketReturnInfo inf, uint32_t eid, std::u16string e_name, v3<int32_t> xyz, v2<int8_t> yp, uint8_t held_item) : 
@@ -162,8 +147,6 @@ Packet p_Entity_NamedSpawn::serialize(){
     return pack;
 }
 
-p_Entity_NamedSpawn::~p_Entity_NamedSpawn(){
-}
 
 p_Entity_SpawnGroundItem::p_Entity_SpawnGroundItem(PacketReturnInfo inf, uint32_t eid, uint16_t item_id, uint8_t count, uint16_t damage_or_metadata, v3<int32_t> xyz, v3<int8_t> rpr) : 
     p_EntityBase(inf, eid),
@@ -194,8 +177,6 @@ Packet p_Entity_SpawnGroundItem::serialize(){
     return pack;
 }
 
-p_Entity_SpawnGroundItem::~p_Entity_SpawnGroundItem(){
-}
 
 p_Entity_Collect::p_Entity_Collect(PacketReturnInfo inf, uint32_t eid, uint32_t collector_id) :
     p_EntityBase(inf, eid),
@@ -216,9 +197,6 @@ Packet p_Entity_Collect::serialize(){
     writeBytes_from32bit(pack.bytes+1, this->getEID());
     writeBytes_from32bit(pack.bytes+5, this->collector_id);
     return pack;
-}
-
-p_Entity_Collect::~p_Entity_Collect(){
 }
 
 p_Entity_SpawnVehicle::p_Entity_SpawnVehicle(PacketReturnInfo inf, uint32_t eid, uint8_t type, v3<int32_t> xyz, int32_t unknown, v3<int16_t> unknowns) :
@@ -248,9 +226,6 @@ Packet p_Entity_SpawnVehicle::serialize(){
     return pack;
 }
 
-p_Entity_SpawnVehicle::~p_Entity_SpawnVehicle(){
-}
-
 p_Entity_SpawnMob::p_Entity_SpawnMob(PacketReturnInfo inf, uint32_t eid, uint8_t mob_type, v3<int32_t> xyz, v2<int8_t> yp, std::vector<uint8_t> metadata) : 
     p_EntityBase(inf, eid),
     mob_type(mob_type),
@@ -276,9 +251,6 @@ Packet p_Entity_SpawnMob::serialize(){
     writeBytes_fromV2(pack.bytes+18, this->yp);
     writeBytes_fromVector(pack.bytes+20, this->metadata);
     return pack;
-}
-
-p_Entity_SpawnMob::~p_Entity_SpawnMob(){
 }
 
 p_Entity_Painting::p_Entity_Painting(PacketReturnInfo inf, uint32_t eid, std::u16string painting_name, v3<int32_t> center_xyz, PaintingDirections direction) : 
@@ -307,9 +279,6 @@ Packet p_Entity_Painting::serialize(){
     return pack;
 }
 
-p_Entity_Painting::~p_Entity_Painting(){
-}
-
 p_Entity_Velocity::p_Entity_Velocity(PacketReturnInfo inf, uint32_t eid, v3<int16_t> v_xyz) : 
     p_EntityBase(inf, eid),
     v_xyz(v_xyz){
@@ -331,8 +300,6 @@ Packet p_Entity_Velocity::serialize(){
     return pack;
 }
 
-p_Entity_Velocity::~p_Entity_Velocity(){
-}
 
 p_Entity_Delete::p_Entity_Delete(PacketReturnInfo inf, uint32_t eid) :
     p_EntityBase(inf, eid){
@@ -351,9 +318,6 @@ Packet p_Entity_Delete::serialize(){
     pack.bytes[0] = this->getID();
     writeBytes_from32bit(pack.bytes+1, this->getEID());
     return pack;
-}
-
-p_Entity_Delete::~p_Entity_Delete(){
 }
 
 p_Entity_RelativeMove::p_Entity_RelativeMove(PacketReturnInfo inf, uint32_t eid, v3<int8_t> d_xyz) :
@@ -381,9 +345,6 @@ Packet p_Entity_RelativeMove::serialize(){
     return pack;
 }
 
-p_Entity_RelativeMove::~p_Entity_RelativeMove(){
-}
-
 p_Entity_Look::p_Entity_Look(PacketReturnInfo inf, uint32_t eid, v2<int8_t> yp) :
     p_EntityBase(inf, eid),
     yp(yp){
@@ -409,9 +370,6 @@ Packet p_Entity_Look::serialize(){
     return pack;
 }
 
-p_Entity_Look::~p_Entity_Look(){
-}
-
 p_Entity_RelMoveLook::p_Entity_RelMoveLook(PacketReturnInfo inf, uint32_t eid, v3<int8_t> d_xyz, v2<int8_t> yp) :
     p_Entity_Look(inf, eid, yp),
     p_Entity_RelativeMove(inf, eid, d_xyz){
@@ -432,9 +390,6 @@ Packet p_Entity_RelMoveLook::serialize(){
     writeBytes_fromV3(pack.bytes+5, this->getXYZ());
     writeBytes_fromV2(pack.bytes+8, this->getYP());
     return pack;
-}
-
-p_Entity_RelMoveLook::~p_Entity_RelMoveLook(){
 }
 
 p_Entity_Teleport::p_Entity_Teleport(PacketReturnInfo inf, uint32_t eid, v3<int32_t> xyz, v2<int8_t> yp) :
@@ -459,9 +414,6 @@ Packet p_Entity_Teleport::serialize(){
     return pack;
 }
 
-p_Entity_Teleport::~p_Entity_Teleport(){    
-}
-
 p_Entity_Status::p_Entity_Status(PacketReturnInfo inf, uint32_t eid, uint8_t status): 
     p_EntityBase(inf, eid),
     status(status){
@@ -481,9 +433,6 @@ Packet p_Entity_Status::serialize(){
     writeBytes_from32bit(pack.bytes+1, this->getEID());
     pack.bytes[5] = this->status;
     return pack;
-}
-
-p_Entity_Status::~p_Entity_Status(){
 }
 
 p_Entity_Attach::p_Entity_Attach(PacketReturnInfo inf, uint32_t eid, uint32_t vehicle_eid):
@@ -507,9 +456,6 @@ Packet p_Entity_Attach::serialize(){
     return pack;
 }
 
-p_Entity_Attach::~p_Entity_Attach(){
-}
-
 p_Entity_Metadata::p_Entity_Metadata(PacketReturnInfo inf, uint32_t eid, std::vector<uint8_t> bytes) :
     p_EntityBase(inf, eid),
     bytes(bytes){
@@ -531,8 +477,6 @@ Packet p_Entity_Metadata::serialize(){
     return pack;
 }
 
-p_Entity_Metadata::~p_Entity_Metadata(){ 
-}
 
 p_Entity_Thunderbolt::p_Entity_Thunderbolt(PacketReturnInfo inf, uint32_t eid, v3<int32_t> xyz) :
     p_EntityBase(inf, eid),
@@ -554,7 +498,4 @@ Packet p_Entity_Thunderbolt::serialize(){
     pack.bytes[5] = this->t;
     writeBytes_fromV3(pack.bytes+6, this->xyz);
     return pack;
-}
-
-p_Entity_Thunderbolt::~p_Entity_Thunderbolt(){
 }
