@@ -31,7 +31,7 @@ void TempServer::tickloop(){
 
 void TempServer::tickevents(){
     this->pp_processor.retrieveQueue();
-    this->pp_processor.processPackets();
+    this->pp_processor.processPackets(&this->e_handler);
     this->e_handler.processEvents();
     this->e_handler.sendPackets();
 }

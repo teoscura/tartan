@@ -11,7 +11,7 @@ class EventBase{
         uint64_t delivery_tick;
     public: 
         EventBase(uint64_t delivery_tick);
-        void setDeliveryTick(); /* this function is only to be inside of event scheduler functions. nowhere else.*/
+        void setDeliveryTick(uint64_t delivery_tick); /* this function is only to be inside of event scheduler functions. nowhere else.*/
         uint64_t getDeliveryTick();
         void queuePacket_Global(DsPacket pack, ServerState* state, PacketQueue* queue);
         void queuePacket_ToPlayer(DsPacket pack, ServerState* state, PacketQueue* queue, uint32_t target_eid);

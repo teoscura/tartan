@@ -31,11 +31,13 @@ void PacketProcessor::processPackets(EventHandler* handler){
                 LoggerHandler::getLogger()->LogPrint(INFO, "Recieved an unimplemented packet! ID: {}", tmp->getID());
                 break;
             case 0x01:
-                {auto t = static_cast<p_LoginRequest*>(&tmp.value());
-                handler->insertEvent(Event_LoginLogRequest(0, t->getInfo(), t->protocol), 1);
+                {auto t = static_cast<p_LoginRequest&>(tmp.value());
+                handler->insertEvent(Event_LoginLogRequest(0, t.getInfo(), t.protocol), 1);
                 break;}
             case 0x02:
-                break;
+                {auto t = static_cast<p_HandShake&>(tmp.value());
+                handler->insertEvent(Event_LoginHandshake(0, t.getInfo(), t.username), 1);
+                break;}
             case 0x03:
                 LoggerHandler::getLogger()->LogPrint(INFO, "Recieved an unimplemented packet! ID: {}", tmp->getID());
                 break;

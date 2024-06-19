@@ -20,7 +20,7 @@ class Event_LoginHandshake  : public EventBase {
         std::u16string username;
         PacketReturnInfo inf;
     public:
-        Event_LoginHandshake(uint64_t delivery_tick, std::u16string username, PacketReturnInfo inf);
+        Event_LoginHandshake(uint64_t delivery_tick,PacketReturnInfo inf, std::u16string username);
         void process(ServerState* state, PacketQueue* queue) override;
         ~Event_LoginHandshake() override = default;
 };

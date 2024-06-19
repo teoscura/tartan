@@ -32,7 +32,7 @@ void Event_LoginLogRequest::process(ServerState *state, PacketQueue* queue){
     queue->push(p_LoginRequest(this->inf));
 }   
 
-Event_LoginHandshake::Event_LoginHandshake(uint64_t delivery_tick, std::u16string username, PacketReturnInfo inf) : 
+Event_LoginHandshake::Event_LoginHandshake(uint64_t delivery_tick, PacketReturnInfo inf, std::u16string username) : 
     EventBase(delivery_tick),
     inf(inf),
     username(username){
