@@ -2,6 +2,7 @@
 
 #include <bit>
 #include <cstdint>
+#include <vector>
 
 #include "../../helpers/loggerhandler.hpp"
 #include "../../util/byteops.hpp"
@@ -19,11 +20,9 @@ PacketCategories p_KeepAlive::getType(){
     return PLAYER;
 }
 
-p_SpawnPosition::p_SpawnPosition(PacketReturnInfo inf, v3<int32_t> coords){
-    this->setInfo(inf);
-    this->x = coords.x;
-    this->y = coords.y;
-    this->z = coords.z;
+p_SpawnPosition::p_SpawnPosition(PacketReturnInfo inf, v3<int32_t> coords) : 
+    DsPacket(inf),
+    xyz(coords){
 }
 
 uint8_t p_SpawnPosition::getID(){
@@ -36,11 +35,9 @@ PacketCategories p_SpawnPosition::getType(){
 
 
 Packet p_SpawnPosition::serialize(){
-    Packet result = Packet(new uint8_t[13], 13, this->getInfo());
+    Packet result = Packet(std::vector<uint8_t>(13), this->getInfo());
     result.bytes[0] = this->getID();
-    writeBytes_from32bit(result.bytes+1, this->x);
-    writeBytes_from32bit(result.bytes+5, this->y);
-    writeBytes_from32bit(result.bytes+9, this->z);
+    writeBytes_fromV3(result.bytes.data()+1, this->xyz);
     return result;
 }
 
@@ -55,11 +52,11 @@ p_PlayerBase::p_PlayerBase(PacketReturnInfo inf, bool on_ground) :
 
 p_PlayerBase::p_PlayerBase(Packet pack):
     DsPacket(pack.info){
-    if(pack.size<2){
+    if(pack.bytes.size()<2){
         LoggerHandler::getLogger()->LogPrint(ERROR, "{:0x} Packet invalid!", (int)pack.bytes[0]);
         return;
     }
-    this->on_ground = pack.bytes[pack.size-1];
+    this->on_ground = pack.bytes[pack.bytes.size()-1];
 }
 
 uint8_t p_PlayerBase::getID(){
@@ -71,7 +68,7 @@ PacketCategories p_PlayerBase::getType(){
 }
 
 Packet p_PlayerBase::serialize(){
-    Packet result = Packet(new uint8_t[2],2,this->getInfo());
+    Packet result = Packet(std::vector<uint8_t>(2),this->getInfo());
     result.bytes[0] = this->getID();
     result.bytes[1] = this->on_ground;
     return result;
@@ -93,14 +90,14 @@ p_Player_Pos::p_Player_Pos(PacketReturnInfo inf, bool on_ground, v3<double> xyz,
 
 p_Player_Pos::p_Player_Pos(Packet pack) : 
     p_PlayerBase(pack.info, pack.bytes[33]){
-    if(pack.size!=34){
+    if(pack.bytes.size()!=34){
         LoggerHandler::getLogger()->LogPrint(ERROR, "{:0x} Packet invalid!", (int)pack.bytes[0]);
         return;
     }
-    this->xyz.x = std::bit_cast<double>(read8byteInt_BE(pack.bytes+1));
-    this->xyz.y = std::bit_cast<double>(read8byteInt_BE(pack.bytes+9));
-    this->stance = std::bit_cast<double>(read8byteInt_BE(pack.bytes+17));
-    this->xyz.z = std::bit_cast<double>(read8byteInt_BE(pack.bytes+25));
+    this->xyz.x = std::bit_cast<double>(read8byteInt_BE(pack.bytes.data()+1));
+    this->xyz.y = std::bit_cast<double>(read8byteInt_BE(pack.bytes.data()+9));
+    this->stance = std::bit_cast<double>(read8byteInt_BE(pack.bytes.data()+17));
+    this->xyz.z = std::bit_cast<double>(read8byteInt_BE(pack.bytes.data()+25));
 }
 
 uint8_t p_Player_Pos::getID(){
@@ -108,14 +105,12 @@ uint8_t p_Player_Pos::getID(){
 }
 
 Packet p_Player_Pos::serialize(){
-    Packet pack;
-    pack.info = this->getInfo();
-    pack.bytes = new uint8_t[34];
+    Packet pack(std::vector<uint8_t>(34),this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from64bit(pack.bytes+1, this->xyz.x);
-    writeBytes_from64bit(pack.bytes+9, this->xyz.y);
-    writeBytes_from64bit(pack.bytes+17, this->stance);
-    writeBytes_from64bit(pack.bytes+25, this->xyz.z);
+    writeBytes_from64bit(pack.bytes.data()+1, this->xyz.x);
+    writeBytes_from64bit(pack.bytes.data()+9, this->xyz.y);
+    writeBytes_from64bit(pack.bytes.data()+17, this->stance);
+    writeBytes_from64bit(pack.bytes.data()+25, this->xyz.z);
     pack.bytes[33] = this->getOnGround();
     return pack;
 }
@@ -131,12 +126,12 @@ p_Player_Look::p_Player_Look(PacketReturnInfo inf, bool on_ground, v2<float> yp)
 
 p_Player_Look::p_Player_Look(Packet pack) :
     p_PlayerBase(pack.info, pack.bytes[9]){
-    if(pack.size!=10){
+    if(pack.bytes.size()!=10){
         LoggerHandler::getLogger()->LogPrint(ERROR, "{:0x} Packet invalid!", (int)pack.bytes[0]);
         return;
     }
-    this->yp.x = (float)std::bit_cast<double>(read8byteInt_BE(pack.bytes+1));
-    this->yp.z = (float)std::bit_cast<double>(read8byteInt_BE(pack.bytes+5));
+    this->yp.x = (float)std::bit_cast<double>(read8byteInt_BE(pack.bytes.data()+1));
+    this->yp.z = (float)std::bit_cast<double>(read8byteInt_BE(pack.bytes.data()+5));
 }
 
 uint8_t p_Player_Look::getID(){
@@ -144,10 +139,10 @@ uint8_t p_Player_Look::getID(){
 }
 
 Packet p_Player_Look::serialize(){
-    Packet pack = Packet(new uint8_t[10],10,this->getInfo());
+    Packet pack = Packet(std::vector<uint8_t>(10),this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from32bit(pack.bytes+1, this->yp.x);
-    writeBytes_from32bit(pack.bytes+5, this->yp.z);
+    writeBytes_from32bit(pack.bytes.data()+1, this->yp.x);
+    writeBytes_from32bit(pack.bytes.data()+5, this->yp.z);
     pack.bytes[9] = this->getOnGround();
     return pack;
 }
@@ -158,9 +153,9 @@ p_Player_PosLook::p_Player_PosLook(PacketReturnInfo inf, bool on_ground, v3<doub
 }
 
 p_Player_PosLook::p_Player_PosLook(Packet pack) :
-    p_Player_Look(pack.info, pack.bytes[41], v2<float>(read4byteInt_BE(pack.bytes+33), read4byteInt_BE(pack.bytes+37))),
-    p_Player_Pos(pack.info, pack.bytes[41], v3<double>(read8byteInt_BE(pack.bytes+1), read8byteInt_BE(pack.bytes+9), read8byteInt_BE(pack.bytes+17)), read8byteInt_BE(pack.bytes+25)){
-    if(pack.size!=42){
+    p_Player_Look(pack.info, pack.bytes[41], v2<float>(read4byteInt_BE(pack.bytes.data()+33), read4byteInt_BE(pack.bytes.data()+37))),
+    p_Player_Pos(pack.info, pack.bytes[41], v3<double>(read8byteInt_BE(pack.bytes.data()+1), read8byteInt_BE(pack.bytes.data()+9), read8byteInt_BE(pack.bytes.data()+17)), read8byteInt_BE(pack.bytes.data()+25)){
+    if(pack.bytes.size()!=42){
         LoggerHandler::getLogger()->LogPrint(ERROR, "{:0x} Packet invalid!", (int)pack.bytes[0]);
         return;
     }
@@ -171,18 +166,16 @@ uint8_t p_Player_PosLook::getID(){
 }
 
 Packet p_Player_PosLook::serialize(){
-    Packet pack;
-    pack.info = this->p_Player_Look::getInfo();
-    pack.bytes = new uint8_t[42];
+    Packet pack(std::vector<uint8_t>(42), this->p_Player_Look::getInfo());
     pack.bytes[0] = this->getID();
     v3<double> xyz; v2<float> yp;
     xyz = this->getXYZ(); yp = this->getYP();
-    writeBytes_from64bit(pack.bytes+1, xyz.x);
-    writeBytes_from64bit(pack.bytes+9, this->getStance());
-    writeBytes_from64bit(pack.bytes+17, xyz.y);
-    writeBytes_from64bit(pack.bytes+25, xyz.z);
-    writeBytes_from32bit(pack.bytes+33, yp.x);
-    writeBytes_from32bit(pack.bytes+37, yp.z);
+    writeBytes_from64bit(pack.bytes.data()+1, xyz.x);
+    writeBytes_from64bit(pack.bytes.data()+9, this->getStance());
+    writeBytes_from64bit(pack.bytes.data()+17, xyz.y);
+    writeBytes_from64bit(pack.bytes.data()+25, xyz.z);
+    writeBytes_from32bit(pack.bytes.data()+33, yp.x);
+    writeBytes_from32bit(pack.bytes.data()+37, yp.z);
     pack.bytes[41] = this->p_Player_Look::getOnGround();
     return pack;
 }
@@ -190,11 +183,11 @@ Packet p_Player_PosLook::serialize(){
 p_Player_Dig::p_Player_Dig(Packet pack):
     DsPacket(pack.info),
     status((P_DigStatus)pack.bytes[1]),
-    x(read4byteInt_BE(pack.bytes+2)),
+    x(read4byteInt_BE(pack.bytes.data()+2)),
     y(pack.bytes[6]),
-    z(read4byteInt_BE(pack.bytes+7)),
+    z(read4byteInt_BE(pack.bytes.data()+7)),
     face((Block_Face)pack.bytes[11]){
-    if(pack.size!=12){
+    if(pack.bytes.size()!=12){
         LoggerHandler::getLogger()->LogPrint(ERROR, "{:0x} Packet invalid!", (int)pack.bytes[0]);
         return;
     }
@@ -209,27 +202,24 @@ PacketCategories p_Player_Dig::getType(){
 }
 
 Packet p_Player_Dig::serialize(){
-    Packet pack;    
-    pack.info = this->getInfo();
-    pack.size = 12;
-    pack.bytes = new uint8_t[12];
+    Packet pack(std::vector<uint8_t>(12),this->getInfo());
     pack.bytes[0] = this->getID();
     pack.bytes[1] = this->status;
-    writeBytes_from32bit(pack.bytes+2, this->x);
+    writeBytes_from32bit(pack.bytes.data()+2, this->x);
     pack.bytes[6] = this->y;
-    writeBytes_from32bit(pack.bytes+7, this->z);
+    writeBytes_from32bit(pack.bytes.data()+7, this->z);
     pack.bytes[7] = this->face;
     return pack;
 }
 
 p_Player_BlockPlace::p_Player_BlockPlace(Packet pack) :
     DsPacket(pack.info),
-    x(read4byteInt_BE(pack.bytes+1)),
+    x(read4byteInt_BE(pack.bytes.data()+1)),
     y(pack.bytes[5]),
-    z(read4byteInt_BE(pack.bytes+6)),
+    z(read4byteInt_BE(pack.bytes.data()+6)),
     face((Block_Face)pack.bytes[10]),
-    block_id(read2byteInt_BE(pack.bytes+12)){
-    if(pack.size!=13){
+    block_id(read2byteInt_BE(pack.bytes.data()+12)){
+    if(pack.bytes.size()!=13){
         LoggerHandler::getLogger()->LogPrint(ERROR, "{:0x} Packet invalid!", (int)pack.bytes[0]);
         return;
     }
@@ -244,19 +234,19 @@ PacketCategories p_Player_BlockPlace::getType(){
 }
 
 Packet p_Player_BlockPlace::serialize(){
-    return Packet(nullptr,0,this->getInfo());
+    return Packet(std::vector<uint8_t>(0),this->getInfo());
 }
 
 p_Player_BlockPlaceItem::p_Player_BlockPlaceItem(Packet pack) :
     DsPacket(pack.info),
-    x(read4byteInt_BE(pack.bytes+1)),
+    x(read4byteInt_BE(pack.bytes.data()+1)),
     y(pack.bytes[5]),
-    z(read4byteInt_BE(pack.bytes+6)),
+    z(read4byteInt_BE(pack.bytes.data()+6)),
     face((Block_Face)pack.bytes[10]),
-    block_id(read2byteInt_BE(pack.bytes+12)),
+    block_id(read2byteInt_BE(pack.bytes.data()+12)),
     amount(pack.bytes[14]),
-    damage(read2byteInt_BE(pack.bytes+15)){
-    if(pack.size!=16){
+    damage(read2byteInt_BE(pack.bytes.data()+15)){
+    if(pack.bytes.size()!=16){
         LoggerHandler::getLogger()->LogPrint(ERROR, "{:0x} Packet invalid!", (int)pack.bytes[0]);
         return;
     }
@@ -271,13 +261,13 @@ PacketCategories p_Player_BlockPlaceItem::getType(){
 }
 
 Packet p_Player_BlockPlaceItem::serialize(){
-    return Packet(nullptr, 0, this->getInfo());
+    return Packet(std::vector<uint8_t>(0), this->getInfo());
 }
 
 p_Player_HoldChange::p_Player_HoldChange(Packet pack):
     DsPacket(pack.info),
-    slot(read2byteInt_BE(pack.bytes+1)){
-    if(pack.size!=3){
+    slot(read2byteInt_BE(pack.bytes.data()+1)){
+    if(pack.bytes.size()!=3){
         LoggerHandler::getLogger()->LogPrint(ERROR, "{:0x} Packet invalid!", (int)pack.bytes[0]);
         return;
     }
@@ -292,7 +282,7 @@ PacketCategories p_Player_HoldChange::getType(){
 }
 
 Packet p_Player_HoldChange::serialize(){
-    return Packet(nullptr,0,this->getInfo());
+    return Packet(std::vector<uint8_t>(0),this->getInfo());
 }
 
 p_Player_UseBed::p_Player_UseBed(PacketReturnInfo inf, int32_t eid, v3<int32_t> xyz):
@@ -312,15 +302,12 @@ PacketCategories p_Player_UseBed::getType(){
 }
 
 Packet p_Player_UseBed::serialize(){
-    Packet pack;
-    pack.info = this->getInfo();
-    pack.size = 0x0F;
-    pack.bytes = new uint8_t[15];
+    Packet pack(std::vector<uint8_t>(15),this->getInfo());
     pack.bytes[0] = this->getID();
     pack.bytes[1] = 0x00;
-    writeBytes_from32bit(pack.bytes+2, this->x);
+    writeBytes_from32bit(pack.bytes.data()+2, this->x);
     pack.bytes[6] = this->y;
-    writeBytes_from32bit(pack.bytes+7,this->z);
+    writeBytes_from32bit(pack.bytes.data()+7,this->z);
     return pack;
 }
 
@@ -338,12 +325,9 @@ PacketCategories p_Player_updateHp::getType(){
 }
 
 Packet p_Player_updateHp::serialize(){
-    Packet pack;
-    pack.info = this->getInfo();
-    pack.size = 3;
-    pack.bytes = new uint8_t[3];
+    Packet pack(std::vector<uint8_t>(3),this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from16bit(pack.bytes+1, this->new_hp);
+    writeBytes_from16bit(pack.bytes.data()+1, this->new_hp);
     return pack;
 }
 
@@ -354,7 +338,7 @@ p_Player_Respawn::p_Player_Respawn(PacketReturnInfo inf, int8_t dimension) :
 
 p_Player_Respawn::p_Player_Respawn(Packet pack) :
     DsPacket(pack.info){
-    if(pack.size!=2){
+    if(pack.bytes.size()!=2){
         LoggerHandler::getLogger()->LogPrint(ERROR, "{:0x} Packet invalid!", (int)pack.bytes[0]);
         return;
     }
@@ -370,7 +354,7 @@ PacketCategories p_Player_Respawn::getType(){
 }
 
 Packet p_Player_Respawn::serialize(){
-    Packet pack(new uint8_t[2], 2, this->getInfo());
+    Packet pack(std::vector<uint8_t>(2), this->getInfo());
     pack.bytes[0] = this->getID();
     pack.bytes[1] = this->getID();
     return pack;

@@ -18,8 +18,8 @@ void Event_PlayerUpdateBase::process(ServerState* state, PacketQueue* queue){
         return;
     }
     player.value()->updateOnGround(this->on_ground);
-    auto t = p_EntityBase(PacketReturnInfo(), this->EID);
-    this->queuePacket_ExPlayer(t, state, queue, this->EID);
+    auto t =  new p_EntityBase(PacketReturnInfo(), this->EID);
+    this->queuePacket_ExPlayer(std::shared_ptr<DsPacket>(t), state, queue, this->EID);
     //FIXME remember to validate changes.
 }
 

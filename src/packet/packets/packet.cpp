@@ -17,19 +17,20 @@ bool isImplemented(uint8_t id){
 Packet::Packet(){
     this->info.epoll_fd = 0;
     this->info.thread_ID = 0;
-    this->bytes = nullptr;
-    this->size = 0;
+
 }
 
-Packet::Packet(uint8_t *arr, std::size_t sz, PacketReturnInfo in){
-    this->info = in;
-    this->bytes = new uint8_t[sz];
-    memcpy(this->bytes, arr, sz);
-    this->size = sz;
+Packet::Packet(PacketReturnInfo in):
+    info(in){
+}
+
+Packet::Packet(std::vector<uint8_t> array, PacketReturnInfo in):
+    info(in),
+
+    bytes(array){
 }
 
 Packet::~Packet(){
-    delete[] this->bytes;
 }
 
 DsPacket::DsPacket(){
@@ -56,7 +57,7 @@ void DsPacket::setInfo(PacketReturnInfo inf){
 }
 
 Packet DsPacket::serialize(){
-    return Packet(nullptr,0,this->getInfo());
+    return Packet(std::vector<uint8_t>(),this->getInfo());
 }
 
 

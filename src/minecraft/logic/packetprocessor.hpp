@@ -13,10 +13,10 @@ class PacketProcessor{
         PacketDeserializer* deserializer;
     public:
         PacketProcessor(PacketDeserializer* deserial);
-        void queuePacket(DsPacket pack);
+        void queuePacket(std::shared_ptr<DsPacket> pack);
         void retrieveQueue();
         void processPackets(EventHandler* handler);
-        ~PacketProcessor();
+        ~PacketProcessor() = default;
 };
 
 #endif  

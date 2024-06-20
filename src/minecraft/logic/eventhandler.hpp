@@ -12,7 +12,7 @@ class EventHandler{
         PacketSerializer* serializer;
     public:
         EventHandler(PacketSerializer* serializer, ServerState* state);
-        void insertEvent(EventBase event, uint32_t tick_delay);
+        void insertEvent(std::shared_ptr<EventBase> event, uint32_t tick_delay);
         void processEvents();
         void sendPackets();
 };

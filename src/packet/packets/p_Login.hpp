@@ -6,7 +6,7 @@
 #include "packet.hpp"
 
 
-class p_LoginRequest : public DsPacket {
+class p_LoginRequest : public DsPacket { /* 0x01 */
     public:
         int32_t protocol;
         uint16_t username_len;
@@ -23,7 +23,7 @@ class p_LoginRequest : public DsPacket {
         ~p_LoginRequest() override = default;
 };
 
-class p_HandShake : public DsPacket{
+class p_HandShake : public DsPacket{ /* 0x02 */
     public:
         uint16_t username_len;
         std::u16string username;
@@ -38,7 +38,7 @@ class p_HandShake : public DsPacket{
         ~p_HandShake() override = default;
 };
 
-class p_Kick : public DsPacket{
+class p_Kick : public DsPacket{ /* 0xFF */
     public:
         uint16_t reason_len;
         std::u16string reason;

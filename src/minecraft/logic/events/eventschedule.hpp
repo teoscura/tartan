@@ -2,16 +2,17 @@
 #define E_SCHEDULE_H
 
 #include <cstdint>
+#include <memory>
 #include <vector>
 
 #include "event.hpp"
 
 class EventSchedule{
     private:
-        std::vector<EventBase> event_schedule;
+        std::vector<std::shared_ptr<EventBase>> event_schedule;
     public:
-        void insert(EventBase event);
-        std::vector<EventBase> getExpectedEvents(uint64_t delivery_tick);
+        void insert(std::shared_ptr<EventBase> event);
+        std::optional<std::shared_ptr<EventBase>> getLateEvent(uint64_t delivery_tick);
 };
 
 #endif

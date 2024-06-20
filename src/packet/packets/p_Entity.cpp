@@ -24,9 +24,9 @@ PacketCategories p_EntityBase::getType(){
 }
 
 Packet p_EntityBase::serialize(){
-    Packet pack(new uint8_t[5], 5, this->getInfo());
+    Packet pack(std::vector<uint8_t>(5), this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from32bit(pack.bytes+1, this->eid);
+    writeBytes_from32bit(pack.bytes.data()+1, this->eid);
     return pack;
 }
 
@@ -46,12 +46,12 @@ PacketCategories p_Entity_Equipment::getType(){
 }
 
 Packet p_Entity_Equipment::serialize(){
-    Packet pack(new uint8_t[11], 11, this->getInfo());
+    Packet pack(std::vector<uint8_t>(11), this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from32bit(pack.bytes+1, this->getEID());
-    writeBytes_from16bit(pack.bytes+5, this->slot);
-    writeBytes_from16bit(pack.bytes+7, this->item_id);
-    writeBytes_from16bit(pack.bytes+9, this->data);
+    writeBytes_from32bit(pack.bytes.data()+1, this->getEID());
+    writeBytes_from16bit(pack.bytes.data()+5, this->slot);
+    writeBytes_from16bit(pack.bytes.data()+7, this->item_id);
+    writeBytes_from16bit(pack.bytes.data()+9, this->data);
     return pack;
 }
 
@@ -70,10 +70,10 @@ PacketCategories p_Entity_useEntity::getType(){
 }
 
 Packet p_Entity_useEntity::serialize(){
-    Packet pack(new uint8_t[10], 10, this->getInfo());
+    Packet pack(std::vector<uint8_t>(10), this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from32bit(pack.bytes+1, this->getEID());
-    writeBytes_from32bit(pack.bytes+5, this->target);
+    writeBytes_from32bit(pack.bytes.data()+1, this->getEID());
+    writeBytes_from32bit(pack.bytes.data()+5, this->target);
     pack.bytes[9] = this->leftclick;
     return pack;
 }
@@ -92,9 +92,9 @@ PacketCategories p_Entity_Animation::getType(){
 }
 
 Packet p_Entity_Animation::serialize(){
-    Packet pack(new uint8_t[6], 6, this->getInfo());
+    Packet pack(std::vector<uint8_t>(6), this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from32bit(pack.bytes+1, this->getEID());
+    writeBytes_from32bit(pack.bytes.data()+1, this->getEID());
     pack.bytes[5] = this->animation;
     return pack;
 }
@@ -113,9 +113,9 @@ PacketCategories p_Entity_Action::getType(){
 }
 
 Packet p_Entity_Action::serialize(){
-    Packet pack(new uint8_t[6], 6, this->getInfo());
+    Packet pack(std::vector<uint8_t>(6), this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from32bit(pack.bytes+1, this->getEID());
+    writeBytes_from32bit(pack.bytes.data()+1, this->getEID());
     pack.bytes[5] = this->action;
     return pack;
 }
@@ -137,12 +137,12 @@ PacketCategories p_Entity_NamedSpawn::getType(){
 }
 
 Packet p_Entity_NamedSpawn::serialize(){
-    Packet pack(new uint8_t[23+2*e_name.length()], 23+2*e_name.length(), this->getInfo());
+    Packet pack(std::vector<uint8_t>(23+2*e_name.length()), this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from16bit(pack.bytes+1, this->e_name.length());
-    writeBytes_fromWstring(pack.bytes+3, this->e_name);
-    writeBytes_fromV3(pack.bytes+3+2*e_name.length(), this->xyz);
-    writeBytes_fromV2(pack.bytes+15+2*e_name.length(), this->yp);
+    writeBytes_from16bit(pack.bytes.data()+1, this->e_name.length());
+    writeBytes_fromWstring(pack.bytes.data()+3, this->e_name);
+    writeBytes_fromV3(pack.bytes.data()+3+2*e_name.length(), this->xyz);
+    writeBytes_fromV2(pack.bytes.data()+15+2*e_name.length(), this->yp);
     pack.bytes[17+2*e_name.length()] = held_item;
     return pack;
 }
@@ -166,14 +166,14 @@ PacketCategories p_Entity_SpawnGroundItem::getType(){
 }
 
 Packet p_Entity_SpawnGroundItem::serialize(){
-    Packet pack(new uint8_t[25], 25, this->getInfo());
+    Packet pack(std::vector<uint8_t>(25), this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from32bit(pack.bytes+1, this->getEID());
-    writeBytes_from16bit(pack.bytes+5, this->item_id);
+    writeBytes_from32bit(pack.bytes.data()+1, this->getEID());
+    writeBytes_from16bit(pack.bytes.data()+5, this->item_id);
     pack.bytes[7] = this->count;
-    writeBytes_from16bit(pack.bytes+8, this->damage_or_metadata);
-    writeBytes_fromV3(pack.bytes+10, this->xyz);
-    writeBytes_fromV3(pack.bytes+22, this->rpr);
+    writeBytes_from16bit(pack.bytes.data()+8, this->damage_or_metadata);
+    writeBytes_fromV3(pack.bytes.data()+10, this->xyz);
+    writeBytes_fromV3(pack.bytes.data()+22, this->rpr);
     return pack;
 }
 
@@ -192,10 +192,10 @@ PacketCategories p_Entity_Collect::getType(){
 }
 
 Packet p_Entity_Collect::serialize(){
-    Packet pack(new uint8_t[9], 9, this->getInfo());
+    Packet pack(std::vector<uint8_t>(9), this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from32bit(pack.bytes+1, this->getEID());
-    writeBytes_from32bit(pack.bytes+5, this->collector_id);
+    writeBytes_from32bit(pack.bytes.data()+1, this->getEID());
+    writeBytes_from32bit(pack.bytes.data()+5, this->collector_id);
     return pack;
 }
 
@@ -216,13 +216,13 @@ PacketCategories p_Entity_SpawnVehicle::getType(){
 }
 
 Packet p_Entity_SpawnVehicle::serialize(){
-    Packet pack(new uint8_t[28], 28, this->getInfo());
+    Packet pack(std::vector<uint8_t>(28), this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from32bit(pack.bytes+1, this->getEID());
+    writeBytes_from32bit(pack.bytes.data()+1, this->getEID());
     pack.bytes[5] = this->type;
-    writeBytes_fromV3(pack.bytes+6, this->xyz);
-    writeBytes_from32bit(pack.bytes+18, this->unknown);
-    writeBytes_fromV3(pack.bytes+22, this->unknowns);
+    writeBytes_fromV3(pack.bytes.data()+6, this->xyz);
+    writeBytes_from32bit(pack.bytes.data()+18, this->unknown);
+    writeBytes_fromV3(pack.bytes.data()+22, this->unknowns);
     return pack;
 }
 
@@ -243,13 +243,13 @@ PacketCategories p_Entity_SpawnMob::getType(){
 }
 
 Packet p_Entity_SpawnMob::serialize(){
-    Packet pack(new uint8_t[20+metadata.size()], 20+metadata.size(), this->getInfo());
+    Packet pack(std::vector<uint8_t>(20+metadata.size()), this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from32bit(pack.bytes+1, getEID());
+    writeBytes_from32bit(pack.bytes.data()+1, getEID());
     pack.bytes[5] = this->mob_type;
-    writeBytes_fromV3(pack.bytes+6, this->xyz);
-    writeBytes_fromV2(pack.bytes+18, this->yp);
-    writeBytes_fromVector(pack.bytes+20, this->metadata);
+    writeBytes_fromV3(pack.bytes.data()+6, this->xyz);
+    writeBytes_fromV2(pack.bytes.data()+18, this->yp);
+    writeBytes_fromVector(pack.bytes.data()+20, this->metadata);
     return pack;
 }
 
@@ -269,13 +269,13 @@ PacketCategories p_Entity_Painting::getType(){
 }
 
 Packet p_Entity_Painting::serialize(){
-    Packet pack(new uint8_t[22+2*painting_name.length()], 22+2*painting_name.length(), this->getInfo());
+    Packet pack(std::vector<uint8_t>(22+2*painting_name.length()), this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from32bit(pack.bytes+1, this->getEID());
-    writeBytes_from16bit(pack.bytes+5, this->painting_name.length());
-    writeBytes_fromWstring(pack.bytes+7, this->painting_name);
-    writeBytes_fromV3(pack.bytes+9+2*painting_name.length(), this->center_xyz);
-    writeBytes_from32bit(pack.bytes+21+2*painting_name.length(), this->direction);
+    writeBytes_from32bit(pack.bytes.data()+1, this->getEID());
+    writeBytes_from16bit(pack.bytes.data()+5, this->painting_name.length());
+    writeBytes_fromWstring(pack.bytes.data()+7, this->painting_name);
+    writeBytes_fromV3(pack.bytes.data()+9+2*painting_name.length(), this->center_xyz);
+    writeBytes_from32bit(pack.bytes.data()+21+2*painting_name.length(), this->direction);
     return pack;
 }
 
@@ -293,10 +293,10 @@ PacketCategories p_Entity_Velocity::getType(){
 }
 
 Packet p_Entity_Velocity::serialize(){
-    Packet pack(new uint8_t[11], 11, this->getInfo());
+    Packet pack(std::vector<uint8_t>(11), this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from32bit(pack.bytes+1, this->getEID());
-    writeBytes_fromV3(pack.bytes+5, v_xyz);
+    writeBytes_from32bit(pack.bytes.data()+1, this->getEID());
+    writeBytes_fromV3(pack.bytes.data()+5, v_xyz);
     return pack;
 }
 
@@ -314,9 +314,9 @@ PacketCategories p_Entity_Delete::getType(){
 }
 
 Packet p_Entity_Delete::serialize(){
-    Packet pack(new uint8_t[5], 5, this->getInfo());
+    Packet pack(std::vector<uint8_t>(5), this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from32bit(pack.bytes+1, this->getEID());
+    writeBytes_from32bit(pack.bytes.data()+1, this->getEID());
     return pack;
 }
 
@@ -338,10 +338,10 @@ PacketCategories p_Entity_RelativeMove::getType(){
 }
 
 Packet p_Entity_RelativeMove::serialize(){
-    Packet pack(new uint8_t[8], 8, this->getInfo());
+    Packet pack(std::vector<uint8_t>(8), this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from32bit(pack.bytes+1, this->getEID());
-    writeBytes_fromV3(pack.bytes+5, this->d_xyz);
+    writeBytes_from32bit(pack.bytes.data()+1, this->getEID());
+    writeBytes_fromV3(pack.bytes.data()+5, this->d_xyz);
     return pack;
 }
 
@@ -363,10 +363,10 @@ PacketCategories p_Entity_Look::getType(){
 }
 
 Packet p_Entity_Look::serialize(){
-    Packet pack(new uint8_t[7], 7, this->getInfo());
+    Packet pack(std::vector<uint8_t>(7), this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from32bit(pack.bytes+1, this->getEID());
-    writeBytes_fromV2(pack.bytes+5, this->yp);
+    writeBytes_from32bit(pack.bytes.data()+1, this->getEID());
+    writeBytes_fromV2(pack.bytes.data()+5, this->yp);
     return pack;
 }
 
@@ -384,11 +384,11 @@ PacketCategories p_Entity_RelMoveLook::getType(){
 }
 
 Packet p_Entity_RelMoveLook::serialize(){
-    Packet pack(new uint8_t[10], 10, this->p_Entity_Look::getInfo());
+    Packet pack(std::vector<uint8_t>(10), this->p_Entity_Look::getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from32bit(pack.bytes+1, this->p_Entity_Look::getEID());
-    writeBytes_fromV3(pack.bytes+5, this->getXYZ());
-    writeBytes_fromV2(pack.bytes+8, this->getYP());
+    writeBytes_from32bit(pack.bytes.data()+1, this->p_Entity_Look::getEID());
+    writeBytes_fromV3(pack.bytes.data()+5, this->getXYZ());
+    writeBytes_fromV2(pack.bytes.data()+8, this->getYP());
     return pack;
 }
 
@@ -406,11 +406,11 @@ PacketCategories p_Entity_Teleport::getType(){
 }
 
 Packet p_Entity_Teleport::serialize(){
-    Packet pack(new uint8_t[19],19,this->getInfo());
+    Packet pack(std::vector<uint8_t>(19),this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from32bit(pack.bytes+1, this->getEID());
-    writeBytes_fromV3(pack.bytes+5, xyz);
-    writeBytes_fromV2(pack.bytes+17, this->getYP());
+    writeBytes_from32bit(pack.bytes.data()+1, this->getEID());
+    writeBytes_fromV3(pack.bytes.data()+5, xyz);
+    writeBytes_fromV2(pack.bytes.data()+17, this->getYP());
     return pack;
 }
 
@@ -428,9 +428,9 @@ PacketCategories p_Entity_Status::getType(){
 }
 
 Packet p_Entity_Status::serialize(){
-    Packet pack(new uint8_t[6], 6, this->getInfo());
+    Packet pack(std::vector<uint8_t>(6), this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from32bit(pack.bytes+1, this->getEID());
+    writeBytes_from32bit(pack.bytes.data()+1, this->getEID());
     pack.bytes[5] = this->status;
     return pack;
 }
@@ -449,16 +449,16 @@ PacketCategories p_Entity_Attach::getType(){
 }
 
 Packet p_Entity_Attach::serialize(){
-    Packet pack(new uint8_t[9], 9, this->getInfo());
+    Packet pack(std::vector<uint8_t>(9), this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from32bit(pack.bytes+1, this->getEID());
-    writeBytes_from32bit(pack.bytes+5, this->vehicle_eid);
+    writeBytes_from32bit(pack.bytes.data()+1, this->getEID());
+    writeBytes_from32bit(pack.bytes.data()+5, this->vehicle_eid);
     return pack;
 }
 
-p_Entity_Metadata::p_Entity_Metadata(PacketReturnInfo inf, uint32_t eid, std::vector<uint8_t> bytes) :
+p_Entity_Metadata::p_Entity_Metadata(PacketReturnInfo inf, uint32_t eid, std::vector<uint8_t> metadata_bytes) :
     p_EntityBase(inf, eid),
-    bytes(bytes){
+    metadata_bytes(metadata_bytes){
 }
 
 uint8_t p_Entity_Metadata::getID(){
@@ -470,10 +470,10 @@ PacketCategories p_Entity_Metadata::getType(){
 }
 
 Packet p_Entity_Metadata::serialize(){
-    Packet pack(new uint8_t[5+bytes.size()], 5+bytes.size(), this->getInfo());
+    Packet pack(std::vector<uint8_t>(5+metadata_bytes.size()), this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from32bit(pack.bytes+1, this->getID());
-    writeBytes_fromVector(pack.bytes+5, this->bytes);
+    writeBytes_from32bit(pack.bytes.data()+1, this->getID());
+    writeBytes_fromVector(pack.bytes.data()+5, this->metadata_bytes);
     return pack;
 }
 
@@ -492,10 +492,10 @@ PacketCategories p_Entity_Thunderbolt::getType(){
 }
 
 Packet p_Entity_Thunderbolt::serialize(){
-    Packet pack(new uint8_t[18], 18, this->getInfo());
+    Packet pack(std::vector<uint8_t>(18), this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from32bit(pack.bytes+1, this->getEID());
+    writeBytes_from32bit(pack.bytes.data()+1, this->getEID());
     pack.bytes[5] = this->t;
-    writeBytes_fromV3(pack.bytes+6, this->xyz);
+    writeBytes_fromV3(pack.bytes.data()+6, this->xyz);
     return pack;
 }

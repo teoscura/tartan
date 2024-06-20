@@ -292,7 +292,7 @@ class p_Entity_Attach : public p_EntityBase { /* 0x27 */
 
 class p_Entity_Metadata : public p_EntityBase { /* 0x28 */
     private:
-        std::vector<uint8_t> bytes;
+        std::vector<uint8_t> metadata_bytes;
     public:
         p_Entity_Metadata(PacketReturnInfo inf, uint32_t eid, std::vector<uint8_t> bytes);
 

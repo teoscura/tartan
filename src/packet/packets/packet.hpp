@@ -1,9 +1,8 @@
 #ifndef PACKETS_H
 #define PACKETS_H
 
-#include <cstring>
 #include <cstdint>
-#include <cstddef>
+#include <vector>
 
 enum PacketCategories{
     NOT_IMPLEMENTED,
@@ -21,11 +20,11 @@ struct PacketReturnInfo{
 
 struct Packet{
     PacketReturnInfo info;
-    uint8_t *bytes;
-    std::size_t size;
+    std::vector<uint8_t> bytes;
     
     Packet();
-    Packet(uint8_t *arr, std::size_t sz, PacketReturnInfo in);
+    Packet(PacketReturnInfo in);
+    Packet(std::vector<uint8_t> arr, PacketReturnInfo in);
     ~Packet();
 };
 

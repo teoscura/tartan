@@ -12,8 +12,8 @@ class p_ChatMessage : public DsPacket { /* 0x03 */
         std::u16string message;
         uint16_t message_len;
     public:
-        p_ChatMessage(PacketReturnInfo inf, std::u16string message);
         p_ChatMessage(Packet pack);
+        p_ChatMessage(PacketReturnInfo inf, std::u16string message);
 
         uint8_t getID() override;
         PacketCategories getType() override;

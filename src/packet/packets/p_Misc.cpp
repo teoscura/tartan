@@ -2,6 +2,7 @@
 
 #include "../../util/byteops.hpp"
 #include "packet.hpp"
+#include <vector>
 
 p_ChatMessage::p_ChatMessage(PacketReturnInfo inf, std::u16string message) :
     DsPacket(inf),
@@ -10,8 +11,8 @@ p_ChatMessage::p_ChatMessage(PacketReturnInfo inf, std::u16string message) :
 
 p_ChatMessage::p_ChatMessage(Packet pack) : 
     DsPacket(pack.info){
-    this->message_len = read2byteInt_BE(pack.bytes+1);
-    this->message = wstring_fromBytes(pack.bytes+1, this->message_len);
+    this->message_len = read2byteInt_BE(pack.bytes.data()+1);
+    this->message = wstring_fromBytes(pack.bytes.data()+1, this->message_len);
 }
 
 uint8_t p_ChatMessage::getID(){
@@ -23,10 +24,10 @@ PacketCategories p_ChatMessage::getType(){
 }
 
 Packet p_ChatMessage::serialize(){
-    Packet pack(new uint8_t[3+2*message.length()], 3+2*message.length(), this->getInfo());
+    Packet pack(std::vector<uint8_t>(3+2*message.length()), this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from16bit(pack.bytes+1, message.length());
-    writeBytes_fromWstring(pack.bytes+3, message);
+    writeBytes_from16bit(pack.bytes.data()+1, message.length());
+    writeBytes_fromWstring(pack.bytes.data()+3, message);
     return pack;
 }
 
@@ -44,9 +45,9 @@ PacketCategories p_TimeUpdate::getType(){
 }
 
 Packet p_TimeUpdate::serialize(){
-    Packet pack(new uint8_t[9], 9, this->getInfo());
+    Packet pack(std::vector<uint8_t>(9), this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from64bit(pack.bytes+1, this->time);
+    writeBytes_from64bit(pack.bytes.data()+1, this->time);
     return pack;
 }
 
@@ -64,7 +65,7 @@ PacketCategories p_NewState::getType(){
 }
 
 Packet p_NewState::serialize(){
-    Packet pack(new uint8_t[2], 2, this->getInfo());
+    Packet pack(std::vector<uint8_t>(2), this->getInfo());
     pack.bytes[0] = this->getID();
     pack.bytes[1] = this->reason;
     return Packet(pack);
@@ -85,9 +86,9 @@ PacketCategories p_StatIncrease::getType(){
 }
 
 Packet p_StatIncrease::serialize(){
-    Packet pack(new uint8_t[6], 6, this->getInfo());
+    Packet pack(std::vector<uint8_t>(6), this->getInfo());
     pack.bytes[0] = this->getID();
-    writeBytes_from32bit(pack.bytes+1, this->stat_id);
+    writeBytes_from32bit(pack.bytes.data()+1, this->stat_id);
     pack.bytes[5] = this->amount;
     return pack;
 }
