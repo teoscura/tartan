@@ -22,6 +22,13 @@ std::u16string wstring_fromBytes(const uint8_t* raw, std::size_t size);
 uint16_t read2byteInt_BE(const uint8_t* raw);
 uint32_t read4byteInt_BE(const uint8_t* raw);
 uint64_t read8byteInt_BE(const uint8_t* raw);
+
+template<typename T>
+v2<T> readV2_BE(uint8_t *arr);
+
+template<typename T>
+v3<T> readV3_BE(uint8_t *arr);
+
 void print_bytes(std::ostream& out, uint8_t* msg_buf, int dataLen, bool format = true);
 std::string hexStr(const uint8_t *data, int len);
 
@@ -99,6 +106,58 @@ void writeBytes_fromV3(uint8_t *arr, v3<T> vec){
             writeBytes_from64bit(arr+0*sz, vec.x);
             writeBytes_from64bit(arr+1*sz, vec.y);
             writeBytes_from64bit(arr+2*sz, vec.z);
+            break;
+    }
+}
+
+template<typename T>
+v2<T> readV2_BE(uint8_t *arr){
+    std::size_t sz = sizeof(T);
+    v2<T> res;
+    switch(sz){
+        case 1:
+            res.x = arr[0];
+            res.z = arr[1];
+            break;
+        case 2:
+            res.x = read2byteInt_BE(arr+0*sz);
+            res.z = read2byteInt_BE(arr+1*sz);
+            break;
+        case 4:
+            res.x = read4byteInt_BE(arr+0*sz);
+            res.z = read4byteInt_BE(arr+1*sz);
+            break;
+        case 8:
+            res.x = read8byteInt_BE(arr+0*sz);
+            res.z = read8byteInt_BE(arr+1*sz);
+            break;
+    }
+}
+
+template<typename T>
+v3<T> readV3_BE(uint8_t *arr){
+    std::size_t sz = sizeof(T);
+    v3<T> res;
+    switch(sz){
+        case 1:
+            res.x = arr[0];
+            res.y = arr[1];
+            res.z = arr[2];
+            break;
+        case 2:
+            res.x = read2byteInt_BE(arr+0*sz);
+            res.y = read2byteInt_BE(arr+1*sz);
+            res.z = read2byteInt_BE(arr+2*sz);
+            break;
+        case 4:
+            res.x = read4byteInt_BE(arr+0*sz);
+            res.y = read4byteInt_BE(arr+1*sz);
+            res.z = read4byteInt_BE(arr+2*sz);
+            break;
+        case 8:
+            res.x = read8byteInt_BE(arr+0*sz);
+            res.y = read8byteInt_BE(arr+1*sz);
+            res.z = read8byteInt_BE(arr+2*sz);
             break;
     }
 }

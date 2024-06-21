@@ -43,12 +43,26 @@ class Player : public Entity{
     public:
         Player(PacketReturnInfo inf, std::u16string username, uint32_t EID);
 
-        void updateBlob(uint8_t new_blob);
-        std::u16string getUsername();
+        void setBlob(uint8_t new_blob);
+        void setHP(uint8_t hp);
+        void setSleeping(bool sleeping);
+        void setHeldSlot(uint16_t held_slot);
+        void setHeight(double height);
+        void setKeepAlive(uint64_t keepalive);
+        void setStance(PlayerStances stance);
+        void setRespawnPos(v3<int32_t> respawn_pos);
+
         const PacketReturnInfo& getReturnInfo();
-
+        std::u16string getUsername();
+        uint8_t getHP();
+        bool getSleeping();
+        uint16_t getHeldSlot();
+        double getHeight();
+        uint64_t getLastKeepalive();
+        PlayerStances getStance();
+        v3<int32_t> getRespawnPos();
+        
         ~Player() override;
-
         //TODO constructor, destructor and methods specify the arguments for each function.
 };
 

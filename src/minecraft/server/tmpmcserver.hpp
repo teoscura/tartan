@@ -17,7 +17,7 @@ class TempServer{
         EventHandler e_handler;
         std::unique_ptr<Chunk> motherchunk;
     public:
-        TempServer(PacketDeserializer* pdeserial,PacketSerializer* pserial);
+        TempServer(PacketDeserializer* pdeserial,PacketSerializer* pserial, PlayerList* plist, EntityList* elist);
 
         void processEvents();
         void tickevents();

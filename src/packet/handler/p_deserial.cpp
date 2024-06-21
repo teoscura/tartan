@@ -44,6 +44,14 @@ void PacketDeserializer::addPacket(Packet p){
             }
             this->queue.push(std::shared_ptr<DsPacket>(new p_HandShake(p)));
             break;
+        case 0x0B:
+            if(p.bytes.size()!=34){
+                lg->LogPrint(ERROR, "Data isn't a valid {} packet!", (int)p.bytes[0]);
+                std::cerr<<"[ERROR] Data isnt a valid 0x0B packet!\n";
+                return;
+            }
+            this->queue.push(std::shared_ptr<DsPacket>(new p_Player_Pos(p)));
+            break;
         case 0xFF:
             if(p.bytes.size()!=1){
                 lg->LogPrint(ERROR, "Data isn't a valid {} packet!", (int)p.bytes[0]);
@@ -53,7 +61,7 @@ void PacketDeserializer::addPacket(Packet p){
             this->queue.push(std::shared_ptr<DsPacket>(new p_Kick(p)));
             break;
         default:
-            lg->LogPrint(ERROR, "Invalid packet recieved >{:0x}< skipping ahead.", (int)p.bytes[0]);
+            lg->LogPrint(ERROR, "Invalid packet recieved {:0x} skipping ahead.", (int)p.bytes[0]);
             std::cerr<<"[ERROR] Invalid packet recieved (> "<<std::hex << (int)p.bytes[0]<< std::dec <<" <), skipping ahead.\n";
             return;
     }

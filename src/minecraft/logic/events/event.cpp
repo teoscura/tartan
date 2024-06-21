@@ -17,16 +17,16 @@ uint64_t EventBase::getDeliveryTick(){
 
 void EventBase::queuePacket_Global(std::shared_ptr<DsPacket> pack, ServerState* state, PacketQueue* queue){
     auto packet = pack;
-    for(auto temp : state->global_plist->list){
-        pack->setInfo(temp.getReturnInfo());
+    for(auto temp : state->global_plist->getList()){
+        pack->setInfo(temp->getReturnInfo());
         queue->push(std::shared_ptr<DsPacket>(pack));
     }
 }
 
 void EventBase::queuePacket_ToPlayer(std::shared_ptr<DsPacket> pack, ServerState* state, PacketQueue* queue, uint32_t target_eid){
-    for(auto temp : state->global_plist->list){
-        if(temp.getEntityId()==target_eid){
-            pack->setInfo(temp.getReturnInfo());
+    for(auto temp : state->global_plist->getList()){
+        if(temp->getEntityId()==target_eid){
+            pack->setInfo(temp->getReturnInfo());
             queue->push(std::shared_ptr<DsPacket>(pack));
             return;
         }
@@ -35,9 +35,9 @@ void EventBase::queuePacket_ToPlayer(std::shared_ptr<DsPacket> pack, ServerState
 }
 
 void EventBase::queuePacket_ExPlayer(std::shared_ptr<DsPacket> pack, ServerState* state, PacketQueue* queue, uint32_t excluded_eid){
-    for(auto temp : state->global_plist->list){
-        if(temp.getEntityId()!=excluded_eid){
-            pack->setInfo(temp.getReturnInfo());
+    for(auto temp : state->global_plist->getList()){
+        if(temp->getEntityId()!=excluded_eid){
+            pack->setInfo(temp->getReturnInfo());
             queue->push(std::shared_ptr<DsPacket>(pack));
         }
     }

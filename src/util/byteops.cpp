@@ -64,6 +64,8 @@ uint64_t read8byteInt_BE(const uint8_t* raw){
     return ui64;
 }
 
+
+
 void print_bytes(std::ostream& out, uint8_t* msg_buf, int dataLen, bool format) {
     std::flush(out);
     out << std::setfill('0');

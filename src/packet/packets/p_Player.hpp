@@ -19,6 +19,7 @@ class p_SpawnPosition : public DsPacket { /* 0x06 */
         v3<int32_t> xyz;
     public:    
         p_SpawnPosition(PacketReturnInfo inf, v3<int32_t> coords);
+
         uint8_t getID() override;
         PacketCategories getType() override;
         Packet serialize() override; 

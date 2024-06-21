@@ -15,6 +15,7 @@ struct v2{
     v2<T> operator+(v2<T> v2);
     v2<T> operator-();
     v2<T> operator-(v2<T> v2);
+    v2<T> operator*(double n);
     v2<T> operator/(double n);
     v2<T> normalize();
     T norm();
@@ -32,6 +33,7 @@ struct v3{
     v3<T> operator+(v3<T> v2);
     v3<T> operator-();
     v3<T> operator-(v3<T> v2);
+    v3<T> operator*(double n);
     v3<T> operator/(double n);
     v3<T> normalize();
     T norm();
@@ -77,6 +79,11 @@ v2<T> v2<T>::operator-(){
 template<typename T>
 v2<T> v2<T>::operator-(v2<T> v2){
     return v2(this->x-v2.x, this->z-v2.z);
+}
+
+template<typename T>
+v2<T> v2<T>::operator*(double n){
+    return v2(this->x*n,this->z*n);
 }
 
 template<typename T>
@@ -160,6 +167,11 @@ v3<T> v3<T>::operator-(){
 template<typename T>
 v3<T> v3<T>::operator-(v3<T> v3){
     return v3(this->x-v3.x, this->y-v3.y, this->z-v3.z);
+}
+
+template<typename T>
+v3<T> v3<T>::operator*(double n){
+    return v3(this->x*n,this->y*n,this->z*n);
 }
 
 template<typename T>

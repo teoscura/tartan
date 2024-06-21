@@ -4,8 +4,10 @@
 #include <optional>
 
 #include "../../packet/packets/p_Login.hpp"
+#include "../../packet/packets/p_Player.hpp"
 #include "../../helpers/loggerhandler.hpp"
 #include "events/e_login.hpp"
+#include "events/e_player.hpp"
 //#include "events/e_player.hpp"
 
 PacketProcessor::PacketProcessor(PacketDeserializer* pdeserial) : 
@@ -51,7 +53,9 @@ void PacketProcessor::processPackets(EventHandler* handler){
             case 0x0A:
                 notImpl(tmp.value()->getID());break;
             case 0x0B:
-                notImpl(tmp.value()->getID());break;
+                {auto t = dynamic_cast<p_Player_Pos*>(tmp->get());
+                handler->insertEvent(std::shared_ptr<EventBase>(new Event_PlayerUpdate_Pos(0, t->getOnGround(), t->getXYZ(), t->getStance())), 1);
+                break;}
             case 0x0C:
                 notImpl(tmp.value()->getID());break;
             case 0x0D:

@@ -7,11 +7,11 @@
 #include "servertimeutil.hpp"
 
 
-TempServer::TempServer(PacketDeserializer* pdeserial, PacketSerializer* pserial):
+TempServer::TempServer(PacketDeserializer* pdeserial, PacketSerializer* pserial, PlayerList* global_plist, EntityList* global_elist):
     pp_processor(pdeserial),
     e_handler(pserial, &state),
-    motherchunk(this->terrain_gen.generateChunk(v2(0,0))){
-    state.time = TimeUtil(state.time.Clock.now(),std::chrono::milliseconds(50), 0, 0);
+    motherchunk(this->terrain_gen.generateChunk(v2(0,0))),
+    state(TimeUtil(state.time.Clock.now(),std::chrono::milliseconds(50), 0, 0), global_plist, global_elist, PlayerList(), EntityList(), 0){
 };
 
 void TempServer::tickloop(){

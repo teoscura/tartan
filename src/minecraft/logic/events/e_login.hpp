@@ -17,14 +17,12 @@ class Event_LoginLogRequest  : public EventBase {
 
 class Event_LoginHandshake  : public EventBase {
     private:
-        std::u16string username;
         PacketReturnInfo inf;
+        std::u16string username;
     public:
         Event_LoginHandshake(uint64_t delivery_tick,PacketReturnInfo inf, std::u16string username);
         void process(ServerState* state, PacketQueue* queue) override;
         ~Event_LoginHandshake() override = default;
 };
-
-
 
 #endif

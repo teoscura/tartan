@@ -1,5 +1,6 @@
 #include "entitylist.hpp"
 
+#include <memory>
 #include <optional>
 
 #include "../../helpers/loggerhandler.hpp"
@@ -10,18 +11,18 @@ uint32_t EntityList::allocateEID(){
     return this->last_eid;
 }
 
-void EntityList::insert(Entity player){
-    this->list.push_back(player);
+void EntityList::insert(std::shared_ptr<DeadEntity> entity){
+    this->list.push_back(entity);
 }
 
-std::optional<Entity*> EntityList::findEntity(uint32_t eid){
-    for(DeadEntity& t : this->list){
-        if(t.isDespawned()){
+std::optional<std::shared_ptr<Entity>> EntityList::findEntity(uint32_t eid){
+    for(auto t : this->list){
+        if(t->isDespawned()){
             return std::nullopt;
         } 
-        Entity temp = static_cast<Entity&>(t);
-        if(temp.getEntityId()==eid){
-            return &temp;
+        Entity* temp = static_cast<Entity*>(t.get());
+        if(temp->getEntityId()==eid){
+            return std::shared_ptr<Entity>(temp);
         }
     }
     return std::nullopt;
@@ -33,11 +34,11 @@ void EntityList::despawn(uint32_t eid){
         return;
     }
     for(int i = 0; i<list.size();i++){
-        if(list.at(i).isDespawned()){
+        if(list.at(i)->isDespawned()){
             continue;
         }
-        if(list.at(i).getEntityId()==eid){
-            list.at(i) = DeadEntity(eid);
+        if(list.at(i)->getEntityId()==eid){
+            list.at(i) = std::shared_ptr<DeadEntity>(new DeadEntity(eid));
             return;
         }
     }
@@ -46,5 +47,5 @@ void EntityList::despawn(uint32_t eid){
 }
 
 bool EntityList::isDespawned(uint32_t eid){
-    return list.at(eid-1).isDespawned();
+    return list.at(eid-1)->isDespawned();
 }

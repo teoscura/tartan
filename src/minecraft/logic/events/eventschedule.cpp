@@ -6,6 +6,10 @@
 #include "event.hpp"
 
 void EventSchedule::insert(std::shared_ptr<EventBase> event){
+    if(this->event_schedule.empty()){
+        this->event_schedule.push_back(event);
+        return;
+    }
     for(int i=0; i<this->event_schedule.size();i++){
         if(this->event_schedule.at(i)->getDeliveryTick()>event->getDeliveryTick()){
             this->event_schedule.insert(this->event_schedule.begin()+i, event);

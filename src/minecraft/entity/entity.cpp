@@ -20,11 +20,11 @@ Entity::Entity(uint32_t eid) :
     DeadEntity(eid){    
 }
 
-void Entity::updateOnGround(bool new_on_ground){
+void Entity::setOnGround(bool new_on_ground){
     this->on_ground = new_on_ground;
 }
 
-void Entity::updatePosLook(v3<double> new_xyz, v2<float> new_yp){
+void Entity::setPosLook(v3<double> new_xyz, v2<float> new_yp){
     this->xyz = new_xyz;
     this->yp = new_yp;
 }

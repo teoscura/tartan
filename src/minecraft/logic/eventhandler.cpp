@@ -1,4 +1,5 @@
 #include "eventhandler.hpp"
+
 #include <optional>
 
 EventHandler::EventHandler(PacketSerializer* serializer, ServerState* state) : 
@@ -7,6 +8,7 @@ EventHandler::EventHandler(PacketSerializer* serializer, ServerState* state) :
 }
 
 void EventHandler::insertEvent(std::shared_ptr<EventBase> event,uint32_t tick_delay){
+    
     auto t = this->state->time.s_tick+tick_delay;
     event->setDeliveryTick(t);
     this->e_schedule.insert(event);

@@ -11,6 +11,7 @@ class EventSchedule{
     private:
         std::vector<std::shared_ptr<EventBase>> event_schedule;
     public:
+        EventSchedule() = default;
         void insert(std::shared_ptr<EventBase> event);
         std::optional<std::shared_ptr<EventBase>> getLateEvent(uint64_t delivery_tick);
 };
