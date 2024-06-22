@@ -58,6 +58,8 @@ void EpollHandler::handleRead(uint32_t fd){
         std::cout<<"Client closed.\n";
         eventOp(fd, EPOLLIN|EPOLLOUT, EPOLL_CTL_DEL);
         close(fd);
+        uint8_t i[] = { 0xFF, 0x00, 0x00};
+        this->deserializer->addPacket(Packet(std::vector<uint8_t>(i, i+3), PacketReturnInfo(fd, this->info.ID)));
     }
     else {
         Packet pack = Packet(std::vector<uint8_t>(buffer,buffer+nread), PacketReturnInfo(fd, this->info.ID));

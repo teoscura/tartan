@@ -39,7 +39,7 @@ void PacketProcessor::processPackets(ServerState* state, EventHandler* handler){
                 notImpl(tmp.value()->getID());break;
             case 0x01:
                 {auto t = dynamic_cast<p_LoginRequest*>(tmp->get());
-                handler->insertEvent(std::shared_ptr<EventBase>(new Event_LoginLogRequest(0, t->getInfo(), t->protocol)), 1);
+                handler->insertEvent(std::shared_ptr<EventBase>(new Event_LoginLogRequest(0, t->getInfo(), t->protocol)), 2);
                 break;}
             case 0x02:
                 {auto t = dynamic_cast<p_HandShake*>(tmp->get());
