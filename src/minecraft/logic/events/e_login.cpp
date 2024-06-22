@@ -1,12 +1,16 @@
 #include "e_login.hpp"
 
+#include <codecvt>
+#include <iostream>
+#include <memory>
+#include <string>
+
 #include "../../../packet/packets/p_Login.hpp"
 #include "../../../packet/packets/p_Player.hpp"
 #include "../../../packet/packets/p_Misc.hpp"
 #include "../../../helpers/loggerhandler.hpp"
 #include "event.hpp"
-#include <memory>
-#include <string>
+
 
 Event_LoginLogRequest::Event_LoginLogRequest(uint64_t delivery_tick, PacketReturnInfo inf, uint64_t version) :
     EventBase(delivery_tick),
@@ -15,6 +19,7 @@ Event_LoginLogRequest::Event_LoginLogRequest(uint64_t delivery_tick, PacketRetur
 }
 
 void Event_LoginLogRequest::process(ServerState *state, PacketQueue* queue){
+    std::cout<<"Recieved logreq 3!\n";
     std::u16string reason;
     if(!state->global_plist->findLogin(this->inf).has_value()){
         LoggerHandler::getLogger()->LogPrint(ERROR, "{} sent a login request while in an invalid state!", inf.epoll_fd);
@@ -44,6 +49,8 @@ void Event_LoginLogRequest::process(ServerState *state, PacketQueue* queue){
     this->queuePacket_ExPlayer(std::shared_ptr<p_ChatMessage>(new p_ChatMessage(PacketReturnInfo(), 
                                std::u16string(t->getUsername() + u" logged in the server."))), 
                                state, queue, t->getEntityId());
+    std::wstring_convert<std::codecvt_utf8<char16_t>, char16_t> converter;
+    std::cout<<converter.to_bytes(t->getUsername()) << " logged in the server.\n";
 }
 
 Event_LoginHandshake::Event_LoginHandshake(uint64_t delivery_tick, PacketReturnInfo inf, std::u16string username) : 
@@ -73,8 +80,11 @@ void Event_LoginHandshake::process(ServerState* state, PacketQueue* queue){
         queue->push(std::shared_ptr<p_Kick>(new p_Kick(this->inf, reason, reason.length())));
         return;
     }
-    state->global_plist->insertLogin(std::shared_ptr<LoginPlayer>(new LoginPlayer(state->time.s_tick, this->username, this->inf)));
+    auto newplayer = new LoginPlayer(state->time.s_tick, this->username, this->inf);
+    state->global_plist->insertLogin(std::shared_ptr<LoginPlayer>(newplayer));
     queue->push(std::shared_ptr<p_HandShake>(new p_HandShake(u"-", this->inf)));
+    std::wstring_convert<std::codecvt_utf8<char16_t>, char16_t> converter;
+    std::cout<<converter.to_bytes(newplayer->username) << " sent a handshake.\n";
 }
 
 

@@ -1,5 +1,6 @@
 #include "p_deserial.hpp"
 
+#include <iostream>
 #include <memory>
 #include <optional>
 
@@ -32,6 +33,7 @@ void PacketDeserializer::addPacket(Packet p){
                 return;
             }
             this->queue.push(std::shared_ptr<p_LoginRequest>(new p_LoginRequest(p)));
+            std::cout<<"Recieved login req 2!\n";
             break;
         case 0x02:
             if(p.bytes.size()<3){
@@ -39,6 +41,7 @@ void PacketDeserializer::addPacket(Packet p){
                 return;
             }
             this->queue.push(std::shared_ptr<p_HandShake>(new p_HandShake(p)));
+            std::cout<<"Recieved handshake 2!\n";
             break;
         case 0x0B:
             if(p.bytes.size()!=34){

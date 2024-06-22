@@ -51,7 +51,7 @@ void Server::listen_loop(){
     std::stringstream str;
 
     while(this->running){
-        listen(listener.sockfd, MAX_PLAYERS);
+        listen(listener.sockfd, atoi(settings->getSettings().at("max_players").c_str()));
         if ((c_sockfd = accept(listener.sockfd, (sockaddr*)&c_sock, &size)) < 0) {
             lg->LogPrint(ERROR, "Couldn't accept connection!");
             std::cerr << "[ERROR] Couldn't accept connection!\n";

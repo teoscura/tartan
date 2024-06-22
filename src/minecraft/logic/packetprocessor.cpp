@@ -1,5 +1,6 @@
 #include "packetprocessor.hpp"
 
+#include <iostream>
 #include <memory>
 #include <optional>
 
@@ -43,6 +44,7 @@ void PacketProcessor::processPackets(ServerState* state, EventHandler* handler){
             case 0x02:
                 {auto t = dynamic_cast<p_HandShake*>(tmp->get());
                 handler->insertEvent(std::shared_ptr<EventBase>(new Event_LoginHandshake(0, t->getInfo(), t->username)), 1);
+                std::cout<<"Recieved handshake 3!\n";
                 break;}
             case 0x03:
                 notImpl(tmp.value()->getID());break;

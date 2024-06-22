@@ -32,6 +32,7 @@ p_LoginRequest::p_LoginRequest(Packet pack){
     this->username = std::u16string(wstring_fromBytes(pack.bytes.data()+7, this->username_len));
     this->seed = read8byteInt_BE(pack.bytes.data()+(7+this->username_len*2));
     this->dimension = pack.bytes[15+this->username_len*2];
+    std::cout<<"Recieved login req !\n";
 }
 
 uint8_t p_LoginRequest::getID(){
@@ -54,15 +55,15 @@ Packet p_LoginRequest::serialize(){
 }
 
 p_HandShake::p_HandShake(Packet pack){
-    Logger* lg = LoggerHandler::getLogger();
     this->info = pack.info;
     this->username_len = read2byteInt_BE(pack.bytes.data()+1);
     if((3+2*this->username_len)!=pack.bytes.size()){
-        lg->LogPrint(ERROR, "{:0x} Packet invalid!", (int)pack.bytes[0]);
+        LoggerHandler::getLogger()->LogPrint(ERROR, "{:0x} Packet invalid!", (int)pack.bytes[0]);
         std::cerr<<"[ERROR] 0x02 Packet invalid!, returning\n";
         return;
     }
     this->username = wstring_fromBytes(pack.bytes.data()+3, username_len);
+    std::cout<<"Recieved handshake!\n";
 }
 
 p_HandShake::p_HandShake(std::u16string resp, PacketReturnInfo inf) : 

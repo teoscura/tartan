@@ -62,7 +62,6 @@ void EpollHandler::handleRead(uint32_t fd){
     else {
         Packet pack = Packet(std::vector<uint8_t>(buffer,buffer+nread), PacketReturnInfo(fd, this->info.ID));
         lg->LogPrint(INFO, "Incoming Packets from: {}/{}\n{}", fd, this->info.ID, hexStr(pack.bytes.data(), nread));
-        std::cout<<"Read message from fd: "<<fd<<" from thread: "<< this->info.ID<<" [nread = " << nread <<"]\n";
         this->deserializer->addPacket(pack);
     }
 }
@@ -76,7 +75,6 @@ void EpollHandler::handleWrite(uint32_t fd, Packet pack){
     }
     else{
         lg->LogPrint(INFO, "Sent packet to: {}\n{}", fd, hexStr(pack.bytes.data(), pack.bytes.size()));
-        std::cout<<"[INFO] Packet response sent!\n";
     }
 }
 
