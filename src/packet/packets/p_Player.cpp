@@ -166,7 +166,7 @@ uint8_t p_Player_PosLook::getID(){
 }
 
 Packet p_Player_PosLook::serialize(){
-    Packet pack(std::vector<uint8_t>(42), this->p_Player_Look::getInfo());
+    Packet pack(std::vector<uint8_t>(42), this->getInfo());
     pack.bytes[0] = this->getID();
     v3<double> xyz;
     xyz = this->getXYZ(); 
@@ -175,7 +175,7 @@ Packet p_Player_PosLook::serialize(){
     writeBytes_from64bit(pack.bytes.data()+17, xyz.y);
     writeBytes_from64bit(pack.bytes.data()+25, xyz.z);
     writeBytes_fromV2(pack.bytes.data()+33, this->yp);
-    pack.bytes[41] = this->p_Player_Look::getOnGround();
+    pack.bytes[41] = this->getOnGround();
     return pack;
 }
 

@@ -29,6 +29,10 @@ void Entity::setPosLook(v3<double> new_xyz, v2<float> new_yp){
     this->yp = new_yp;
 }
 
+bool Entity::getOnGround(){
+    return this->on_ground;
+}
+
 v3<double> Entity::getXYZ(){
     return this->xyz;
 }

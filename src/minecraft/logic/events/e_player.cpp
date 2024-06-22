@@ -5,6 +5,7 @@
 
 #include "../../../packet/packets/p_Entity.hpp"
 #include "../../../packet/packets/p_Login.hpp"
+#include "../../../packet/packets/p_Player.hpp"
 #include "../../../helpers/loggerhandler.hpp"
 #include "event.hpp"
 
@@ -40,11 +41,13 @@ void Event_PlayerUpdate_Pos::process(ServerState* state, PacketQueue* queue){
         LoggerHandler::getLogger()->LogPrint(ERROR, "EID {} is not a player/is present!", this->EID);
         return;
     }
-    v3<double> diff(player.value()->getXYZ().x-this->new_xyz.x,player.value()->getXYZ().y-this->new_xyz.y,player.value()->getXYZ().z-this->new_xyz.z);
+    auto xyz = player.value()->getXYZ();
+    v3<double> diff(xyz.x-this->new_xyz.x,xyz.y-this->new_xyz.y,xyz.z-this->new_xyz.z);
     if(diff.norm()>4.0){
         LoggerHandler::getLogger()->LogPrint(ERROR, "EID {} is flying!", this->EID);
         reason = u"Flying is not allowed!";
         queue->push(std::shared_ptr<p_Kick>(new p_Kick(player.value()->getReturnInfo(), reason, reason.length())));
+        state->global_plist->remove(player.value()->getUsername());
         return;
     }
     auto relmove = v3<int8_t>(diff.x*32,diff.y*32,diff.z*32);
@@ -52,6 +55,7 @@ void Event_PlayerUpdate_Pos::process(ServerState* state, PacketQueue* queue){
     player.value()->setPosLook(this->new_xyz, player.value()->getYP());
     player.value()->setHeight(this->stance);
     this->queuePacket_ExPlayer(std::shared_ptr<p_Entity_RelativeMove>(t), state, queue, this->EID);
+    queue->push(std::shared_ptr<p_Player_Pos>(new p_Player_Pos(player.value()->getReturnInfo(), player.value()->getOnGround(), xyz, player.value()->getStance())));
 }
 
 Event_PlayerUpdate_Look::Event_PlayerUpdate_Look(uint64_t destination_tick, uint32_t EID, bool on_ground, v2<float> new_yp) :

@@ -9,11 +9,11 @@ PacketSerializer::PacketSerializer(){
 }
 
 void PacketSerializer::serialize(std::shared_ptr<DsPacket> p){
-    if(!isImplemented(p->getID())){
+    Packet result = p->serialize();
+    if(result.bytes.size()==0){
         LoggerHandler::getLogger()->LogPrint(ERROR, "Tried to serialize unimplemented {} packet!", (int)p->getID());
         return;
     }
-    Packet result = p->serialize();
     this->next->insert_packet(result);
 }
 

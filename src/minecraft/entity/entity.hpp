@@ -25,6 +25,7 @@ class Entity : public DeadEntity{
         Entity(uint32_t eid);
         void setOnGround(bool new_on_ground);
         void setPosLook(v3<double> new_xyz, v2<float> new_yp);
+        bool getOnGround();
         v3<double> getXYZ();
         v2<float> getYP();
         virtual ~Entity() override = default;
