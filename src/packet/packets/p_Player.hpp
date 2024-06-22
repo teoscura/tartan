@@ -96,7 +96,9 @@ class p_Player_Look : public p_PlayerBase { /* 0x0C */
         ~p_Player_Look() override = default;
 };
 
-class p_Player_PosLook : public p_Player_Look, public p_Player_Pos { /* 0x0D */
+class p_Player_PosLook : public p_Player_Pos { /* 0x0D */
+    private:
+        v2<float> yp;
     public:
         p_Player_PosLook(PacketReturnInfo inf, bool on_ground, v3<double> xyz, double stance, v2<float> yp);
         p_Player_PosLook(Packet pack);

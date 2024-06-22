@@ -26,6 +26,7 @@ class PlayerList{
         void remove(std::u16string username);
         void cleanupLogin(uint64_t current_tick);
         const std::vector<std::shared_ptr<Player>>& getList();
+        std::optional<uint32_t> findEID(PacketReturnInfo info);
         std::optional<std::shared_ptr<Player>> findPlayer(uint32_t eid);
         std::optional<std::shared_ptr<Player>> findPlayer(std::u16string username);
         std::optional<std::shared_ptr<LoginPlayer>> findLogin(PacketReturnInfo inf);

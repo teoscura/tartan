@@ -149,16 +149,16 @@ Packet p_Player_Look::serialize(){
 
 p_Player_PosLook::p_Player_PosLook(PacketReturnInfo inf, bool on_ground, v3<double> xyz, double stance, v2<float> yp) :
     p_Player_Pos(inf, on_ground, xyz, stance),
-    p_Player_Look(inf, on_ground, yp){
+    yp(yp){
 }
 
 p_Player_PosLook::p_Player_PosLook(Packet pack) :
-    p_Player_Look(pack.info, pack.bytes[41], v2<float>(read4byteInt_BE(pack.bytes.data()+33), read4byteInt_BE(pack.bytes.data()+37))),
     p_Player_Pos(pack.info, pack.bytes[41], v3<double>(read8byteInt_BE(pack.bytes.data()+1), read8byteInt_BE(pack.bytes.data()+9), read8byteInt_BE(pack.bytes.data()+17)), read8byteInt_BE(pack.bytes.data()+25)){
     if(pack.bytes.size()!=42){
         LoggerHandler::getLogger()->LogPrint(ERROR, "{:0x} Packet invalid!", (int)pack.bytes[0]);
         return;
     }
+    this->yp = v2<float>(read4byteInt_BE(pack.bytes.data()+33), read4byteInt_BE(pack.bytes.data()+37));
 }
 
 uint8_t p_Player_PosLook::getID(){
@@ -168,14 +168,13 @@ uint8_t p_Player_PosLook::getID(){
 Packet p_Player_PosLook::serialize(){
     Packet pack(std::vector<uint8_t>(42), this->p_Player_Look::getInfo());
     pack.bytes[0] = this->getID();
-    v3<double> xyz; v2<float> yp;
-    xyz = this->getXYZ(); yp = this->getYP();
+    v3<double> xyz;
+    xyz = this->getXYZ(); 
     writeBytes_from64bit(pack.bytes.data()+1, xyz.x);
     writeBytes_from64bit(pack.bytes.data()+9, this->getStance());
     writeBytes_from64bit(pack.bytes.data()+17, xyz.y);
     writeBytes_from64bit(pack.bytes.data()+25, xyz.z);
-    writeBytes_from32bit(pack.bytes.data()+33, yp.x);
-    writeBytes_from32bit(pack.bytes.data()+37, yp.z);
+    writeBytes_fromV2(pack.bytes.data()+33, this->yp);
     pack.bytes[41] = this->p_Player_Look::getOnGround();
     return pack;
 }

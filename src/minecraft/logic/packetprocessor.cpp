@@ -30,7 +30,7 @@ void notImpl(uint8_t id){
     LoggerHandler::getLogger()->LogPrint(INFO, "Recieved an unimplemented packet! ID: {}", (int)id);
 }
 
-void PacketProcessor::processPackets(EventHandler* handler){
+void PacketProcessor::processPackets(ServerState* state, EventHandler* handler){
     std::optional<std::shared_ptr<DsPacket>> tmp = std::nullopt;
     while((tmp=this->in.pop()).has_value()){
         switch(tmp.value()->getID()){
@@ -54,7 +54,11 @@ void PacketProcessor::processPackets(EventHandler* handler){
                 notImpl(tmp.value()->getID());break;
             case 0x0B:
                 {auto t = dynamic_cast<p_Player_Pos*>(tmp->get());
-                handler->insertEvent(std::shared_ptr<EventBase>(new Event_PlayerUpdate_Pos(0, t->getOnGround(), t->getXYZ(), t->getStance())), 1);
+                auto eid = state->global_plist->findEID(t->getInfo());
+                if(!eid.has_value()){
+                    break;
+                }
+                handler->insertEvent(std::shared_ptr<EventBase>(new Event_PlayerUpdate_Pos(0, eid.value(), t->getOnGround(), t->getXYZ(), t->getStance())), 1);
                 break;}
             case 0x0C:
                 notImpl(tmp.value()->getID());break;

@@ -1,6 +1,5 @@
 #include "p_deserial.hpp"
 
-#include <iostream>
 #include <memory>
 #include <optional>
 
@@ -23,46 +22,54 @@ void PacketDeserializer::addPacket(Packet p){
         case 0x00:
             if(p.bytes.size() != 1){
                 lg->LogPrint(ERROR, "Data isn't a valid {} packet!", (int)p.bytes[0]);
-                std::cerr<<"[ERROR] Data isnt a valid 0x00 packet!\n";
                 return;   
             }
-            this->queue.push(std::shared_ptr<DsPacket>(new p_KeepAlive(p)));
+            this->queue.push(std::shared_ptr<p_KeepAlive>(new p_KeepAlive(p)));
             break;
         case 0x01:
             if(p.bytes.size()<16 || p.bytes.size() > 48){
                 lg->LogPrint(ERROR, "Data isn't a valid {} packet!", (int)p.bytes[0]);
-                std::cerr<<"[ERROR] Data isnt a valid 0x01 packet!\n";
                 return;
             }
-            this->queue.push(std::shared_ptr<DsPacket>(new p_LoginRequest(p)));
+            this->queue.push(std::shared_ptr<p_LoginRequest>(new p_LoginRequest(p)));
             break;
         case 0x02:
             if(p.bytes.size()<3){
                 lg->LogPrint(ERROR, "Data isn't a valid {} packet!", (int)p.bytes[0]);
-                std::cerr<<"[ERROR] Data isnt a valid 0x02 packet!\n";
                 return;
             }
-            this->queue.push(std::shared_ptr<DsPacket>(new p_HandShake(p)));
+            this->queue.push(std::shared_ptr<p_HandShake>(new p_HandShake(p)));
             break;
         case 0x0B:
             if(p.bytes.size()!=34){
                 lg->LogPrint(ERROR, "Data isn't a valid {} packet!", (int)p.bytes[0]);
-                std::cerr<<"[ERROR] Data isnt a valid 0x0B packet!\n";
                 return;
             }
-            this->queue.push(std::shared_ptr<DsPacket>(new p_Player_Pos(p)));
+            this->queue.push(std::shared_ptr<p_Player_Pos>(new p_Player_Pos(p)));
+            break;
+        case 0x0C:
+            if(p.bytes.size()!=10){
+                lg->LogPrint(ERROR, "Data isn't a valid {} packet!", (int)p.bytes[0]);
+                return;
+            }
+            this->queue.push(std::shared_ptr<p_Player_Look>(new p_Player_Look(p)));
+            break;
+        case 0x0D:
+            if(p.bytes.size()!=42){
+                lg->LogPrint(ERROR, "Data isn't a valid {} packet!", (int)p.bytes[0]);
+                return;
+            }
+            this->queue.push(std::shared_ptr<p_Player_PosLook>(new p_Player_PosLook(p)));
             break;
         case 0xFF:
             if(p.bytes.size()!=1){
                 lg->LogPrint(ERROR, "Data isn't a valid {} packet!", (int)p.bytes[0]);
-                std::cerr<<"[ERROR] Data isnt a valid 0xFF packet!\n";
                 return;
             }
             this->queue.push(std::shared_ptr<DsPacket>(new p_Kick(p)));
             break;
         default:
             lg->LogPrint(ERROR, "Invalid packet recieved {:0x} skipping ahead.", (int)p.bytes[0]);
-            std::cerr<<"[ERROR] Invalid packet recieved (> "<<std::hex << (int)p.bytes[0]<< std::dec <<" <), skipping ahead.\n";
             return;
     }
 }

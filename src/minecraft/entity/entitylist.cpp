@@ -7,8 +7,9 @@
 #include "entity.hpp"
 
 uint32_t EntityList::allocateEID(){
+    auto t = this->last_eid;
     this->last_eid++;
-    return this->last_eid;
+    return t;
 }
 
 void EntityList::insert(std::shared_ptr<DeadEntity> entity){

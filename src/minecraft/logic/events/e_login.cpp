@@ -39,10 +39,12 @@ void Event_LoginLogRequest::process(ServerState *state, PacketQueue* queue){
     queue->push(std::shared_ptr<p_LoginRequest>(new p_LoginRequest(this->inf)));
     queue->push(std::shared_ptr<p_SpawnPosition>(new p_SpawnPosition(this->inf, t->getRespawnPos())));
     //TODO the rest2
+    auto sp = v3<double>(new_user.getRespawnPos().x, new_user.getRespawnPos().y, new_user.getRespawnPos().z);
+    queue->push(std::shared_ptr<p_Player_PosLook>(new p_Player_PosLook(this->inf, true, sp, STAND, v2<float>(0,0))));
     this->queuePacket_ExPlayer(std::shared_ptr<p_ChatMessage>(new p_ChatMessage(PacketReturnInfo(), 
                                std::u16string(t->getUsername() + u" logged in the server."))), 
                                state, queue, t->getEntityId());
-}   
+}
 
 Event_LoginHandshake::Event_LoginHandshake(uint64_t delivery_tick, PacketReturnInfo inf, std::u16string username) : 
     EventBase(delivery_tick),

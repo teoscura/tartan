@@ -49,7 +49,17 @@ const std::vector<std::shared_ptr<Player>>& PlayerList::getList(){
     return this->list;
 }
 
+std::optional<uint32_t> PlayerList::findEID(PacketReturnInfo info){
+    for(auto t : this->list){
+        if(t->getReturnInfo().epoll_fd==info.epoll_fd){
+            return t->getEntityId();
+        }
+    }
+    return std::nullopt;
+}
+
 std::optional<std::shared_ptr<Player>> PlayerList::findPlayer(uint32_t eid){
+    std::optional<uint32_t> findEID(PacketReturnInfo info);
     for(auto t : this->list){
         if(t->getEntityId()==eid){
             return t;

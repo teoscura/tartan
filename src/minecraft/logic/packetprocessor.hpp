@@ -15,7 +15,7 @@ class PacketProcessor{
         PacketProcessor(PacketDeserializer* deserial);
         void queuePacket(std::shared_ptr<DsPacket> pack);
         void retrieveQueue();
-        void processPackets(EventHandler* handler);
+        void processPackets(ServerState* state, EventHandler* handler);
         ~PacketProcessor() = default;
 };
 

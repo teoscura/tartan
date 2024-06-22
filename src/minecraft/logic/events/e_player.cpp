@@ -10,8 +10,9 @@
 
 //FIXME remember to validate changes.
 
-Event_PlayerUpdateBase::Event_PlayerUpdateBase(uint64_t destination_tick, bool on_ground) : 
+Event_PlayerUpdateBase::Event_PlayerUpdateBase(uint64_t destination_tick, uint32_t EID, bool on_ground) : 
     EventBase(destination_tick),
+    EID(EID),
     on_ground(on_ground){
 }
 
@@ -26,16 +27,13 @@ void Event_PlayerUpdateBase::process(ServerState* state, PacketQueue* queue){
     this->queuePacket_ExPlayer(std::shared_ptr<p_EntityBase>(t), state, queue, this->EID);
 }
 
-Event_PlayerUpdate_Pos::Event_PlayerUpdate_Pos(uint64_t destination_tick, bool on_ground, v3<double> new_xyz, double stance):
-    Event_PlayerUpdateBase(destination_tick, on_ground),
+Event_PlayerUpdate_Pos::Event_PlayerUpdate_Pos(uint64_t destination_tick, uint32_t EID, bool on_ground, v3<double> new_xyz, double stance):
+    Event_PlayerUpdateBase(destination_tick, EID, on_ground),
     new_xyz(new_xyz),
     stance(stance){
 }
 
 void Event_PlayerUpdate_Pos::process(ServerState* state, PacketQueue* queue){
-    //TODO  
-    //then process stance, on ground and xyz, 
-    //send entity pos packet to everyone
     std::u16string reason;
     std::optional<std::shared_ptr<Player>> player = state->global_plist->findPlayer(this->EID);
     if(!player.has_value()){
@@ -56,8 +54,8 @@ void Event_PlayerUpdate_Pos::process(ServerState* state, PacketQueue* queue){
     this->queuePacket_ExPlayer(std::shared_ptr<p_Entity_RelativeMove>(t), state, queue, this->EID);
 }
 
-Event_PlayerUpdate_Look::Event_PlayerUpdate_Look(uint64_t destination_tick, bool on_ground, v2<float> new_yp) :
-    Event_PlayerUpdateBase(destination_tick, on_ground),
+Event_PlayerUpdate_Look::Event_PlayerUpdate_Look(uint64_t destination_tick, uint32_t EID, bool on_ground, v2<float> new_yp) :
+    Event_PlayerUpdateBase(destination_tick, EID, on_ground),
     new_yp(new_yp){
 }
 
@@ -67,9 +65,9 @@ void Event_PlayerUpdate_Look::process(ServerState* state, PacketQueue* queue){
     //send entitylook packet to everyone
 }
 
-Event_PlayerUpdate_PosLook::Event_PlayerUpdate_PosLook(uint64_t destination_tick, bool on_ground, v3<double> new_xyz, double stance, v2<float> new_yp) : 
-    Event_PlayerUpdate_Look(destination_tick, on_ground, new_yp), 
-    Event_PlayerUpdate_Pos(destination_tick, on_ground, new_xyz, stance){
+Event_PlayerUpdate_PosLook::Event_PlayerUpdate_PosLook(uint64_t destination_tick, uint32_t EID, bool on_ground, v3<double> new_xyz, double stance, v2<float> new_yp) : 
+    Event_PlayerUpdate_Look(destination_tick, EID, on_ground, new_yp), 
+    Event_PlayerUpdate_Pos(destination_tick, EID, on_ground, new_xyz, stance){
 }
 
 void Event_PlayerUpdate_PosLook::process(ServerState* state, PacketQueue* queue){
