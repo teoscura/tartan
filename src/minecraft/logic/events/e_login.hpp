@@ -1,9 +1,10 @@
 #ifndef E_LOGINEVENTS_H
 #define E_LOGINEVENTS_H
 
-#include "event.hpp"
 #include <cstdint>
 #include <string>
+
+#include "event.hpp"
 
 class Event_LoginLogRequest  : public EventBase {
     private:

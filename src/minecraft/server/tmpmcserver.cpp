@@ -1,6 +1,7 @@
 #include "tmpmcserver.hpp"
 
 #include <chrono>
+#include <iostream>
 #include <thread>
 
 #include "../logic/packetprocessor.hpp"
@@ -17,10 +18,14 @@ TempServer::TempServer(PacketDeserializer* pdeserial, PacketSerializer* pserial,
 void TempServer::tickloop(){
     while(1){
         uint64_t current_tick = (state.time.Clock.now()-state.time.start_timepoint)/state.time.delay;
+        auto a = current_tick - this->state.time.s_tick;
         //if im rushing - aka if i still didnt get to a new tick to handle;
         if(current_tick<=this->state.time.s_tick){ 
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
             continue;
+        }
+        if(a > 10){
+            std::cout<<"Server lagging by "<<a<<" ticks!\n";
         }
         //if im dragging - i need to handle a tick or im late handling them.
         this->state.time.s_tick = current_tick;

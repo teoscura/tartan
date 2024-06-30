@@ -6,6 +6,7 @@
 
 #include "../../helpers/loggerhandler.hpp"
 #include "../packets/p_Login.hpp"
+#include "../packets/p_Misc.hpp"
 #include "../packets/p_Player.hpp"
 // #include "../packets/p_Entity.hpp"
 #include "queue.hpp"
@@ -43,6 +44,13 @@ void PacketDeserializer::addPacket(Packet p){
             this->queue.push(std::shared_ptr<p_HandShake>(new p_HandShake(p)));
             std::cout<<"Recieved handshake 2!\n";
             break;
+        case 0x03:
+            if(p.bytes.size()<3){
+                lg->LogPrint(ERROR, "Data isn't a valid {} packet!", (int)p.bytes[0]);
+                return;
+            }
+            this->queue.push(std::shared_ptr<p_ChatMessage>(new p_ChatMessage(p)));
+            break;
         case 0x0B:
             if(p.bytes.size()!=34){
                 lg->LogPrint(ERROR, "Data isn't a valid {} packet!", (int)p.bytes[0]);
@@ -65,14 +73,14 @@ void PacketDeserializer::addPacket(Packet p){
             this->queue.push(std::shared_ptr<p_Player_PosLook>(new p_Player_PosLook(p)));
             break;
         case 0xFF:
-            if(p.bytes.size()!=1){
+            if(p.bytes.size()<3){
                 lg->LogPrint(ERROR, "Data isn't a valid {} packet!", (int)p.bytes[0]);
                 return;
             }
             this->queue.push(std::shared_ptr<DsPacket>(new p_Kick(p)));
             break;
         default:
-            lg->LogPrint(ERROR, "Invalid packet recieved {:0x} skipping ahead.", (int)p.bytes[0]);
+            lg->LogPrint(ERROR, "Invalid packet recieved {:#02x} skipping ahead.", (int)p.bytes[0]);
             return;
     }
 }

@@ -30,19 +30,7 @@ void PlayerList::remove(std::u16string username){
 
 void PlayerList::cleanupLogin(uint64_t current_tick){
     int where;
-    for(auto t: list){
-        for(int j=0;j<this->login_list.size();j++){
-            if(t->getUsername()==login_list[j]->username){
-                where = j;
-            }
-        }
-        login_list.erase(login_list.begin()+where);
-    }
-    for(int j=this->login_list.size()-1;j>=0;j--){
-        if(login_list[j]->howLongAgo(current_tick)>400){
-            login_list.erase(login_list.begin()+j);
-        }
-    }
+    login_list.clear();
 }
 
 const std::vector<std::shared_ptr<Player>>& PlayerList::getList(){

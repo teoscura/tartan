@@ -63,7 +63,7 @@ void EpollHandler::handleRead(uint32_t fd){
     }
     else {
         Packet pack = Packet(std::vector<uint8_t>(buffer,buffer+nread), PacketReturnInfo(fd, this->info.ID));
-        lg->LogPrint(INFO, "Incoming Packets from: {}/{}\n{}", fd, this->info.ID, hexStr(pack.bytes.data(), nread));
+        //lg->LogPrint(INFO, "Incoming Packets from: {}/{}\n{}", fd, this->info.ID, hexStr(pack.bytes.data(), nread));
         this->deserializer->addPacket(pack);
     }
 }

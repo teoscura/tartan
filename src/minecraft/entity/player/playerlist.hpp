@@ -12,7 +12,6 @@ struct LoginPlayer{
     uint64_t login_tick;
     std::u16string username;
     PacketReturnInfo inf;
-
     uint64_t howLongAgo(uint64_t current_tick);
 };
 

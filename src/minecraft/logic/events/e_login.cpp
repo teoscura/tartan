@@ -47,7 +47,7 @@ void Event_LoginLogRequest::process(ServerState *state, PacketQueue* queue){
     auto sp = v3<double>(new_user.getRespawnPos().x, new_user.getRespawnPos().y, new_user.getRespawnPos().z);
     queue->push(std::shared_ptr<p_Player_PosLook>(new p_Player_PosLook(this->inf, true, sp, STAND, v2<float>(0,0))));
     this->queuePacket_ExPlayer(std::shared_ptr<p_ChatMessage>(new p_ChatMessage(PacketReturnInfo(), 
-                               std::u16string(t->getUsername() + u" logged in the server."))), 
+                               std::u16string(u"§p"+t->getUsername() + u" logged in the server.§r§f"))), 
                                state, queue, t->getEntityId());
     std::wstring_convert<std::codecvt_utf8<char16_t>, char16_t> converter;
     std::cout<<converter.to_bytes(t->getUsername()) << " logged in the server.\n";

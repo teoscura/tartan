@@ -5,14 +5,13 @@
 #include <cstddef>
 #include <mutex>
 #include <optional>
-#include <queue>
 
 #include "../packets/packet.hpp"
 
 template<class T>
 class ThreadSafeQueue{
     private:
-        std::queue<T> queue;
+        std::vector<T> vector;
         std::mutex mut;
         std::condition_variable var;
     public:
@@ -26,7 +25,7 @@ class ThreadSafeQueue{
 template<class T>
 void ThreadSafeQueue<T>::push(T item){  
     std::unique_lock<std::mutex> lock(mut); 
-    queue.push(std::move(item)); 
+    vector.push_back(item); 
     lock.unlock();
     var.notify_one(); 
 }
@@ -34,32 +33,22 @@ void ThreadSafeQueue<T>::push(T item){
 template<class T>
 std::optional<T> ThreadSafeQueue<T>::pop(){
     std::unique_lock<std::mutex> lock(mut); 
-    if(queue.empty()){
+    if(vector.empty()){
         return std::nullopt;
     }
-    T item = std::move(queue.front()); 
-    queue.pop(); 
+    T item = vector.front();
+    vector.erase(vector.begin());
     return std::move(item); 
 }
 
 template<class T>
 bool ThreadSafeQueue<T>::isEmpty(){
-    bool result;
-    std::unique_lock<std::mutex> lock(mut); 
-    result = queue.empty();
-    lock.unlock();
-    var.notify_one();
-    return result;
+    return vector.empty();
 }
 
 template<class T>
 const std::size_t ThreadSafeQueue<T>::size(){
-    std::size_t res;
-    std::unique_lock<std::mutex> lock(mut); 
-    res = queue.size();
-    lock.unlock();
-    var.notify_one();
-    return res;
+    return vector.size();
 }
 
 using PacketQueue = ThreadSafeQueue<std::shared_ptr<DsPacket>>;

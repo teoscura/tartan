@@ -5,9 +5,11 @@
 #include <optional>
 
 #include "../../packet/packets/p_Login.hpp"
+#include "../../packet/packets/p_Misc.hpp"
 #include "../../packet/packets/p_Player.hpp"
 #include "../../helpers/loggerhandler.hpp"
 #include "events/e_login.hpp"
+#include "events/e_misc.hpp"
 #include "events/e_player.hpp"
 //#include "events/e_player.hpp"
 
@@ -36,8 +38,10 @@ void PacketProcessor::processPackets(ServerState* state, EventHandler* handler){
     while((tmp=this->in.pop()).has_value()){
         switch(tmp.value()->getID()){
             case 0x00:
+                std::cout<<"Recieved a keepalive\n";
                 notImpl(tmp.value()->getID());break;
             case 0x01:
+                std::cout<<"Recieved a loginreq\n";
                 {auto t = dynamic_cast<p_LoginRequest*>(tmp->get());
                 handler->insertEvent(std::shared_ptr<EventBase>(new Event_LoginLogRequest(0, t->getInfo(), t->protocol)), 2);
                 break;}
@@ -47,7 +51,10 @@ void PacketProcessor::processPackets(ServerState* state, EventHandler* handler){
                 std::cout<<"Recieved handshake 3!\n";
                 break;}
             case 0x03:
-                notImpl(tmp.value()->getID());break;
+                std::cout<<"Recieved a chat\n";
+                {auto t = dynamic_cast<p_ChatMessage*>(tmp->get());
+                handler->insertEvent(std::shared_ptr<Event_ChatMessage>(new Event_ChatMessage(0, t->getInfo(), t->getMessage())), 1);
+                break;}
             case 0x07:
                 notImpl(tmp.value()->getID());break;
             case 0x09:

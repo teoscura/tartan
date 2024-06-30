@@ -2,6 +2,7 @@
 
 #include "../../util/byteops.hpp"
 #include "packet.hpp"
+#include <string>
 #include <vector>
 
 p_ChatMessage::p_ChatMessage(PacketReturnInfo inf, std::u16string message) :
@@ -12,7 +13,11 @@ p_ChatMessage::p_ChatMessage(PacketReturnInfo inf, std::u16string message) :
 p_ChatMessage::p_ChatMessage(Packet pack) : 
     DsPacket(pack.info){
     this->message_len = read2byteInt_BE(pack.bytes.data()+1);
-    this->message = wstring_fromBytes(pack.bytes.data()+1, this->message_len);
+    this->message = wstring_fromBytes(pack.bytes.data()+3, this->message_len);
+}
+
+std::u16string p_ChatMessage::getMessage(){
+    return this->message;
 }
 
 uint8_t p_ChatMessage::getID(){

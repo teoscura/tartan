@@ -9,12 +9,10 @@
 #include "packet.hpp"
 
 class p_EntityBase : public DsPacket{ /* 0x1E */
-    private:
+    public:
         uint32_t eid;
     public:
         p_EntityBase(PacketReturnInfo inf, uint32_t eid);
-
-        uint32_t getEID();
 
         uint8_t getID() override;
         PacketCategories getType() override;
