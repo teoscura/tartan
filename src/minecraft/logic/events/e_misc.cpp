@@ -14,7 +14,7 @@ Event_ChatMessage::Event_ChatMessage(uint64_t delivery_tick, PacketReturnInfo in
     message(message){
 }
 
-void Event_ChatMessage::process(ServerState* state, PacketQueue* queue){
+void Event_ChatMessage::process(ServerState* state, PacketSerializer* serial){
     auto eid = state->global_plist->findEID(this->inf);
     if(this->inf.epoll_fd!=0&&!eid.has_value()){
         LoggerHandler::getLogger()->LogPrint(ERROR, "Someone sent a chat message in an unallowed way!");
@@ -27,11 +27,11 @@ void Event_ChatMessage::process(ServerState* state, PacketQueue* queue){
         return;
     }
     if(message[0] == u'/'){
-        queue->push(std::shared_ptr<p_ChatMessage>(new p_ChatMessage(this->inf, u"§l§cCommands are not implemented yet!§r§f")));
+        serial->serialize(std::shared_ptr<p_ChatMessage>(new p_ChatMessage(this->inf, u"§l§cCommands are not implemented yet!§r§f")));
         //TODO Command.
         return;
     }
     std::u16string chat_message;
     chat_message = u"<"+player.value()->getUsername()+u"> "+this->message;
-    this->queuePacket_Global(std::shared_ptr<p_ChatMessage>(new p_ChatMessage(PacketReturnInfo(), chat_message)), state, queue);
+    this->queuePacket_Global(std::shared_ptr<p_ChatMessage>(new p_ChatMessage(PacketReturnInfo(), chat_message)), state, serial);
 }

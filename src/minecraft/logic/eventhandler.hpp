@@ -8,13 +8,11 @@ class EventHandler{
     private:
         ServerState* state;
         EventSchedule e_schedule;
-        PacketQueue out;
         PacketSerializer* serializer;
     public:
         EventHandler(PacketSerializer* serializer, ServerState* state);
         void insertEvent(std::shared_ptr<EventBase> event, uint32_t tick_delay);
         void processEvents();
-        void sendPackets();
 };
 
 

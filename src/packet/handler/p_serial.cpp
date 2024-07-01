@@ -1,12 +1,7 @@
 #include "p_serial.hpp"
 
 #include "../../helpers/loggerhandler.hpp"
-#include "p_interface.hpp"
 #include <memory>
-
-PacketSerializer::PacketSerializer(){
-    this->next = new PacketInterface();
-}
 
 void PacketSerializer::serialize(std::shared_ptr<DsPacket> p){
     Packet result = p->serialize();
@@ -14,13 +9,9 @@ void PacketSerializer::serialize(std::shared_ptr<DsPacket> p){
         LoggerHandler::getLogger()->LogPrint(ERROR, "Tried to serialize unimplemented {} packet!", (int)p->getID());
         return;
     }
-    this->next->insert_packet(result);
+    this->out.push_back(result);
 }
 
-PacketInterface* PacketSerializer::get_next(){
-    return this->next;
-}
-
-PacketSerializer::~PacketSerializer(){
-    delete this->next;
+std::vector<Packet>* PacketSerializer::getOut(){
+    return &this->out;
 }

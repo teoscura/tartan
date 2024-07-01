@@ -15,7 +15,6 @@ enum PacketCategories{
 
 struct PacketReturnInfo{
     uint32_t epoll_fd;
-    uint32_t thread_ID;
 };
 
 struct Packet{

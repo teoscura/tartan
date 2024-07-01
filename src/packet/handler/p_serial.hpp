@@ -1,18 +1,17 @@
 #ifndef P_SERIAL_H
 #define P_SERIAL_H
 
-#include "p_interface.hpp"
 #include "../packets/packet.hpp"
 #include <memory>
 
 class PacketSerializer{
     private:
-        PacketInterface* next;
+        std::vector<Packet> out;
     public:
-        PacketSerializer();
+        PacketSerializer() = default;
         void serialize(std::shared_ptr<DsPacket> pack);
-        PacketInterface* get_next();
-        ~PacketSerializer();
+        std::vector<Packet>* getOut();
+        ~PacketSerializer() = default;
 };
 
 #endif

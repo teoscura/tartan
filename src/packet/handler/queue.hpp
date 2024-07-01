@@ -38,7 +38,8 @@ std::optional<T> ThreadSafeQueue<T>::pop(){
     }
     T item = vector.front();
     vector.erase(vector.begin());
-    return std::move(item); 
+    var.notify_one();
+    return item;
 }
 
 template<class T>

@@ -9,10 +9,8 @@
 #include "../helpers/logger.hpp"
 
 struct HandlerState{
-    uint32_t ID;
     uint32_t epoll_fd;
     uint32_t ready;
-    bool running;
 };
 
 class EpollHandler{
@@ -35,7 +33,7 @@ class EpollHandler{
         int getHowMany();
         int getID();
         
-        EpollHandler(uint32_t id, PacketDeserializer* pdeserial, PacketSerializer*pserial);
+        EpollHandler(PacketDeserializer* pdeserial, PacketSerializer*pserial);
         ~EpollHandler(); 
 };
 

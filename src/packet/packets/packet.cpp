@@ -4,8 +4,6 @@
 
 Packet::Packet(){
     this->info.epoll_fd = 0;
-    this->info.thread_ID = 0;
-
 }
 
 Packet::Packet(PacketReturnInfo in):

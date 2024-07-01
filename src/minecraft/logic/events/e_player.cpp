@@ -17,7 +17,7 @@ Event_PlayerUpdateBase::Event_PlayerUpdateBase(uint64_t destination_tick, uint32
     on_ground(on_ground){
 }
 
-void Event_PlayerUpdateBase::process(ServerState* state, PacketQueue* queue){
+void Event_PlayerUpdateBase::process(ServerState* state, PacketSerializer* serial){
     std::optional<std::shared_ptr<Player>> player = state->global_plist->findPlayer(this->EID);
     if(!player.has_value()){
         LoggerHandler::getLogger()->LogPrint(ERROR, "EID {} is not a player/is present!", this->EID);
@@ -25,7 +25,7 @@ void Event_PlayerUpdateBase::process(ServerState* state, PacketQueue* queue){
     }
     player.value()->setOnGround(this->on_ground);
     auto t =  new p_EntityBase(PacketReturnInfo(), this->EID);
-    this->queuePacket_ExPlayer(std::shared_ptr<p_EntityBase>(t), state, queue, this->EID);
+    this->queuePacket_ExPlayer(std::shared_ptr<p_EntityBase>(t), state, serial, this->EID);
 }
 
 Event_PlayerUpdate_Pos::Event_PlayerUpdate_Pos(uint64_t destination_tick, uint32_t EID, bool on_ground, v3<double> new_xyz, double stance):
@@ -34,7 +34,7 @@ Event_PlayerUpdate_Pos::Event_PlayerUpdate_Pos(uint64_t destination_tick, uint32
     stance(stance){
 }
 
-void Event_PlayerUpdate_Pos::process(ServerState* state, PacketQueue* queue){
+void Event_PlayerUpdate_Pos::process(ServerState* state, PacketSerializer* serial){
     std::u16string reason;
     std::optional<std::shared_ptr<Player>> player = state->global_plist->findPlayer(this->EID);
     if(!player.has_value()){
@@ -54,8 +54,8 @@ void Event_PlayerUpdate_Pos::process(ServerState* state, PacketQueue* queue){
     auto t =  new p_Entity_RelativeMove(PacketReturnInfo(), this->EID, relmove);
     player.value()->setPosLook(this->new_xyz, player.value()->getYP());
     player.value()->setHeight(this->stance);
-    queue->push(std::shared_ptr<p_Player_Pos>(new p_Player_Pos(player.value()->getReturnInfo(), player.value()->getOnGround(), xyz, player.value()->getStance())));
-    this->queuePacket_ExPlayer(std::shared_ptr<p_Entity_RelativeMove>(t), state, queue, this->EID);
+    serial->serialize(std::shared_ptr<p_Player_Pos>(new p_Player_Pos(player.value()->getReturnInfo(), player.value()->getOnGround(), xyz, player.value()->getStance())));
+    this->queuePacket_ExPlayer(std::shared_ptr<p_Entity_RelativeMove>(t), state, serial, this->EID);
 }
 
 Event_PlayerUpdate_Look::Event_PlayerUpdate_Look(uint64_t destination_tick, uint32_t EID, bool on_ground, v2<float> new_yp) :
@@ -63,7 +63,7 @@ Event_PlayerUpdate_Look::Event_PlayerUpdate_Look(uint64_t destination_tick, uint
     new_yp(new_yp){
 }
 
-void Event_PlayerUpdate_Look::process(ServerState* state, PacketQueue* queue){
+void Event_PlayerUpdate_Look::process(ServerState* state, PacketSerializer* serial){
     //TODO 
     //process look and on ground check pitch.
     //send entitylook packet to everyone
@@ -74,7 +74,7 @@ Event_PlayerUpdate_PosLook::Event_PlayerUpdate_PosLook(uint64_t destination_tick
     Event_PlayerUpdate_Pos(destination_tick, EID, on_ground, new_xyz, stance){
 }
 
-void Event_PlayerUpdate_PosLook::process(ServerState* state, PacketQueue* queue){
+void Event_PlayerUpdate_PosLook::process(ServerState* state, PacketSerializer* serial){
     //TODO
     //process everything checking correct pitch
     //sendEntityPosLook to everyone

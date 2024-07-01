@@ -6,22 +6,22 @@
 #include "../../util/byteops.hpp"
 #include "packet.hpp"
 
-p_LoginRequest::p_LoginRequest(PacketReturnInfo inf){
-    this->setInfo(inf);
-    this->dimension=0;
-    this->seed = 0;
-    this->protocol = 0x0e;
-    this->username_len=0;
+p_LoginRequest::p_LoginRequest(PacketReturnInfo inf) : 
+    DsPacket(inf),
+    protocol(0x0e),
+    dimension(0),
+    seed(0),
+    username_len(0){
 }
 
-p_LoginRequest::p_LoginRequest(Packet pack){
+p_LoginRequest::p_LoginRequest(Packet pack) : 
+    DsPacket(pack.info){
     Logger* lg = LoggerHandler::getLogger();
     if(pack.bytes.size()<7){
         lg->LogPrint(ERROR, "{:0x} Packet invalid!", (int)pack.bytes[0]);
         std::cerr<<"[ERROR] 0x01 Packet invalid!, returning\n";
         return;
     }
-    this->info = pack.info;
     this->protocol = read4byteInt_BE(pack.bytes.data()+1);
     this->username_len = read2byteInt_BE(pack.bytes.data()+5);
     if((2*this->username_len+16)!=pack.bytes.size()){
@@ -32,7 +32,6 @@ p_LoginRequest::p_LoginRequest(Packet pack){
     this->username = std::u16string(wstring_fromBytes(pack.bytes.data()+7, this->username_len));
     this->seed = read8byteInt_BE(pack.bytes.data()+(7+this->username_len*2));
     this->dimension = pack.bytes[15+this->username_len*2];
-    std::cout<<"Recieved login req !\n";
 }
 
 uint8_t p_LoginRequest::getID(){
@@ -54,8 +53,8 @@ Packet p_LoginRequest::serialize(){
     return result;
 }
 
-p_HandShake::p_HandShake(Packet pack){
-    this->info = pack.info;
+p_HandShake::p_HandShake(Packet pack) : 
+    DsPacket(pack.info){
     this->username_len = read2byteInt_BE(pack.bytes.data()+1);
     if((3+2*this->username_len)!=pack.bytes.size()){
         LoggerHandler::getLogger()->LogPrint(ERROR, "{:0x} Packet invalid!", (int)pack.bytes[0]);
@@ -63,7 +62,6 @@ p_HandShake::p_HandShake(Packet pack){
         return;
     }
     this->username = wstring_fromBytes(pack.bytes.data()+3, username_len);
-    std::cout<<"Recieved handshake!\n";
 }
 
 p_HandShake::p_HandShake(std::u16string resp, PacketReturnInfo inf) : 

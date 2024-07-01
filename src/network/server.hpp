@@ -1,24 +1,26 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include "../helpers/logger.hpp"
-#include "../helpers/server_settings.hpp"
-#include "threadpool.hpp"
-#include "connections.hpp"
+#include "epollhandler.hpp"
+#include <netinet/in.h>
+#include <thread>
+
+struct Connection{
+    uint32_t socksize = sizeof(sockaddr_in);
+    uint32_t sockfd;
+    sockaddr_in sock;
+};
 
 class Server{
     private:
-        Logger* lg;
-        ServerSettings* settings;
-        ThreadPool tp;
+        EpollHandler e_handler;
+        std::jthread e_handler_thr;
         Connection listener;
-        bool running;
     public:
         Server(PacketDeserializer* pdeserial,PacketSerializer*pserial);
         ~Server();
         void listen_loop();
-        void shutdown();
-        Connection getListener();
+        void addFileDescriptor(uint32_t fd);
 };
 
 #endif

@@ -12,7 +12,7 @@ class Event_LoginLogRequest  : public EventBase {
         uint64_t version;
     public:
         Event_LoginLogRequest(uint64_t delivery_tick, PacketReturnInfo inf, uint64_t version);
-        void process(ServerState* state, PacketQueue* queue) override;
+        void process(ServerState* state, PacketSerializer* serial) override;
         ~Event_LoginLogRequest() override = default;
 };
 
@@ -21,8 +21,8 @@ class Event_LoginHandshake  : public EventBase {
         PacketReturnInfo inf;
         std::u16string username;
     public:
-        Event_LoginHandshake(uint64_t delivery_tick,PacketReturnInfo inf, std::u16string username);
-        void process(ServerState* state, PacketQueue* queue) override;
+        Event_LoginHandshake(uint64_t delivery_tick, PacketReturnInfo inf, std::u16string username);
+        void process(ServerState* state, PacketSerializer* serial) override;
         ~Event_LoginHandshake() override = default;
 };
 

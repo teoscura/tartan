@@ -17,13 +17,6 @@ void EventHandler::insertEvent(std::shared_ptr<EventBase> event,uint32_t tick_de
 void EventHandler::processEvents(){
     std::optional<std::shared_ptr<EventBase>> t;
     while((t=this->e_schedule.getLateEvent(this->state->time.s_tick)).has_value()){
-        t.value()->process(this->state, &this->out);
-    }
-}
-
-void EventHandler::sendPackets(){
-    auto tmpsz = out.size();
-    for(int i=0;i<tmpsz;i++){
-        this->serializer->serialize(out.pop().value());
+        t.value()->process(this->state, this->serializer);
     }
 }

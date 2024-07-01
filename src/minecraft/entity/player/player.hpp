@@ -39,7 +39,7 @@ class Player : public Entity{
         double actual_height;
         uint64_t last_keepalive;
         PlayerStances stance = STAND;
-        v3<int32_t> respawn_pos = v3<int32_t>(0,10,0);
+        v3<int32_t> respawn_pos = v3<int32_t>(8,10,8);
     public:
         Player(PacketReturnInfo inf, std::u16string username, uint32_t EID);
 

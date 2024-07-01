@@ -13,20 +13,8 @@
 #include "events/e_player.hpp"
 //#include "events/e_player.hpp"
 
-PacketProcessor::PacketProcessor(PacketDeserializer* pdeserial) : 
-    deserializer(pdeserial){
-}
-
-//TEMPORARY
-void PacketProcessor::retrieveQueue(){
-    std::optional<std::shared_ptr<DsPacket>> tmp;
-    while((tmp = this->deserializer->retrievePacket()).has_value()){
-        this->in.push(tmp.value());
-    }
-}
-
-void PacketProcessor::queuePacket(std::shared_ptr<DsPacket> pack){
-    this->in.push(pack);
+PacketProcessor::PacketProcessor(PacketQueue* in) : 
+    in(in){
 }
 
 void notImpl(uint8_t id){
@@ -35,24 +23,22 @@ void notImpl(uint8_t id){
 
 void PacketProcessor::processPackets(ServerState* state, EventHandler* handler){
     std::optional<std::shared_ptr<DsPacket>> tmp = std::nullopt;
-    while((tmp=this->in.pop()).has_value()){
+    while((tmp=this->in->pop()).has_value()){
         switch(tmp.value()->getID()){
             case 0x00:
                 std::cout<<"Recieved a keepalive\n";
                 notImpl(tmp.value()->getID());break;
             case 0x01:
-                std::cout<<"Recieved a loginreq\n";
-                {auto t = dynamic_cast<p_LoginRequest*>(tmp->get());
+                {auto t = dynamic_cast<p_LoginRequest*>(tmp.value().get());
                 handler->insertEvent(std::shared_ptr<EventBase>(new Event_LoginLogRequest(0, t->getInfo(), t->protocol)), 2);
                 break;}
             case 0x02:
-                {auto t = dynamic_cast<p_HandShake*>(tmp->get());
+                {auto t = dynamic_cast<p_HandShake*>(tmp.value().get());
                 handler->insertEvent(std::shared_ptr<EventBase>(new Event_LoginHandshake(0, t->getInfo(), t->username)), 1);
-                std::cout<<"Recieved handshake 3!\n";
                 break;}
             case 0x03:
                 std::cout<<"Recieved a chat\n";
-                {auto t = dynamic_cast<p_ChatMessage*>(tmp->get());
+                {auto t = dynamic_cast<p_ChatMessage*>(tmp.value().get());
                 handler->insertEvent(std::shared_ptr<Event_ChatMessage>(new Event_ChatMessage(0, t->getInfo(), t->getMessage())), 1);
                 break;}
             case 0x07:
@@ -62,7 +48,7 @@ void PacketProcessor::processPackets(ServerState* state, EventHandler* handler){
             case 0x0A:
                 notImpl(tmp.value()->getID());break;
             case 0x0B:
-                {auto t = dynamic_cast<p_Player_Pos*>(tmp->get());
+                {auto t = dynamic_cast<p_Player_Pos*>(tmp.value().get());
                 auto eid = state->global_plist->findEID(t->getInfo());
                 if(!eid.has_value()){
                     break;

@@ -4,18 +4,14 @@
 #include "../../helpers/logger.hpp"
 #include "../packets/packet.hpp"
 #include "queue.hpp"
-#include <memory>
-
 
 class PacketDeserializer{
     private:
-        PacketQueue queue;
+        PacketQueue* deserialized;
         Logger* lg;
     public:
-        PacketDeserializer();
+        PacketDeserializer(PacketQueue* deserialized);
         void addPacket(Packet p);
-        bool isEmpty();
-        std::optional<std::shared_ptr<DsPacket>> retrievePacket();
         ~PacketDeserializer();
 };
 

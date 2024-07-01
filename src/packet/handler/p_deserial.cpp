@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <memory>
-#include <optional>
 
 #include "../../helpers/loggerhandler.hpp"
 #include "../packets/p_Login.hpp"
@@ -11,7 +10,8 @@
 // #include "../packets/p_Entity.hpp"
 #include "queue.hpp"
 
-PacketDeserializer::PacketDeserializer(){
+PacketDeserializer::PacketDeserializer(PacketQueue* deserialized) : 
+    deserialized(deserialized){
     this->lg = LoggerHandler::getLogger();
 }
 
@@ -26,14 +26,14 @@ void PacketDeserializer::addPacket(Packet p){
                 lg->LogPrint(ERROR, "Data isn't a valid {} packet!", (int)p.bytes[0]);
                 return;   
             }
-            this->queue.push(std::shared_ptr<p_KeepAlive>(new p_KeepAlive(p)));
+            this->deserialized->push(std::shared_ptr<p_KeepAlive>(new p_KeepAlive(p)));
             break;
         case 0x01:
             if(p.bytes.size()<16 || p.bytes.size() > 48){
                 lg->LogPrint(ERROR, "Data isn't a valid {} packet!", (int)p.bytes[0]);
                 return;
             }
-            this->queue.push(std::shared_ptr<p_LoginRequest>(new p_LoginRequest(p)));
+            this->deserialized->push(std::shared_ptr<p_LoginRequest>(new p_LoginRequest(p)));
             std::cout<<"Recieved login req 2!\n";
             break;
         case 0x02:
@@ -41,57 +41,45 @@ void PacketDeserializer::addPacket(Packet p){
                 lg->LogPrint(ERROR, "Data isn't a valid {} packet!", (int)p.bytes[0]);
                 return;
             }
-            this->queue.push(std::shared_ptr<p_HandShake>(new p_HandShake(p)));
-            std::cout<<"Recieved handshake 2!\n";
+            this->deserialized->push(std::shared_ptr<p_HandShake>(new p_HandShake(p)));
             break;
         case 0x03:
             if(p.bytes.size()<3){
                 lg->LogPrint(ERROR, "Data isn't a valid {} packet!", (int)p.bytes[0]);
                 return;
             }
-            this->queue.push(std::shared_ptr<p_ChatMessage>(new p_ChatMessage(p)));
+            this->deserialized->push(std::shared_ptr<p_ChatMessage>(new p_ChatMessage(p)));
             break;
         case 0x0B:
             if(p.bytes.size()!=34){
                 lg->LogPrint(ERROR, "Data isn't a valid {} packet!", (int)p.bytes[0]);
                 return;
             }
-            this->queue.push(std::shared_ptr<p_Player_Pos>(new p_Player_Pos(p)));
+            this->deserialized->push(std::shared_ptr<p_Player_Pos>(new p_Player_Pos(p)));
             break;
         case 0x0C:
             if(p.bytes.size()!=10){
                 lg->LogPrint(ERROR, "Data isn't a valid {} packet!", (int)p.bytes[0]);
                 return;
             }
-            this->queue.push(std::shared_ptr<p_Player_Look>(new p_Player_Look(p)));
+            this->deserialized->push(std::shared_ptr<p_Player_Look>(new p_Player_Look(p)));
             break;
         case 0x0D:
             if(p.bytes.size()!=42){
                 lg->LogPrint(ERROR, "Data isn't a valid {} packet!", (int)p.bytes[0]);
                 return;
             }
-            this->queue.push(std::shared_ptr<p_Player_PosLook>(new p_Player_PosLook(p)));
+            this->deserialized->push(std::shared_ptr<p_Player_PosLook>(new p_Player_PosLook(p)));
             break;
         case 0xFF:
             if(p.bytes.size()<3){
                 lg->LogPrint(ERROR, "Data isn't a valid {} packet!", (int)p.bytes[0]);
                 return;
             }
-            this->queue.push(std::shared_ptr<DsPacket>(new p_Kick(p)));
+            this->deserialized->push(std::shared_ptr<DsPacket>(new p_Kick(p)));
             break;
         default:
             lg->LogPrint(ERROR, "Invalid packet recieved {:#02x} skipping ahead.", (int)p.bytes[0]);
             return;
     }
-}
-
-bool PacketDeserializer::isEmpty(){
-    return this->queue.isEmpty();
-}
-
-std::optional<std::shared_ptr<DsPacket>> PacketDeserializer::retrievePacket(){
-    if(queue.isEmpty()){
-        return std::nullopt;
-    }
-    return this->queue.pop().value();
 }

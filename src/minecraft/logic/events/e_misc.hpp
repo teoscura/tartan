@@ -13,7 +13,7 @@ class Event_ChatMessage  : public EventBase {
         std::u16string message;
     public:
         Event_ChatMessage(uint64_t delivery_tick, PacketReturnInfo inf, std::u16string message);
-        void process(ServerState* state, PacketQueue* queue) override;
+        void process(ServerState* state, PacketSerializer* serial) override;
         ~Event_ChatMessage() override = default;
 };
 

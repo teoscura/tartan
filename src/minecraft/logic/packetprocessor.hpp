@@ -1,20 +1,14 @@
 #ifndef MC_PP_PROCESSOR_H
 #define MC_PP_PROCESSOR_H
 
-
-#include "../../packet/handler/p_deserial.hpp"
 #include "../../packet/handler/queue.hpp"
 #include "eventhandler.hpp"
 
 class PacketProcessor{
     protected:
-        PacketQueue in;
-        /*FIXME remove deserializer pointer after test*/
-        PacketDeserializer* deserializer;
+        PacketQueue* in;
     public:
-        PacketProcessor(PacketDeserializer* deserial);
-        void queuePacket(std::shared_ptr<DsPacket> pack);
-        void retrieveQueue();
+        PacketProcessor(PacketQueue* deserial);
         void processPackets(ServerState* state, EventHandler* handler);
         ~PacketProcessor() = default;
 };

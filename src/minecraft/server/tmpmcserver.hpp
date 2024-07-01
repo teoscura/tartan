@@ -1,6 +1,7 @@
 #ifndef MC_TEMPMCSERVER_H
 #define MC_TEMPMCSERVER_H
 
+#include "../../network/server.hpp"
 #include "../logic/eventhandler.hpp"
 #include "../logic/packetprocessor.hpp"
 #include "../world/chunk.hpp"
@@ -9,17 +10,21 @@
 
 #include <memory>
 
-class TempServer{
+class TempServer : public Server, public FlatlandGenerator{
     private:
+        PacketQueue in;
+        PacketDeserializer pdeserial; 
+        PacketSerializer pserial;
+        PlayerList global_plist;
+        EntityList global_elist;
         ServerState state;
         PacketProcessor pp_processor;
-        FlatlandGenerator terrain_gen;
         EventHandler e_handler;
         std::unique_ptr<Chunk> motherchunk;
     public:
-        TempServer(PacketDeserializer* pdeserial,PacketSerializer* pserial, PlayerList* plist, EntityList* elist);
+        TempServer();
 
-        void processEvents();
+        PacketQueue* getIn();
         void tickevents();
         void tickloop();
 
