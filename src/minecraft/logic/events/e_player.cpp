@@ -54,7 +54,7 @@ void Event_PlayerUpdate_Pos::process(ServerState* state, PacketSerializer* seria
     auto t =  new p_Entity_RelativeMove(PacketReturnInfo(), this->EID, relmove);
     player.value()->setPosLook(this->new_xyz, player.value()->getYP());
     player.value()->setHeight(this->stance);
-    serial->serialize(std::shared_ptr<p_Player_Pos>(new p_Player_Pos(player.value()->getReturnInfo(), player.value()->getOnGround(), xyz, player.value()->getStance())));
+    serial->serialize(std::shared_ptr<p_Player_Pos>(new p_Player_Pos(player.value()->getReturnInfo(), player.value()->getOnGround(), xyz, player.value()->getHeight())));
     this->queuePacket_ExPlayer(std::shared_ptr<p_Entity_RelativeMove>(t), state, serial, this->EID);
 }
 

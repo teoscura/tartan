@@ -1,5 +1,3 @@
-#include <chrono>
-#include <iostream>
 #include <thread>
 
 #include "helpers/loggerhandler.hpp"
@@ -17,9 +15,7 @@ int main(){
     std::jthread NetworkThread(&TempServer::Server::listen_loop, &tserver);
     std::jthread GameThread(&TempServer::tickloop, &tserver);
     while(1){
-        //ctrlC to destroy is strange but works.
-        std::this_thread::sleep_for(std::chrono::milliseconds(10000));
-        std::cout<<"[INFO] Still Running... [CTRL+C to STOP!]\n";
+
     }
     return 0;
 }

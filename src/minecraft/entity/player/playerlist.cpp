@@ -6,50 +6,49 @@
 
 #include "player.hpp"
 
-uint64_t LoginPlayer::howLongAgo(uint64_t current_tick){
-    return current_tick-this->login_tick;
-}
-
 void PlayerList::insert(std::shared_ptr<Player> player){
     this->list.push_back(player);
 }
 
-void PlayerList::insertLogin(std::shared_ptr<LoginPlayer> logplayerin){
-    this->login_list.push_back(logplayerin);
-}
-
 void PlayerList::remove(std::u16string username){
-    for(int i=0;i<this->list.size();i++){
+    for(int i = list.size()-1; i>=0; i--){
         if(this->list[i]->getUsername()==username){
-            int where = i;
+            list.erase(list.begin()+i);
             break;
         }
     }
-    this->list.erase(this->list.begin());
 }
 
-void PlayerList::cleanupLogin(uint64_t current_tick){
-    int where;
-    login_list.clear();
+void PlayerList::cleanupList(uint64_t current_tick){
+    for(int i = list.size()-1; i>=0; i--){
+        if(current_tick>list.at(i)->getLoginTick()+400){
+            list.erase(list.begin()+i);
+        }
+    }
+    for(int i = list.size()-1; i>=0; i--){
+        if(list.at(i)->assertStatus(S_TODESPAWN)){
+            list.erase(list.begin()+i);
+        }
+    }
 }
 
 const std::vector<std::shared_ptr<Player>>& PlayerList::getList(){
     return this->list;
 }
 
-std::optional<uint32_t> PlayerList::findEID(PacketReturnInfo info){
+std::optional<std::shared_ptr<Player>> PlayerList::findPlayer(uint32_t eid){
+    std::optional<uint32_t> findEID(PacketReturnInfo info);
     for(auto t : this->list){
-        if(t->getReturnInfo().epoll_fd==info.epoll_fd){
-            return t->getEntityId();
+        if(t->getEntityId()==eid){
+            return t;
         }
     }
     return std::nullopt;
 }
 
-std::optional<std::shared_ptr<Player>> PlayerList::findPlayer(uint32_t eid){
-    std::optional<uint32_t> findEID(PacketReturnInfo info);
+std::optional<std::shared_ptr<Player>> PlayerList::findPlayer(PacketReturnInfo inf){
     for(auto t : this->list){
-        if(t->getEntityId()==eid){
+        if(t->getReturnInfo().epoll_fd==inf.epoll_fd){
             return t;
         }
     }
@@ -65,49 +64,16 @@ std::optional<std::shared_ptr<Player>> PlayerList::findPlayer(std::u16string use
     return std::nullopt;
 }
 
-std::optional<std::shared_ptr<LoginPlayer>> PlayerList::findLogin(PacketReturnInfo inf){
-    for(auto t : this->login_list){
-        if(t->inf.epoll_fd == inf.epoll_fd){
-            return t;
-        }
-    }
-    return std::nullopt;
-}
-
 bool PlayerList::isOnline(std::u16string username){
+    uint8_t state;
     if(this->list.size()==0){
         return false;
     }
     for(auto t : this->list){
-        if(t->getUsername() == username){
-            return true;
-        }
-    }
-    if(this->login_list.size()==0){
-        return false;
-    }
-    for(auto t : this->login_list){
-        if(t->username==username){
+        state = t->getState();
+        if(t->getUsername()==username && state&L_PLAYING){
             return true;
         }
     }
     return false;
 }
-
-bool PlayerList::isLogin(std::u16string username){
-    for(auto t: this->login_list){
-        if(t->username==username){
-            return true;
-        }
-    }
-    return false;
-}
-
-// bool PlayerList::ishandshake(std::u16string username){
-//     for(auto t: this->login_list){
-//         if(t.username==username){
-//             return t.handshake;
-//         }
-//     }
-//     return false;
-// }

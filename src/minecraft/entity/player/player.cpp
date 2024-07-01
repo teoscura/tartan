@@ -9,6 +9,20 @@ Player::Player(PacketReturnInfo inf, std::u16string username, uint32_t eid) :
     username(username){
 }
 
+bool Player::assertStatus(uint8_t status){
+    if(this->state==status){
+        return true;
+    }
+    return false;
+}
+
+bool Player::assertStatus(PlayerStates state){
+    if(this->state&state){
+        return true;
+    }
+    return false;
+}
+
 void Player::setBlob(uint8_t new_blob){
     this->info.blob = new_blob;
 }
@@ -33,8 +47,11 @@ void Player::setKeepAlive(uint64_t keepalive){
     this->last_keepalive = keepalive;
 }
 
-void Player::setStance(PlayerStances stance){
-    this->stance = stance;
+void Player::setState(PlayerStates new_state){
+    if(this->assertStatus(new_state)){
+        return;
+    }
+    this->state |= new_state;
 }
 
 void Player::setRespawnPos(v3<int32_t> respawn_pos){
@@ -69,8 +86,12 @@ uint64_t Player::getLastKeepalive(){
     return this->last_keepalive;
 }
 
-PlayerStances Player::getStance(){
-    return this->stance;
+uint64_t Player::getLoginTick(){
+    return this->login_tick;
+}
+
+uint8_t Player::getState(){
+    return this->state;
 }
 
 v3<int32_t> Player::getRespawnPos(){

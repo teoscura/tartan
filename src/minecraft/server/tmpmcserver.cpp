@@ -38,9 +38,9 @@ void TempServer::tickloop(){
     }
 }
 
-
 void TempServer::tickevents(){
+    this->state.global_plist->cleanupList(this->state.time.s_tick);
+    //this->state.global_elist->cleanupList();
     this->pp_processor.processPackets(&this->state, &this->e_handler);
     this->e_handler.processEvents();
 }
-

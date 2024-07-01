@@ -1,6 +1,5 @@
 #include "p_deserial.hpp"
 
-#include <iostream>
 #include <memory>
 
 #include "../../helpers/loggerhandler.hpp"
@@ -34,7 +33,6 @@ void PacketDeserializer::addPacket(Packet p){
                 return;
             }
             this->deserialized->push(std::shared_ptr<p_LoginRequest>(new p_LoginRequest(p)));
-            std::cout<<"Recieved login req 2!\n";
             break;
         case 0x02:
             if(p.bytes.size()<3){

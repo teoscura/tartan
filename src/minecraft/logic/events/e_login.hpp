@@ -26,4 +26,13 @@ class Event_LoginHandshake  : public EventBase {
         ~Event_LoginHandshake() override = default;
 };
 
+class Event_PlayerDisconnect : public EventBase {
+    private:
+        PacketReturnInfo inf;
+    public:
+        Event_PlayerDisconnect(uint64_t delivery_tick, PacketReturnInfo inf);
+        void process(ServerState* state, PacketSerializer* serial) override;
+        ~Event_PlayerDisconnect() override = default;    
+};
+
 #endif

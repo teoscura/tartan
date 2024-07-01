@@ -9,10 +9,14 @@
 #include "../../entity/entity.hpp"
 #include "../../world/vector.hpp"
 
-enum PlayerStances{
-    STAND,
-    CROUCH,
-    SLEEP,
+enum PlayerStates{
+    L_OFFLINE= 0<<0,
+    L_HANDSHAKE= 1<<0,
+    L_PLAYING = 1<<1,
+    PS_STAND = 0<<2,
+    PS_CROUCH = 1<<2,
+    PS_SLEEP  = 1<<4,
+    S_TODESPAWN = 1<<5,
 };
 
 struct PlayerConnectionInfo{
@@ -32,16 +36,20 @@ class Player : public Entity{
         PlayerConnectionInfo info;
     protected:
         static const PlayerStats stats;
-        std::u16string username;
-        uint8_t hp = 20;
+        std::u16string username = u"PlayerEntity";
         bool sleeping = false;
-        uint16_t held_slot = 0;
         double actual_height;
-        uint64_t last_keepalive;
-        PlayerStances stance = STAND;
+        uint8_t hp = 20;
+        uint16_t held_slot = 0;
+        uint64_t login_tick = 0;
+        uint64_t last_keepalive = 0;
+        uint8_t state = 0b0000000;
         v3<int32_t> respawn_pos = v3<int32_t>(8,10,8);
     public:
         Player(PacketReturnInfo inf, std::u16string username, uint32_t EID);
+
+        bool assertStatus(uint8_t status);
+        bool assertStatus(PlayerStates state);
 
         void setBlob(uint8_t new_blob);
         void setHP(uint8_t hp);
@@ -49,7 +57,7 @@ class Player : public Entity{
         void setHeldSlot(uint16_t held_slot);
         void setHeight(double height);
         void setKeepAlive(uint64_t keepalive);
-        void setStance(PlayerStances stance);
+        void setState(PlayerStates new_state);
         void setRespawnPos(v3<int32_t> respawn_pos);
 
         const PacketReturnInfo& getReturnInfo();
@@ -59,9 +67,10 @@ class Player : public Entity{
         uint16_t getHeldSlot();
         double getHeight();
         uint64_t getLastKeepalive();
-        PlayerStances getStance();
+        uint64_t getLoginTick();
+        uint8_t getState();
         v3<int32_t> getRespawnPos();
-        
+
         ~Player() override;
         //TODO constructor, destructor and methods specify the arguments for each function.
 };
