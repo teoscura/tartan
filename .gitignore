@@ -3,3 +3,4 @@ target/objects/*
 target/*
 oldies/*
 .vscode/*
+server_preferences.txt
