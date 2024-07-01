@@ -77,6 +77,7 @@ void Event_LoginHandshake::process(ServerState* state, PacketSerializer* serial)
             LoggerHandler::getLogger()->LogPrint(ERROR, "{} sent a handshake while already having sent one!", inf.epoll_fd);
             reason = u"Player sent a handshake while already having sent one!";
             serial->serialize(std::shared_ptr<p_Kick>(new p_Kick(this->inf, reason, reason.length())));
+            state->global_plist->remove(this->username);
             return;
         }
         LoggerHandler::getLogger()->LogPrint(ERROR, "{} sent a handshake while already being online!", inf.epoll_fd);
@@ -86,6 +87,7 @@ void Event_LoginHandshake::process(ServerState* state, PacketSerializer* serial)
     }
     Player* player = new Player(this->inf, this->username, state->global_elist->allocateEID());
     player->setState(L_HANDSHAKE);
+    player->setLoginTick(state->time.s_tick);
     state->global_plist->insert(std::shared_ptr<Player>(player));
     serial->serialize(std::shared_ptr<p_HandShake>(new p_HandShake(u"-", this->inf)));
     std::wstring_convert<std::codecvt_utf8<char16_t>, char16_t> converter;
@@ -98,11 +100,18 @@ Event_PlayerDisconnect::Event_PlayerDisconnect(uint64_t delivery_tick, PacketRet
 
 void Event_PlayerDisconnect::process(ServerState* state, PacketSerializer* serial){
     auto tmpplayer = state->global_plist->findPlayer(this->inf);
-    if(!state->global_plist->isOnline()
+    if(!tmpplayer.has_value()){
+        LoggerHandler::getLogger()->LogPrint(ERROR, "{} sent a disconnect while never being present!", this->inf.epoll_fd);
+        return;
+    }
+    auto player = tmpplayer.value();
     player->setState(S_TODESPAWN);
+    std::wstring_convert<std::codecvt_utf8<char16_t>, char16_t> converter;
+    std::cout<<converter.to_bytes(player->getUsername())+" has disconnected!\n";
     this->queuePacket_Global(std::shared_ptr<p_Entity_Delete>(new p_Entity_Delete(PacketReturnInfo(0), player->getEntityId())), state, serial);
     this->queuePacket_Global(std::shared_ptr<p_ChatMessage>(new p_ChatMessage(PacketReturnInfo(), 
                                std::u16string(u"§c"+player->getUsername() + u" left the server.§r§f"))), 
                                state, serial);
 }
+
 

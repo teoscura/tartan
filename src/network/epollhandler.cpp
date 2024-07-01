@@ -3,6 +3,7 @@
 #include <arpa/inet.h>
 #include <iostream>
 #include <sys/epoll.h>
+#include <thread>
 
 #include "../helpers/loggerhandler.hpp"
 #include "../util/byteops.hpp"
@@ -68,6 +69,9 @@ void EpollHandler::handleWrite(uint32_t fd, Packet pack){
         lg->LogPrint(ERROR, "Couldn't write to FD #", fd);
         std::cerr << "[ERROR] Couldn't write to FD #"<<fd<<"\n";
         eventOp(fd, EPOLLIN|EPOLLOUT, EPOLL_CTL_DEL);
+        uint8_t i[] = { 0xFF, 0x00, 0x00};
+        this->deserializer->addPacket(Packet(std::vector<uint8_t>(i, i+3), PacketReturnInfo(fd)));
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
     else{
         lg->LogPrint(INFO, "Sent packet to: {}\n{}", fd, hexStr(pack.bytes.data(), pack.bytes.size()));

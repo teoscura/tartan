@@ -21,11 +21,6 @@ void PlayerList::remove(std::u16string username){
 
 void PlayerList::cleanupList(uint64_t current_tick){
     for(int i = list.size()-1; i>=0; i--){
-        if(current_tick>list.at(i)->getLoginTick()+400){
-            list.erase(list.begin()+i);
-        }
-    }
-    for(int i = list.size()-1; i>=0; i--){
         if(list.at(i)->assertStatus(S_TODESPAWN)){
             list.erase(list.begin()+i);
         }

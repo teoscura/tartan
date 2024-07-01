@@ -47,6 +47,10 @@ void Player::setKeepAlive(uint64_t keepalive){
     this->last_keepalive = keepalive;
 }
 
+void Player::setLoginTick(uint64_t tick){
+    this->login_tick = tick;
+}
+
 void Player::setState(PlayerStates new_state){
     if(this->assertStatus(new_state)){
         return;

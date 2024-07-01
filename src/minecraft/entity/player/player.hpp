@@ -57,6 +57,7 @@ class Player : public Entity{
         void setHeldSlot(uint16_t held_slot);
         void setHeight(double height);
         void setKeepAlive(uint64_t keepalive);
+        void setLoginTick(uint64_t tick);
         void setState(PlayerStates new_state);
         void setRespawnPos(v3<int32_t> respawn_pos);
 
