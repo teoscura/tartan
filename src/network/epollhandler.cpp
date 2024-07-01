@@ -24,7 +24,7 @@ void EpollHandler::mainLoop(){
 
 void EpollHandler::handleEvents(){
     uint32_t fd;
-    std::vector<Packet> out = *serializer->getOut();
+    std::vector<Packet> out = serializer->getPacketVector();
     Packet pack;
     for (auto i = 0; i < this->info.ready; i++) {
         fd = events[i].data.fd;
@@ -35,7 +35,6 @@ void EpollHandler::handleEvents(){
     for(auto t : out){
         handleWrite(t.info.epoll_fd, t);
     }
-    out.clear();
 }
 
 void EpollHandler::handleRead(uint32_t fd){

@@ -130,8 +130,8 @@ p_Player_Look::p_Player_Look(Packet pack) :
         LoggerHandler::getLogger()->LogPrint(ERROR, "{:0x} Packet invalid!", (int)pack.bytes[0]);
         return;
     }
-    this->yp.x = (float)std::bit_cast<double>(read8byteInt_BE(pack.bytes.data()+1));
-    this->yp.z = (float)std::bit_cast<double>(read8byteInt_BE(pack.bytes.data()+5));
+    this->yp.x = read4byteInt_BE(pack.bytes.data()+1);
+    this->yp.z = read4byteInt_BE(pack.bytes.data()+5);
 }
 
 uint8_t p_Player_Look::getID(){

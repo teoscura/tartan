@@ -21,17 +21,17 @@ struct Packet{
     PacketReturnInfo info;
     std::vector<uint8_t> bytes;
     
-    Packet();
+    Packet() = default;
     Packet(PacketReturnInfo in);
     Packet(std::vector<uint8_t> arr, PacketReturnInfo in);
-    ~Packet();
+    ~Packet() = default;
 };
 
 class DsPacket{
     protected:
         PacketReturnInfo info;
     public:
-        DsPacket();
+        DsPacket() = default;
         DsPacket(PacketReturnInfo inf);
 
         PacketReturnInfo getInfo();

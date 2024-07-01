@@ -2,6 +2,7 @@
 
 #include "../../helpers/loggerhandler.hpp"
 #include <memory>
+#include <mutex>
 
 void PacketSerializer::serialize(std::shared_ptr<DsPacket> p){
     Packet result = p->serialize();
@@ -9,9 +10,13 @@ void PacketSerializer::serialize(std::shared_ptr<DsPacket> p){
         LoggerHandler::getLogger()->LogPrint(ERROR, "Tried to serialize unimplemented {} packet!", (int)p->getID());
         return;
     }
+    std::unique_lock<std::mutex> lock(mut);
     this->out.push_back(result);
 }
 
-std::vector<Packet>* PacketSerializer::getOut(){
-    return &this->out;
+std::vector<Packet> PacketSerializer::getPacketVector(){
+    std::unique_lock<std::mutex> lock(this->mut);
+    std::vector<Packet> res(this->out);
+    this->out.clear();
+    return res;
 }

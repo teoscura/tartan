@@ -43,13 +43,13 @@ void Event_PlayerUpdate_Pos::process(ServerState* state, PacketSerializer* seria
     }
     auto xyz = player.value()->getXYZ();
     v3<double> diff(xyz.x-this->new_xyz.x,xyz.y-this->new_xyz.y,xyz.z-this->new_xyz.z);
-    // if(diff.norm()>4.0){
-    //     LoggerHandler::getLogger()->LogPrint(ERROR, "EID {} is flying!", this->EID);
-    //     reason = u"Flying is not allowed!";
-    //     queue->push(std::shared_ptr<p_Kick>(new p_Kick(player.value()->getReturnInfo(), reason, reason.length())));
-    //     state->global_plist->remove(player.value()->getUsername());
-    //     return;
-    // }
+    if(diff.norm()>16.0){
+        LoggerHandler::getLogger()->LogPrint(ERROR, "EID {} is flying!", this->EID);
+        reason = u"Flying is not allowed!";
+        serial->serialize(std::shared_ptr<p_Kick>(new p_Kick(player.value()->getReturnInfo(), reason, reason.length())));
+        state->global_plist->remove(player.value()->getUsername());
+        return;
+    }
     auto relmove = v3<int8_t>(diff.x*32,diff.y*32,diff.z*32);
     auto t =  new p_Entity_RelativeMove(PacketReturnInfo(), this->EID, relmove);
     player.value()->setPosLook(this->new_xyz, player.value()->getYP());

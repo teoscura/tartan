@@ -2,12 +2,13 @@
 #define E_HANDLER_H
 
 #include "../../packet/handler/p_serial.hpp"
-#include "events/eventschedule.hpp"
+#include "../server/serverstate.hpp"
+#include "events/event.hpp"
 
 class EventHandler{
     private:
         ServerState* state;
-        EventSchedule e_schedule;
+        std::vector<std::shared_ptr<EventBase>> event_schedule;
         PacketSerializer* serializer;
     public:
         EventHandler(PacketSerializer* serializer, ServerState* state);

@@ -2,24 +2,17 @@
 
 #include <vector>
 
-Packet::Packet(){
-    this->info.epoll_fd = 0;
-}
-
 Packet::Packet(PacketReturnInfo in):
     info(in){
 }
+
+// Packet::~Packet(){
+// }
 
 Packet::Packet(std::vector<uint8_t> array, PacketReturnInfo in):
     info(in),
 
     bytes(array){
-}
-
-Packet::~Packet(){
-}
-
-DsPacket::DsPacket(){
 }
 
 DsPacket::DsPacket(PacketReturnInfo inf):
