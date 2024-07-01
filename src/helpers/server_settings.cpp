@@ -12,7 +12,7 @@ std::map<std::string, std::string> ServerSettings::getSettings(){
 
 ServerSettings::ServerSettings(){
     std::string key, value;
-    std::fstream reader("./server_preferences.txt", std::fstream::in);
+    std::fstream reader("./server_prefs.txt", std::fstream::in);
 
     while( reader >> key >> value ) {
         this->settings[key] = value; // input them into the map 
@@ -27,7 +27,7 @@ ServerSettings::ServerSettings(){
 }
 
 ServerSettings::~ServerSettings(){
-    std::fstream reader("./server_preferences.txt", std::fstream::out);
+    std::fstream reader("./server_prefs.txt", std::fstream::out);
     std::string tmp;
     for(auto t : this->settings){
         tmp.clear();

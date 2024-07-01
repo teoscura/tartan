@@ -34,7 +34,7 @@ clean:
 	rm ./target/objects/ -rf
 	rm ./logs/ -rf
 	mkdir logs
-
+	touch server_prefs.txt
 settingstest:
 	g++ -std=c++23 src/util/miscutil.cpp test/settingsmain.cpp ./src/helpers/server_settings.cpp -o target/settingstest
 
